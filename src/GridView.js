@@ -23,11 +23,31 @@ class GridView extends Component {
             'table-bordered'
         ].join(' ') };
     }
+
+    _prepareCell(cell, rule) {
+        if (typeof rule === 'function') {
+            return rule(cell)
+        }
+        // ToDo improve formatting logic
+        return cell;
+    }
+    _prepareRow(row) {
+        let readyRow = [];
+        for (let column in this.props.columns) {
+            readyRow.push(this._prepareCell(row[column], this.props.columns[column]))
+        }
+        return readyRow;
+    }
+
     render() {
-        let tableContent = [<TableBody data={ this.props.data } options={this.rowOptions } tableId={ this.id }/>];
+        let tableContent = [<TableBody
+            data={ this.props.data.map(item =>  this._prepareRow(item) ) }
+            options={ this.rowOptions }
+            tableId={ this.id }
+        />];
         if (this.showHeader) {
             tableContent.unshift(<TableHeader
-                headerCells={ this.props.headerCells }
+                headerCells={ this._prepareRow(this.props.headerCells) }
                 options={ this.headerRowOptions }
                 tableId={ this.id }
             />);
@@ -42,7 +62,7 @@ class GridView extends Component {
         return <div { ...this.options }>
             <table { ...this.tableOptions }>
                 { tableContent }
-            </table> 
+            </table>
             <Pager />
         </div>;
     }

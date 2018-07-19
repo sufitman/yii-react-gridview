@@ -537,12 +537,38 @@ var GridView = function (_Component) {
     }
 
     _createClass(GridView, [{
+        key: '_prepareCell',
+        value: function _prepareCell(cell, rule) {
+            if (typeof rule === 'function') {
+                return rule(cell);
+            }
+            // ToDo improve formatting logic
+            return cell;
+        }
+    }, {
+        key: '_prepareRow',
+        value: function _prepareRow(row) {
+            var readyRow = [];
+            for (var column in this.props.columns) {
+                readyRow.push(this._prepareCell(row[column], this.props.columns[column]));
+            }
+            return readyRow;
+        }
+    }, {
         key: 'render',
         value: function render() {
-            var tableContent = [React.createElement(_TableBody2.default, { data: this.props.data, options: this.rowOptions, tableId: this.id })];
+            var _this2 = this;
+
+            var tableContent = [React.createElement(_TableBody2.default, {
+                data: this.props.data.map(function (item) {
+                    return _this2._prepareRow(item);
+                }),
+                options: this.rowOptions,
+                tableId: this.id
+            })];
             if (this.showHeader) {
                 tableContent.unshift(React.createElement(_TableHeader2.default, {
-                    headerCells: this.props.headerCells,
+                    headerCells: this._prepareRow(this.props.headerCells),
                     options: this.headerRowOptions,
                     tableId: this.id
                 }));
