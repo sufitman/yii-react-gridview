@@ -1,0 +1,41 @@
+{
+  "name": "yii-react-gridview",
+  "version": "0.1.0",
+  "description": "React render of Yii gridview",
+  "main": "dist/yii-react-gridview.js",
+  "scripts": {
+    "build": "webpack --config webpack.config.js --display-error-details",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "watch": "chokidar 'src/**/*.{jsx,js}' 'webpack.config.js' -c 'npm run build'"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sufitman/yii-react-gridview.git"
+  },
+  "keywords": [
+    "yii2",
+    "yii",
+    "gridview",
+    "react"
+  ],
+  "author": "Tim Mustafin",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sufitman/yii-react-gridview/issues"
+  },
+  "homepage": "https://github.com/sufitman/yii-react-gridview#readme",
+  "devDependencies": {
+    "babel-core": "^6.25.5",
+    "babel-loader": "^6.2.10",
+    "babel-preset-es2015": "^6.22.0",
+    "babel-preset-react": "^6.22.0",
+    "chokidar": "^1.6.1",
+    "chokidar-cli": "^1.2.0",
+    "npm-run-all": "^4.0.1",
+    "random-string": "^0.2.0",
+    "react": "^16.4.1",
+    "react-dom": "^16.4.1",
+    "react-scripts": "1.1.4",
+    "webpack": "^2.2.1"
+  }
+}
