@@ -1,11 +1,11 @@
-import { Component } from 'react'
+import {Component} from 'react'
 
 class TableCell extends Component {
-    render() {
-        return <td>
-            { this.props.cell }
-        </td>;
-    }
+  render() {
+    return <td>
+      {this.props.cell}
+    </td>;
+  }
 }
 
 export default TableCell;
