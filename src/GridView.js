@@ -93,26 +93,26 @@ class GridView extends Component {
         { tableContent }
       </table>
       <Pager
-        options={this.props.pagerOptions}
-        pageOptions={this.props.pageOptions}
-        currentPage={this.props.currentPage}
-        totalCount={this.props.totalCount}
-        onButtonClick={this.props.onPageButtonClick}
+        options={ this.props.pagerOptions }
+        pageOptions={ this.props.pageOptions }
+        currentPage={ this.props.currentPage }
+        totalCount={ this.props.totalCount }
+        onButtonClick={ this.props.onPageButtonClick }
 
-        maxButtonCount={this.props.totalCount || 10}
-        pageSize={this.props.pageSize || 20}
-        pagerTag={this.props.pagerTag || 'ul'}
-        pageTag={this.props.pageTag || 'li'}
-        activePageCssClass={this.props.activePageCssClass || 'active'}
-        disabledPageCssClass={this.props.disabledPageCssClass || 'disabled'}
-        nextPageCssClass={this.props.nextPageCssClass || 'next'}
-        prevPageCssClass={this.props.prevPageCssClass || 'prev'}
-        firstPageCssClass={this.props.firstPageCssClass || 'first'}
-        lastPageCssClass={this.props.lastPageCssClass || 'last'}
-        nextPageLabel={this.props.nextPageLabel || '»'}
-        prevPageLabel={this.props.prevPageLabel || '«'}
-        firstPageLabel={this.props.firstPageLabel || null}
-        lastPageLabel={this.props.lastPageLabel || null}
+        maxButtonCount={ this.props.totalCount || 10 }
+        pageSize={ this.props.pageSize || 20 }
+        pagerTag={ this.props.pagerTag || 'ul' }
+        pageTag={ this.props.pageTag || 'li' }
+        activePageCssClass={ this.props.activePageCssClass || 'active' }
+        disabledPageCssClass={ this.props.disabledPageCssClass || 'disabled' }
+        nextPageCssClass={ this.props.nextPageCssClass || 'next' }
+        prevPageCssClass={ this.props.prevPageCssClass || 'prev' }
+        firstPageCssClass={ this.props.firstPageCssClass || 'first' }
+        lastPageCssClass={ this.props.lastPageCssClass || 'last' }
+        nextPageLabel={ this.props.nextPageLabel || '»' }
+        prevPageLabel={ this.props.prevPageLabel || '«' }
+        firstPageLabel={ this.props.firstPageLabel || null }
+        lastPageLabel={ this.props.lastPageLabel || null }
         tableId={ this.id }
       />
     </div>;

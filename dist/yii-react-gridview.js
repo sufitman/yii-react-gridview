@@ -316,7 +316,6 @@ var Pager = function (_Component) {
 
     var _this = _possibleConstructorReturn(this, (Pager.__proto__ || Object.getPrototypeOf(Pager)).call(this, props));
 
-    _this.buttons = [];
     _this.generalOptions = {
       onButtonClick: _this.props.onButtonClick,
       activePageCssClass: _this.props.activePageCssClass,
@@ -337,17 +336,17 @@ var Pager = function (_Component) {
 
   _createClass(Pager, [{
     key: '_addPageButton',
-    value: function _addPageButton(pageButtonOptions) {
+    value: function _addPageButton(buttons, pageButtonOptions) {
       var options = Object.assign({}, this.generalOptions, pageButtonOptions);
       options.key = 'pg-' + this.props.tableId + '-' + pageButtonOptions.idx;
-      this.buttons.push(React.createElement(_PageButton2.default, options));
+      buttons.push(React.createElement(_PageButton2.default, options));
     }
   }, {
     key: '_addFirstPageButton',
-    value: function _addFirstPageButton() {
+    value: function _addFirstPageButton(buttons) {
       var page = 0;
       var isActive = this.props.currentPage === page;
-      this._addPageButton({
+      this._addPageButton(buttons, {
         page: page,
         content: this.props.firstPageLabel,
         active: isActive,
@@ -358,8 +357,8 @@ var Pager = function (_Component) {
     }
   }, {
     key: '_addLastPageButton',
-    value: function _addLastPageButton() {
-      this._addPageButton({
+    value: function _addLastPageButton(buttons) {
+      this._addPageButton(buttons, {
         page: this.pageCount - 1,
         content: this.props.lastPageLabel || this.pageCount,
         active: false,
@@ -370,12 +369,12 @@ var Pager = function (_Component) {
     }
   }, {
     key: '_addPrevPageButton',
-    value: function _addPrevPageButton() {
+    value: function _addPrevPageButton(buttons) {
       var page = void 0;
       if ((page = this.props.currentPage - 1) < 0) {
         page = 0;
       }
-      this._addPageButton({
+      this._addPageButton(buttons, {
         page: page,
         content: this.props.prevPageLabel,
         active: false,
@@ -386,13 +385,13 @@ var Pager = function (_Component) {
     }
   }, {
     key: '_addNextPageButton',
-    value: function _addNextPageButton() {
+    value: function _addNextPageButton(buttons) {
       var page = void 0;
       var penultimate = this.pageCount - 1;
       if ((page = this.props.currentPage + 1) >= penultimate) {
         page = penultimate;
       }
-      this._addPageButton({
+      this._addPageButton(buttons, {
         page: page,
         content: this.props.nextPageLabel,
         active: false,
@@ -403,7 +402,7 @@ var Pager = function (_Component) {
     }
   }, {
     key: '_addPages',
-    value: function _addPages() {
+    value: function _addPages(buttons) {
       var beginPage = Math.max(0, this.props.currentPage - Math.round(this.props.maxButtonCount / 2));
       var endPage = beginPage + this.props.maxButtonCount - 1;
       if (endPage >= this.pageCount) {
@@ -413,7 +412,7 @@ var Pager = function (_Component) {
 
       for (var i = beginPage; i <= endPage; ++i) {
         var isActive = this.props.currentPage === i;
-        this._addPageButton({
+        this._addPageButton(buttons, {
           page: i,
           content: i + 1,
           active: isActive,
@@ -426,23 +425,24 @@ var Pager = function (_Component) {
     key: 'render',
     value: function render() {
       var Tag = this.props.pagerTag;
+      var buttons = [];
       if (this.props.firstPageLabel) {
-        this._addFirstPageButton();
+        this._addFirstPageButton(buttons);
       }
       if (this.props.prevPageLabel) {
-        this._addPrevPageButton();
+        this._addPrevPageButton(buttons);
       }
-      this._addPages();
+      this._addPages(buttons);
       if (this.props.nextPageLabel) {
-        this._addNextPageButton();
+        this._addNextPageButton(buttons);
       }
       if (this.props.lastPageLabel) {
-        this._addLastPageButton();
+        this._addLastPageButton(buttons);
       }
       return React.createElement(
         Tag,
         this.props.options,
-        this.buttons
+        buttons
       );
     }
   }]);
@@ -957,38 +957,6 @@ var PageButton = function (_Component) {
 
     var _this = _possibleConstructorReturn(this, (PageButton.__proto__ || Object.getPrototypeOf(PageButton)).call(this, props));
 
-    _this.tag = _this.props.tag;
-
-    _this.linkTag = 'a';
-    _this.options = {};
-    _this.options.className = _this.props.className;
-
-    if (typeof _this.options.className === 'string') {
-      _this.options.className = _this.options.className.split(' ');
-    } else {
-      _this.options.className = [];
-    }
-
-    if (_this.props.isNextPage) {
-      _this.options.className.push(_this.props.nextPageCssClass);
-    }
-    if (_this.props.isPrevPage) {
-      _this.options.className.push(_this.props.prevPageCssClass);
-    }
-    if (_this.props.isLastPage) {
-      _this.options.className.push(_this.props.lastPageCssClass);
-    }
-    if (_this.props.isFirstPage) {
-      _this.options.className.push(_this.props.firstPageCssClass);
-    }
-    if (_this.props.active) {
-      _this.options.className.push(_this.props.activePageCssClass);
-    }
-    if (_this.props.disabled) {
-      _this.options.className.push(_this.props.disabledPageCssClass);
-      _this.linkTag = 'span';
-    }
-    _this.options.className = _this.options.className.join(' ');
     _this.clickTag = _this.clickTag.bind(_this);
     return _this;
   }
@@ -1005,8 +973,41 @@ var PageButton = function (_Component) {
   }, {
     key: 'render',
     value: function render() {
-      var Tag = this.tag;
-      var LinkTag = this.linkTag;
+      var Tag = this.props.tag;
+      var LinkTag = 'a';
+      var options = {};
+      options.className = this.props.className;
+
+      if (typeof options.className === 'string') {
+        options.className = options.className.split(' ');
+      } else {
+        options.className = [];
+      }
+
+      if (this.props.isNextPage) {
+        options.className.push(this.props.nextPageCssClass);
+      }
+      if (this.props.isPrevPage) {
+        options.className.push(this.props.prevPageCssClass);
+      }
+      if (this.props.isLastPage) {
+        options.className.push(this.props.lastPageCssClass);
+      }
+      if (this.props.isFirstPage) {
+        options.className.push(this.props.firstPageCssClass);
+      }
+      if (this.props.active) {
+        options.className.push(this.props.activePageCssClass);
+      }
+      if (this.props.disabled) {
+        options.className.push(this.props.disabledPageCssClass);
+        LinkTag = 'span';
+      }
+      if (options.className.length) {
+        options.className = options.className.join(' ');
+      } else {
+        delete options.className;
+      }
       return React.createElement(
         Tag,
         null,
@@ -1014,7 +1015,7 @@ var PageButton = function (_Component) {
           LinkTag,
           _extends({
             onClick: this.clickTag
-          }, this.options),
+          }, options),
           this.props.content
         )
       );
