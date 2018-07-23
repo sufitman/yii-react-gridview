@@ -26,6 +26,7 @@ class GridView extends Component {
     };
     this.notSetText = this.props.notSetText || '(not set)';
     this.filters = this.props.filters || null;
+    this.emptyCaption = this.props.emptyCaption || 'Nothing found';
   }
 
   _prepareCell = (cell, rule) => {
@@ -64,12 +65,18 @@ class GridView extends Component {
   };
 
   render() {
-    let tableContent = [<TableBody
-      data={ this.props.data.map(item => this._prepareRow(item)) }
-      options={ this.rowOptions }
-      tableId={ this.id }
-      key={ `tbody-${this.id}` }
-    />];
+    let tableContent, somethingFound = true;
+    if (this.props.data && this.props.data.length) {
+      tableContent = [<TableBody
+        data={ this.props.data.map(item => this._prepareRow(item)) }
+        options={ this.rowOptions }
+        tableId={ this.id }
+        key={ `tbody-${this.id}` }
+      />];
+    } else {
+      tableContent = [];
+      somethingFound = false;
+    }
     if (this.showHeader) {
       tableContent.unshift(<TableHeader
         headerCells={ this._prepareRow(this.props.headerCells, true) }
@@ -80,8 +87,13 @@ class GridView extends Component {
         key={ `thead-${this.id}` }
       />);
     }
-    if (this.props.caption) {
-      tableContent.unshift(<TableCaption text={ this.props.caption } options={ this.captionOptions } key={ `tcaption-${this.id}` }/>);
+    if (this.props.caption || !somethingFound) {
+      let captionProps = {
+        options: this.captionOptions,
+        key: `tcaption-${this.id}`,
+        text: somethingFound ? this.props.caption : this.emptyCaption
+      };
+      tableContent[somethingFound ? 'unshift' : 'push'](<TableCaption { ...captionProps }/>);
     }
     if (this.showFooter) {
       let footer = <TableFooter footerCells={ ['d', 'e', 'f'] } options={ this.footerRowOptions } tableId={ this.id }/>;

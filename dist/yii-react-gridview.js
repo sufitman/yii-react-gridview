@@ -499,15 +499,23 @@ class GridView extends __WEBPACK_IMPORTED_MODULE_0_react__["Component"] {
     };
     this.notSetText = this.props.notSetText || '(not set)';
     this.filters = this.props.filters || null;
+    this.emptyCaption = this.props.emptyCaption || 'Nothing found';
   }
 
   render() {
-    let tableContent = [React.createElement(__WEBPACK_IMPORTED_MODULE_3__TableBody__["a" /* default */], {
-      data: this.props.data.map(item => this._prepareRow(item)),
-      options: this.rowOptions,
-      tableId: this.id,
-      key: `tbody-${this.id}`
-    })];
+    let tableContent,
+        somethingFound = true;
+    if (this.props.data && this.props.data.length) {
+      tableContent = [React.createElement(__WEBPACK_IMPORTED_MODULE_3__TableBody__["a" /* default */], {
+        data: this.props.data.map(item => this._prepareRow(item)),
+        options: this.rowOptions,
+        tableId: this.id,
+        key: `tbody-${this.id}`
+      })];
+    } else {
+      tableContent = [];
+      somethingFound = false;
+    }
     if (this.showHeader) {
       tableContent.unshift(React.createElement(__WEBPACK_IMPORTED_MODULE_2__TableHeader__["a" /* default */], {
         headerCells: this._prepareRow(this.props.headerCells, true),
@@ -518,8 +526,13 @@ class GridView extends __WEBPACK_IMPORTED_MODULE_0_react__["Component"] {
         key: `thead-${this.id}`
       }));
     }
-    if (this.props.caption) {
-      tableContent.unshift(React.createElement(__WEBPACK_IMPORTED_MODULE_1__TableCaption__["a" /* default */], { text: this.props.caption, options: this.captionOptions, key: `tcaption-${this.id}` }));
+    if (this.props.caption || !somethingFound) {
+      let captionProps = {
+        options: this.captionOptions,
+        key: `tcaption-${this.id}`,
+        text: somethingFound ? this.props.caption : this.emptyCaption
+      };
+      tableContent[somethingFound ? 'unshift' : 'push'](React.createElement(__WEBPACK_IMPORTED_MODULE_1__TableCaption__["a" /* default */], captionProps));
     }
     if (this.showFooter) {
       let footer = React.createElement(__WEBPACK_IMPORTED_MODULE_4__TableFooter__["a" /* default */], { footerCells: ['d', 'e', 'f'], options: this.footerRowOptions, tableId: this.id });
