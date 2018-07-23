@@ -256,14 +256,13 @@ var TableFilter = function (_Component) {
   }, {
     key: 'applyFilters',
     value: function applyFilters(e) {
-      this.setState(function (prevState) {
-        var newState = Object.assign({}, prevState);
-        newState.filters[e.target.name] = e.target.value;
-        return {
-          filters: newState.filters
-        };
+      var _this2 = this;
+
+      var filters = Object.assign({}, this.state.filters);
+      filters[e.target.name] = e.target.value;
+      this.setState({ filters: filters }, function () {
+        return _this2.props.onFilterChange(_this2.state.filters);
       });
-      this.props.onFilterChange(this.state.filters);
     }
   }, {
     key: 'render',

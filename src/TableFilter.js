@@ -56,14 +56,9 @@ class TableFilter extends Component {
     throw new Error('Invalid filter param');
   }
   applyFilters(e) {
-    this.setState((prevState) => {
-      let newState = Object.assign({}, prevState);
-      newState.filters[e.target.name] = e.target.value;
-      return {
-        filters: newState.filters
-      };
-    })
-    this.props.onFilterChange(this.state.filters)
+    let filters = Object.assign({}, this.state.filters);
+    filters[e.target.name] = e.target.value;
+    this.setState({filters: filters}, () => this.props.onFilterChange(this.state.filters));
   }
   render() {
     return <TableRow
