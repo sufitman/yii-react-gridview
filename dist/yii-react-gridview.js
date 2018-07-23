@@ -97,7 +97,7 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 var _react = __webpack_require__(0);
 
-var _TableCell = __webpack_require__(10);
+var _TableCell = __webpack_require__(11);
 
 var _TableCell2 = _interopRequireDefault(_TableCell);
 
@@ -296,6 +296,12 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 var _react = __webpack_require__(0);
 
+var _PageButton = __webpack_require__(10);
+
+var _PageButton2 = _interopRequireDefault(_PageButton);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
@@ -305,19 +311,138 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 var Pager = function (_Component) {
   _inherits(Pager, _Component);
 
-  function Pager() {
+  function Pager(props) {
     _classCallCheck(this, Pager);
 
-    return _possibleConstructorReturn(this, (Pager.__proto__ || Object.getPrototypeOf(Pager)).apply(this, arguments));
+    var _this = _possibleConstructorReturn(this, (Pager.__proto__ || Object.getPrototypeOf(Pager)).call(this, props));
+
+    _this.buttons = [];
+    _this.generalOptions = {
+      onButtonClick: _this.props.onButtonClick,
+      activePageCssClass: _this.props.activePageCssClass,
+      disabledPageCssClass: _this.props.disabledPageCssClass,
+      nextPageCssClass: _this.props.nextPageCssClass,
+      prevPageCssClass: _this.props.prevPageCssClass,
+      lastPageCssClass: _this.props.lastPageCssClass,
+      firstPageCssClass: _this.props.firstPageCssClass,
+      isFirstPage: false,
+      isLastPage: false,
+      isPrevPage: false,
+      isNextPage: false,
+      tag: _this.props.pageTag
+    };
+    _this.pageCount = Math.ceil(_this.props.totalCount / _this.props.pageSize);
+    return _this;
   }
 
   _createClass(Pager, [{
+    key: '_addPageButton',
+    value: function _addPageButton(pageButtonOptions) {
+      var options = Object.assign({}, this.generalOptions, pageButtonOptions);
+      options.key = 'pg-' + this.props.tableId + '-' + pageButtonOptions.idx;
+      this.buttons.push(React.createElement(_PageButton2.default, options));
+    }
+  }, {
+    key: '_addFirstPageButton',
+    value: function _addFirstPageButton() {
+      var page = 0;
+      var isActive = this.props.currentPage === page;
+      this._addPageButton({
+        page: page,
+        content: this.props.firstPageLabel,
+        active: isActive,
+        disabled: isActive,
+        isFirstPage: true,
+        idx: 'f'
+      });
+    }
+  }, {
+    key: '_addLastPageButton',
+    value: function _addLastPageButton() {
+      this._addPageButton({
+        page: this.pageCount - 1,
+        content: this.props.lastPageLabel || this.pageCount,
+        active: false,
+        disabled: this.props.currentPage >= this.pageCount - 1,
+        isLastPage: true,
+        idx: 'l'
+      });
+    }
+  }, {
+    key: '_addPrevPageButton',
+    value: function _addPrevPageButton() {
+      var page = void 0;
+      if ((page = this.props.currentPage - 1) < 0) {
+        page = 0;
+      }
+      this._addPageButton({
+        page: page,
+        content: this.props.prevPageLabel,
+        active: false,
+        disabled: this.props.currentPage <= 0,
+        isPrevPage: true,
+        idx: 'p'
+      });
+    }
+  }, {
+    key: '_addNextPageButton',
+    value: function _addNextPageButton() {
+      var page = void 0;
+      var penultimate = this.pageCount - 1;
+      if ((page = this.props.currentPage + 1) >= penultimate) {
+        page = penultimate;
+      }
+      this._addPageButton({
+        page: page,
+        content: this.props.nextPageLabel,
+        active: false,
+        disabled: this.props.currentPage >= penultimate,
+        isNextPage: true,
+        idx: 'n'
+      });
+    }
+  }, {
+    key: '_addPages',
+    value: function _addPages() {
+      var beginPage = Math.max(0, this.props.currentPage - Math.round(this.props.maxButtonCount / 2));
+      var endPage = beginPage + this.props.maxButtonCount - 1;
+      if (endPage >= this.pageCount) {
+        endPage = this.pageCount - 1;
+        beginPage = Math.max(0, endPage - this.props.maxButtonCount + 1);
+      }
+
+      for (var i = beginPage; i <= endPage; ++i) {
+        var isActive = this.props.currentPage === i;
+        this._addPageButton({
+          page: i,
+          content: i + 1,
+          active: isActive,
+          disabled: isActive,
+          idx: i
+        });
+      }
+    }
+  }, {
     key: 'render',
     value: function render() {
+      var Tag = this.props.pagerTag;
+      if (this.props.firstPageLabel) {
+        this._addFirstPageButton();
+      }
+      if (this.props.prevPageLabel) {
+        this._addPrevPageButton();
+      }
+      this._addPages();
+      if (this.props.nextPageLabel) {
+        this._addNextPageButton();
+      }
+      if (this.props.lastPageLabel) {
+        this._addLastPageButton();
+      }
       return React.createElement(
-        'div',
-        null,
-        '?!@'
+        Tag,
+        this.props.options,
+        this.buttons
       );
     }
   }]);
@@ -711,9 +836,7 @@ var GridView = function (_Component) {
           cell = this._prepareCell(row[column], this.props.columns[column]);
         } else {
           if (isTh) {
-            console.log(column);
             var title = column.replace(/([A-Z])/g, " $1");
-            console.log(title);
             cell = (title.charAt(0).toUpperCase() + title.slice(1)).replace(/_/g, ' ');
           } else {
             cell = this.notSetText;
@@ -770,7 +893,29 @@ var GridView = function (_Component) {
           this.tableOptions,
           tableContent
         ),
-        React.createElement(_Pager2.default, null)
+        React.createElement(_Pager2.default, {
+          options: this.props.pagerOptions,
+          pageOptions: this.props.pageOptions,
+          currentPage: this.props.currentPage,
+          totalCount: this.props.totalCount,
+          onButtonClick: this.props.onPageButtonClick,
+
+          maxButtonCount: this.props.totalCount || 10,
+          pageSize: this.props.pageSize || 20,
+          pagerTag: this.props.pagerTag || 'ul',
+          pageTag: this.props.pageTag || 'li',
+          activePageCssClass: this.props.activePageCssClass || 'active',
+          disabledPageCssClass: this.props.disabledPageCssClass || 'disabled',
+          nextPageCssClass: this.props.nextPageCssClass || 'next',
+          prevPageCssClass: this.props.prevPageCssClass || 'prev',
+          firstPageCssClass: this.props.firstPageCssClass || 'first',
+          lastPageCssClass: this.props.lastPageCssClass || 'last',
+          nextPageLabel: this.props.nextPageLabel || '»',
+          prevPageLabel: this.props.prevPageLabel || '«',
+          firstPageLabel: this.props.firstPageLabel || null,
+          lastPageLabel: this.props.lastPageLabel || null,
+          tableId: this.id
+        })
       );
     }
   }]);
@@ -783,6 +928,107 @@ exports.default = GridView;
 
 /***/ }),
 /* 10 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(React) {
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(0);
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var PageButton = function (_Component) {
+  _inherits(PageButton, _Component);
+
+  function PageButton(props) {
+    _classCallCheck(this, PageButton);
+
+    var _this = _possibleConstructorReturn(this, (PageButton.__proto__ || Object.getPrototypeOf(PageButton)).call(this, props));
+
+    _this.tag = _this.props.tag;
+
+    _this.linkTag = 'a';
+    _this.options = {};
+    _this.options.className = _this.props.className;
+
+    if (typeof _this.options.className === 'string') {
+      _this.options.className = _this.options.className.split(' ');
+    } else {
+      _this.options.className = [];
+    }
+
+    if (_this.props.isNextPage) {
+      _this.options.className.push(_this.props.nextPageCssClass);
+    }
+    if (_this.props.isPrevPage) {
+      _this.options.className.push(_this.props.prevPageCssClass);
+    }
+    if (_this.props.isLastPage) {
+      _this.options.className.push(_this.props.lastPageCssClass);
+    }
+    if (_this.props.isFirstPage) {
+      _this.options.className.push(_this.props.firstPageCssClass);
+    }
+    if (_this.props.active) {
+      _this.options.className.push(_this.props.activePageCssClass);
+    }
+    if (_this.props.disabled) {
+      _this.options.className.push(_this.props.disabledPageCssClass);
+      _this.linkTag = 'span';
+    }
+    _this.options.className = _this.options.className.join(' ');
+    _this.clickTag = _this.clickTag.bind(_this);
+    return _this;
+  }
+
+  _createClass(PageButton, [{
+    key: 'clickTag',
+    value: function clickTag(e) {
+      e.preventDefault();
+      if (this.props.disabled) {
+        return;
+      }
+      this.props.onButtonClick(this.props.page);
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      var Tag = this.tag;
+      var LinkTag = this.linkTag;
+      return React.createElement(
+        Tag,
+        null,
+        React.createElement(
+          LinkTag,
+          _extends({
+            onClick: this.clickTag
+          }, this.options),
+          this.props.content
+        )
+      );
+    }
+  }]);
+
+  return PageButton;
+}(_react.Component);
+
+exports.default = PageButton;
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
+
+/***/ }),
+/* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";

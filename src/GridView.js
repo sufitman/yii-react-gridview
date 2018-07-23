@@ -45,9 +45,7 @@ class GridView extends Component {
         cell = this._prepareCell(row[column], this.props.columns[column]);
       } else {
         if (isTh) {
-          console.log(column);
           let title = column.replace(/([A-Z])/g, " $1");
-          console.log(title);
           cell = (title.charAt(0).toUpperCase() + title.slice(1)).replace(/_/g, ' ');
         } else {
           cell = this.notSetText
@@ -94,7 +92,29 @@ class GridView extends Component {
       <table { ...this.tableOptions }>
         { tableContent }
       </table>
-      <Pager/>
+      <Pager
+        options={this.props.pagerOptions}
+        pageOptions={this.props.pageOptions}
+        currentPage={this.props.currentPage}
+        totalCount={this.props.totalCount}
+        onButtonClick={this.props.onPageButtonClick}
+
+        maxButtonCount={this.props.totalCount || 10}
+        pageSize={this.props.pageSize || 20}
+        pagerTag={this.props.pagerTag || 'ul'}
+        pageTag={this.props.pageTag || 'li'}
+        activePageCssClass={this.props.activePageCssClass || 'active'}
+        disabledPageCssClass={this.props.disabledPageCssClass || 'disabled'}
+        nextPageCssClass={this.props.nextPageCssClass || 'next'}
+        prevPageCssClass={this.props.prevPageCssClass || 'prev'}
+        firstPageCssClass={this.props.firstPageCssClass || 'first'}
+        lastPageCssClass={this.props.lastPageCssClass || 'last'}
+        nextPageLabel={this.props.nextPageLabel || '»'}
+        prevPageLabel={this.props.prevPageLabel || '«'}
+        firstPageLabel={this.props.firstPageLabel || null}
+        lastPageLabel={this.props.lastPageLabel || null}
+        tableId={ this.id }
+      />
     </div>;
   }
 }
