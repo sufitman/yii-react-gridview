@@ -73,7 +73,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 9);
+/******/ 	return __webpack_require__(__webpack_require__.s = 8);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -84,268 +84,54 @@ module.exports = __WEBPACK_EXTERNAL_MODULE_0__;
 
 /***/ }),
 /* 1 */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* WEBPACK VAR INJECTION */(function(React) {
+/* WEBPACK VAR INJECTION */(function(React) {/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_react__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__TableCell__ = __webpack_require__(10);
 
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
 
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _react = __webpack_require__(0);
-
-var _TableCell = __webpack_require__(11);
-
-var _TableCell2 = _interopRequireDefault(_TableCell);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var TableRow = function (_Component) {
-  _inherits(TableRow, _Component);
-
-  function TableRow() {
-    _classCallCheck(this, TableRow);
-
-    return _possibleConstructorReturn(this, (TableRow.__proto__ || Object.getPrototypeOf(TableRow)).apply(this, arguments));
+class TableRow extends __WEBPACK_IMPORTED_MODULE_0_react__["Component"] {
+  render() {
+    return React.createElement(
+      'tr',
+      this.props.options,
+      this.props.cells.map((cell, idx) => React.createElement(__WEBPACK_IMPORTED_MODULE_1__TableCell__["a" /* default */], {
+        key: `${this.props.id}-td-${idx}`,
+        cell: cell }))
+    );
   }
+}
 
-  _createClass(TableRow, [{
-    key: 'render',
-    value: function render() {
-      var _this2 = this;
-
-      return React.createElement(
-        'tr',
-        this.props.options,
-        this.props.cells.map(function (cell, idx) {
-          return React.createElement(_TableCell2.default, {
-            key: _this2.props.id + '-td-' + idx,
-            cell: cell });
-        })
-      );
-    }
-  }]);
-
-  return TableRow;
-}(_react.Component);
-
-exports.default = TableRow;
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
+/* harmony default export */ __webpack_exports__["a"] = (TableRow);
+/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(0)))
 
 /***/ }),
 /* 2 */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* WEBPACK VAR INJECTION */(function(React) {
+/* WEBPACK VAR INJECTION */(function(React) {/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_react__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__PageButton__ = __webpack_require__(9);
 
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
 
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+class Pager extends __WEBPACK_IMPORTED_MODULE_0_react__["Component"] {
+  constructor(props) {
+    super(props);
 
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _react = __webpack_require__(0);
-
-var _TableRow = __webpack_require__(1);
-
-var _TableRow2 = _interopRequireDefault(_TableRow);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var TableFilter = function (_Component) {
-  _inherits(TableFilter, _Component);
-
-  function TableFilter(props) {
-    _classCallCheck(this, TableFilter);
-
-    var _this = _possibleConstructorReturn(this, (TableFilter.__proto__ || Object.getPrototypeOf(TableFilter)).call(this, props));
-
-    _this.applyFilters = _this.applyFilters.bind(_this);
-    _this.state = {
-      filters: {}
+    this._addPageButton = (buttons, pageButtonOptions) => {
+      let options = Object.assign({}, this.generalOptions, pageButtonOptions);
+      options.key = `pg-${this.props.tableId}-${pageButtonOptions.idx}`;
+      buttons.push(React.createElement(__WEBPACK_IMPORTED_MODULE_1__PageButton__["a" /* default */], options));
     };
-    return _this;
-  }
 
-  _createClass(TableFilter, [{
-    key: '_renderFilters',
-    value: function _renderFilters() {
-      var readyFilters = [];
-      for (var column in this.props.filters) {
-        var filter = this.props.filters[column];
-        readyFilters.push(this._prepareFilter(column, filter));
-      }
-      return readyFilters;
-    }
-  }, {
-    key: '_getFieldName',
-    value: function _getFieldName(column) {
-      return 'search-' + this.props.tableId + '-' + column;
-    }
-  }, {
-    key: '_renderFilter',
-    value: function _renderFilter(column, type) {
-      var options = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
-
-      var name = this._getFieldName(column);
-      switch (type) {
-        case 'text':
-          return React.createElement('input', _extends({ name: name, type: 'text' }, options, { onChange: this.applyFilters }));
-        case 'checkbox':
-          return React.createElement('input', _extends({ name: name, type: 'checkbox' }, options, { onChange: this.applyFilters }));
-        case 'select':
-          var opts = [];
-          if (!options.data) {
-            throw new Error('Filter select has no options');
-          }
-          var idx = 0;
-          for (var val in options.data) {
-            opts.push(React.createElement(
-              'option',
-              { key: name + '-' + idx++, value: val },
-              options.data[val]
-            ));
-          }
-          return React.createElement(
-            'select',
-            { name: this._getFieldName(column), onChange: this.applyFilters },
-            opts
-          );
-      }
-      return null;
-    }
-  }, {
-    key: '_prepareFilter',
-    value: function _prepareFilter(column) {
-      var filter = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
-
-      if (!filter) {
-        return '';
-      }
-      if (typeof filter === 'string') {
-        return this._renderFilter(column, filter);
-      }
-      if ((typeof filter === 'undefined' ? 'undefined' : _typeof(filter)) === 'object') {
-        return this._renderFilter(column, filter.type, filter.options || {});
-      }
-      if (typeof filter === 'function') {
-        return filter(this._getFieldName(column));
-      }
-      throw new Error('Invalid filter param');
-    }
-  }, {
-    key: 'applyFilters',
-    value: function applyFilters(e) {
-      var _this2 = this;
-
-      var filters = Object.assign({}, this.state.filters);
-      filters[e.target.name] = e.target.value;
-      this.setState({ filters: filters }, function () {
-        return _this2.props.onFilterChange(_this2.state.filters);
-      });
-    }
-  }, {
-    key: 'render',
-    value: function render() {
-      return React.createElement(_TableRow2.default, {
-        cells: this._renderFilters(),
-        id: this.id,
-        key: this.id
-      });
-    }
-  }]);
-
-  return TableFilter;
-}(_react.Component);
-
-exports.default = TableFilter;
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
-
-/***/ }),
-/* 3 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-/* WEBPACK VAR INJECTION */(function(React) {
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _react = __webpack_require__(0);
-
-var _PageButton = __webpack_require__(10);
-
-var _PageButton2 = _interopRequireDefault(_PageButton);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var Pager = function (_Component) {
-  _inherits(Pager, _Component);
-
-  function Pager(props) {
-    _classCallCheck(this, Pager);
-
-    var _this = _possibleConstructorReturn(this, (Pager.__proto__ || Object.getPrototypeOf(Pager)).call(this, props));
-
-    _this.generalOptions = {
-      onButtonClick: _this.props.onButtonClick,
-      activePageCssClass: _this.props.activePageCssClass,
-      disabledPageCssClass: _this.props.disabledPageCssClass,
-      nextPageCssClass: _this.props.nextPageCssClass,
-      prevPageCssClass: _this.props.prevPageCssClass,
-      lastPageCssClass: _this.props.lastPageCssClass,
-      firstPageCssClass: _this.props.firstPageCssClass,
-      isFirstPage: false,
-      isLastPage: false,
-      isPrevPage: false,
-      isNextPage: false,
-      tag: _this.props.pageTag
-    };
-    _this.pageCount = Math.ceil(_this.props.totalCount / _this.props.pageSize);
-    return _this;
-  }
-
-  _createClass(Pager, [{
-    key: '_addPageButton',
-    value: function _addPageButton(buttons, pageButtonOptions) {
-      var options = Object.assign({}, this.generalOptions, pageButtonOptions);
-      options.key = 'pg-' + this.props.tableId + '-' + pageButtonOptions.idx;
-      buttons.push(React.createElement(_PageButton2.default, options));
-    }
-  }, {
-    key: '_addFirstPageButton',
-    value: function _addFirstPageButton(buttons) {
-      var page = 0;
-      var isActive = this.props.currentPage === page;
+    this._addFirstPageButton = buttons => {
+      let page = 0;
+      let isActive = this.props.currentPage === page;
       this._addPageButton(buttons, {
         page: page,
         content: this.props.firstPageLabel,
@@ -354,10 +140,9 @@ var Pager = function (_Component) {
         isFirstPage: true,
         idx: 'f'
       });
-    }
-  }, {
-    key: '_addLastPageButton',
-    value: function _addLastPageButton(buttons) {
+    };
+
+    this._addLastPageButton = buttons => {
       this._addPageButton(buttons, {
         page: this.pageCount - 1,
         content: this.props.lastPageLabel || this.pageCount,
@@ -366,11 +151,10 @@ var Pager = function (_Component) {
         isLastPage: true,
         idx: 'l'
       });
-    }
-  }, {
-    key: '_addPrevPageButton',
-    value: function _addPrevPageButton(buttons) {
-      var page = void 0;
+    };
+
+    this._addPrevPageButton = buttons => {
+      let page;
       if ((page = this.props.currentPage - 1) < 0) {
         page = 0;
       }
@@ -382,12 +166,11 @@ var Pager = function (_Component) {
         isPrevPage: true,
         idx: 'p'
       });
-    }
-  }, {
-    key: '_addNextPageButton',
-    value: function _addNextPageButton(buttons) {
-      var page = void 0;
-      var penultimate = this.pageCount - 1;
+    };
+
+    this._addNextPageButton = buttons => {
+      let page;
+      let penultimate = this.pageCount - 1;
       if ((page = this.props.currentPage + 1) >= penultimate) {
         page = penultimate;
       }
@@ -399,19 +182,18 @@ var Pager = function (_Component) {
         isNextPage: true,
         idx: 'n'
       });
-    }
-  }, {
-    key: '_addPages',
-    value: function _addPages(buttons) {
-      var beginPage = Math.max(0, this.props.currentPage - Math.round(this.props.maxButtonCount / 2));
-      var endPage = beginPage + this.props.maxButtonCount - 1;
+    };
+
+    this._addPages = buttons => {
+      let beginPage = Math.max(0, this.props.currentPage - Math.round(this.props.maxButtonCount / 2));
+      let endPage = beginPage + this.props.maxButtonCount - 1;
       if (endPage >= this.pageCount) {
         endPage = this.pageCount - 1;
         beginPage = Math.max(0, endPage - this.props.maxButtonCount + 1);
       }
 
-      for (var i = beginPage; i <= endPage; ++i) {
-        var isActive = this.props.currentPage === i;
+      for (let i = beginPage; i <= endPage; ++i) {
+        let isActive = this.props.currentPage === i;
         this._addPageButton(buttons, {
           page: i,
           content: i + 1,
@@ -420,274 +202,175 @@ var Pager = function (_Component) {
           idx: i
         });
       }
-    }
-  }, {
-    key: 'render',
-    value: function render() {
-      var Tag = this.props.pagerTag;
-      var buttons = [];
-      if (this.props.firstPageLabel) {
-        this._addFirstPageButton(buttons);
-      }
-      if (this.props.prevPageLabel) {
-        this._addPrevPageButton(buttons);
-      }
-      this._addPages(buttons);
-      if (this.props.nextPageLabel) {
-        this._addNextPageButton(buttons);
-      }
-      if (this.props.lastPageLabel) {
-        this._addLastPageButton(buttons);
-      }
-      return React.createElement(
-        Tag,
-        this.props.options,
-        buttons
-      );
-    }
-  }]);
+    };
 
-  return Pager;
-}(_react.Component);
+    this.generalOptions = {
+      onButtonClick: this.props.onButtonClick,
+      activePageCssClass: this.props.activePageCssClass,
+      disabledPageCssClass: this.props.disabledPageCssClass,
+      nextPageCssClass: this.props.nextPageCssClass,
+      prevPageCssClass: this.props.prevPageCssClass,
+      lastPageCssClass: this.props.lastPageCssClass,
+      firstPageCssClass: this.props.firstPageCssClass,
+      isFirstPage: false,
+      isLastPage: false,
+      isPrevPage: false,
+      isNextPage: false,
+      tag: this.props.pageTag
+    };
+    this.pageCount = Math.ceil(this.props.totalCount / this.props.pageSize);
+  }
 
-exports.default = Pager;
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
+  render() {
+    let Tag = this.props.pagerTag;
+    let buttons = [];
+    if (this.props.firstPageLabel) {
+      this._addFirstPageButton(buttons);
+    }
+    if (this.props.prevPageLabel) {
+      this._addPrevPageButton(buttons);
+    }
+    this._addPages(buttons);
+    if (this.props.nextPageLabel) {
+      this._addNextPageButton(buttons);
+    }
+    if (this.props.lastPageLabel) {
+      this._addLastPageButton(buttons);
+    }
+    return React.createElement(
+      Tag,
+      this.props.options,
+      buttons
+    );
+  }
+}
+
+/* harmony default export */ __webpack_exports__["a"] = (Pager);
+/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(0)))
+
+/***/ }),
+/* 3 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(React) {/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_react__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__TableRow__ = __webpack_require__(1);
+
+
+
+class TableBody extends __WEBPACK_IMPORTED_MODULE_0_react__["Component"] {
+  render() {
+    return React.createElement(
+      'tbody',
+      null,
+      this.props.data.map((item, idx) => {
+        let id = `tr-${this.props.tableId}-${idx}`;
+        return React.createElement(__WEBPACK_IMPORTED_MODULE_1__TableRow__["a" /* default */], {
+          cells: item,
+          options: this.props.options,
+          id: id,
+          key: id
+        });
+      })
+    );
+  }
+}
+
+/* harmony default export */ __webpack_exports__["a"] = (TableBody);
+/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(0)))
 
 /***/ }),
 /* 4 */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* WEBPACK VAR INJECTION */(function(React) {
+/* WEBPACK VAR INJECTION */(function(React) {/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_react__);
 
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
 
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _react = __webpack_require__(0);
-
-var _TableRow = __webpack_require__(1);
-
-var _TableRow2 = _interopRequireDefault(_TableRow);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var TableBody = function (_Component) {
-  _inherits(TableBody, _Component);
-
-  function TableBody(props) {
-    _classCallCheck(this, TableBody);
-
-    return _possibleConstructorReturn(this, (TableBody.__proto__ || Object.getPrototypeOf(TableBody)).call(this, props));
+class TableCaption extends __WEBPACK_IMPORTED_MODULE_0_react__["Component"] {
+  render() {
+    return React.createElement(
+      'caption',
+      this.props.options,
+      this.props.text
+    );
   }
+}
 
-  _createClass(TableBody, [{
-    key: 'render',
-    value: function render() {
-      var _this2 = this;
-
-      return React.createElement(
-        'tbody',
-        null,
-        this.props.data.map(function (item, idx) {
-          var id = 'tr-' + _this2.props.tableId + '-' + idx;
-          return React.createElement(_TableRow2.default, {
-            cells: item,
-            options: _this2.props.options,
-            id: id,
-            key: id
-          });
-        })
-      );
-    }
-  }]);
-
-  return TableBody;
-}(_react.Component);
-
-exports.default = TableBody;
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
+/* harmony default export */ __webpack_exports__["a"] = (TableCaption);
+/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(0)))
 
 /***/ }),
 /* 5 */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* WEBPACK VAR INJECTION */(function(React) {
+/* WEBPACK VAR INJECTION */(function(React) {/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_react__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__TableRow__ = __webpack_require__(1);
 
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
 
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _react = __webpack_require__(0);
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var TableCaption = function (_Component) {
-  _inherits(TableCaption, _Component);
-
-  function TableCaption() {
-    _classCallCheck(this, TableCaption);
-
-    return _possibleConstructorReturn(this, (TableCaption.__proto__ || Object.getPrototypeOf(TableCaption)).apply(this, arguments));
+class TableFooter extends __WEBPACK_IMPORTED_MODULE_0_react__["Component"] {
+  constructor(props) {
+    super(props);
+    this.id = `tf-${this.props.tableId}`;
   }
 
-  _createClass(TableCaption, [{
-    key: 'render',
-    value: function render() {
-      return React.createElement(
-        'caption',
-        this.props.options,
-        this.props.text
-      );
-    }
-  }]);
+  render() {
+    return React.createElement(
+      'tfoot',
+      null,
+      React.createElement(__WEBPACK_IMPORTED_MODULE_1__TableRow__["a" /* default */], { cells: this.props.footerCells, key: this.id, id: this.id })
+    );
+  }
+}
 
-  return TableCaption;
-}(_react.Component);
-
-exports.default = TableCaption;
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
+/* harmony default export */ __webpack_exports__["a"] = (TableFooter);
+/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(0)))
 
 /***/ }),
 /* 6 */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* WEBPACK VAR INJECTION */(function(React) {
+/* WEBPACK VAR INJECTION */(function(React) {/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_react__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__TableRow__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__TableFilter__ = __webpack_require__(11);
 
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
 
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _react = __webpack_require__(0);
 
-var _TableRow = __webpack_require__(1);
-
-var _TableRow2 = _interopRequireDefault(_TableRow);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var TableFooter = function (_Component) {
-  _inherits(TableFooter, _Component);
-
-  function TableFooter(props) {
-    _classCallCheck(this, TableFooter);
-
-    var _this = _possibleConstructorReturn(this, (TableFooter.__proto__ || Object.getPrototypeOf(TableFooter)).call(this, props));
-
-    _this.id = 'tf-' + _this.props.tableId;
-    return _this;
+class TableHeader extends __WEBPACK_IMPORTED_MODULE_0_react__["Component"] {
+  constructor(props) {
+    super(props);
+    this.id = `th-${this.props.tableId}`;
   }
 
-  _createClass(TableFooter, [{
-    key: 'render',
-    value: function render() {
-      return React.createElement(
-        'tfoot',
-        null,
-        React.createElement(_TableRow2.default, { cells: this.props.footerCells, key: this.id, id: this.id })
-      );
-    }
-  }]);
+  render() {
+    let filtersRow = this.props.filters ? React.createElement(__WEBPACK_IMPORTED_MODULE_2__TableFilter__["a" /* default */], { filters: this.props.filters, tableId: this.props.tableId, onFilterChange: this.props.onFilterChange }) : '';
+    return React.createElement(
+      'thead',
+      null,
+      React.createElement(__WEBPACK_IMPORTED_MODULE_1__TableRow__["a" /* default */], {
+        cells: this.props.headerCells,
+        options: this.props.options,
+        id: this.id,
+        key: this.id
+      }),
+      filtersRow
+    );
+  }
+}
 
-  return TableFooter;
-}(_react.Component);
-
-exports.default = TableFooter;
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
+/* harmony default export */ __webpack_exports__["a"] = (TableHeader);
+/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(0)))
 
 /***/ }),
 /* 7 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-/* WEBPACK VAR INJECTION */(function(React) {
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _react = __webpack_require__(0);
-
-var _TableRow = __webpack_require__(1);
-
-var _TableRow2 = _interopRequireDefault(_TableRow);
-
-var _TableFilter = __webpack_require__(2);
-
-var _TableFilter2 = _interopRequireDefault(_TableFilter);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var TableHeader = function (_Component) {
-  _inherits(TableHeader, _Component);
-
-  function TableHeader(props) {
-    _classCallCheck(this, TableHeader);
-
-    var _this = _possibleConstructorReturn(this, (TableHeader.__proto__ || Object.getPrototypeOf(TableHeader)).call(this, props));
-
-    _this.id = 'th-' + _this.props.tableId;
-    return _this;
-  }
-
-  _createClass(TableHeader, [{
-    key: 'render',
-    value: function render() {
-      var filtersRow = this.props.filters ? React.createElement(_TableFilter2.default, { filters: this.props.filters, tableId: this.props.tableId, onFilterChange: this.props.onFilterChange }) : '';
-      return React.createElement(
-        'thead',
-        null,
-        React.createElement(_TableRow2.default, {
-          cells: this.props.headerCells,
-          options: this.props.options,
-          id: this.id,
-          key: this.id
-        }),
-        filtersRow
-      );
-    }
-  }]);
-
-  return TableHeader;
-}(_react.Component);
-
-exports.default = TableHeader;
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
-
-/***/ }),
-/* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -744,99 +427,46 @@ module.exports = function randomString(opts) {
 
 
 /***/ }),
-/* 9 */
-/***/ (function(module, exports, __webpack_require__) {
+/* 8 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* WEBPACK VAR INJECTION */(function(React) {
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* WEBPACK VAR INJECTION */(function(React) {/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_react__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__TableCaption__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__TableHeader__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__TableBody__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__TableFooter__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__Pager__ = __webpack_require__(2);
 
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
 
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _react = __webpack_require__(0);
 
-var _TableCaption = __webpack_require__(5);
 
-var _TableCaption2 = _interopRequireDefault(_TableCaption);
 
-var _TableHeader = __webpack_require__(7);
 
-var _TableHeader2 = _interopRequireDefault(_TableHeader);
+class GridView extends __WEBPACK_IMPORTED_MODULE_0_react__["Component"] {
+  constructor(props) {
+    super(props);
 
-var _TableBody = __webpack_require__(4);
-
-var _TableBody2 = _interopRequireDefault(_TableBody);
-
-var _TableFooter = __webpack_require__(6);
-
-var _TableFooter2 = _interopRequireDefault(_TableFooter);
-
-var _TableFilter = __webpack_require__(2);
-
-var _TableFilter2 = _interopRequireDefault(_TableFilter);
-
-var _Pager = __webpack_require__(3);
-
-var _Pager2 = _interopRequireDefault(_Pager);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var GridView = function (_Component) {
-  _inherits(GridView, _Component);
-
-  function GridView(props) {
-    _classCallCheck(this, GridView);
-
-    var _this = _possibleConstructorReturn(this, (GridView.__proto__ || Object.getPrototypeOf(GridView)).call(this, props));
-
-    _this.id = __webpack_require__(8)();
-    _this.showHeader = _this.props.showHeader || true;
-    _this.showFooter = _this.props.showFooter || false;
-    _this.placeFooterAfterBody = _this.props.placeFooterAfterBody || false;
-    _this.options = _this.props.options || { className: 'grid-view' };
-    _this.captionOptions = _this.props.captionOptions || {};
-    _this.headerRowOptions = _this.props.headerRowOptions || {};
-    _this.footerRowOptions = _this.props.footerRowOptions || {};
-    _this.rowOptions = _this.props.rowOptions || {};
-    _this.tableOptions = _this.props.tableOptions || {
-      className: ['table', 'table-striped', 'table-bordered'].join(' ')
-    };
-    _this.notSetText = _this.props.notSetText || '(not set)';
-    _this.filters = _this.props.filters || null;
-    return _this;
-  }
-
-  _createClass(GridView, [{
-    key: '_prepareCell',
-    value: function _prepareCell(cell, rule) {
+    this._prepareCell = (cell, rule) => {
       if (typeof rule === 'function') {
         return rule(cell);
       }
       // ToDo improve formatting logic
       return cell;
-    }
-  }, {
-    key: '_prepareRow',
-    value: function _prepareRow(row) {
-      var isTh = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
+    };
 
-      var readyRow = [];
-      for (var column in this.props.columns) {
-        var cell = void 0;
+    this._prepareRow = (row, isTh = false) => {
+      let readyRow = [];
+      for (let column in this.props.columns) {
+        let cell;
         if (row[column]) {
           cell = this._prepareCell(row[column], this.props.columns[column]);
         } else {
           if (isTh) {
-            var title = column.replace(/([A-Z])/g, " $1");
+            let title = column.replace(/([A-Z])/g, " $1");
             cell = (title.charAt(0).toUpperCase() + title.slice(1)).replace(/_/g, ' ');
           } else {
             cell = this.notSetText;
@@ -845,235 +475,291 @@ var GridView = function (_Component) {
         readyRow.push(cell);
       }
       return readyRow;
-    }
-  }, {
-    key: '_prepareFilters',
-    value: function _prepareFilters() {
-      var filters = {};
-      for (var column in this.props.columns) {
+    };
+
+    this._prepareFilters = () => {
+      let filters = {};
+      for (let column in this.props.columns) {
         filters[column] = this.filters[column] || null;
       }
       return filters;
-    }
-  }, {
-    key: 'render',
-    value: function render() {
-      var _this2 = this;
+    };
 
-      var tableContent = [React.createElement(_TableBody2.default, {
-        data: this.props.data.map(function (item) {
-          return _this2._prepareRow(item);
-        }),
-        options: this.rowOptions,
-        tableId: this.id,
-        key: 'tbody-' + this.id
-      })];
-      if (this.showHeader) {
-        tableContent.unshift(React.createElement(_TableHeader2.default, {
-          headerCells: this._prepareRow(this.props.headerCells, true),
-          options: this.headerRowOptions,
-          tableId: this.id,
-          filters: this.filters ? this._prepareFilters() : null,
-          onFilterChange: this.props.onFilterChange,
-          key: 'thead-' + this.id
-        }));
-      }
-      if (this.props.caption) {
-        tableContent.unshift(React.createElement(_TableCaption2.default, { text: this.props.caption, options: this.captionOptions, key: 'tcaption-' + this.id }));
-      }
-      if (this.showFooter) {
-        var footer = React.createElement(_TableFooter2.default, { footerCells: ['d', 'e', 'f'], options: this.footerRowOptions, tableId: this.id });
-        this.placeFooterAfterBody ? tableContent.push(footer) : tableContent.unshift(footer);
-      }
-      return React.createElement(
-        'div',
-        this.options,
-        React.createElement(
-          'table',
-          this.tableOptions,
-          tableContent
-        ),
-        React.createElement(_Pager2.default, {
-          options: this.props.pagerOptions,
-          pageOptions: this.props.pageOptions,
-          currentPage: this.props.currentPage,
-          totalCount: this.props.totalCount,
-          onButtonClick: this.props.onPageButtonClick,
-
-          maxButtonCount: this.props.totalCount || 10,
-          pageSize: this.props.pageSize || 20,
-          pagerTag: this.props.pagerTag || 'ul',
-          pageTag: this.props.pageTag || 'li',
-          activePageCssClass: this.props.activePageCssClass || 'active',
-          disabledPageCssClass: this.props.disabledPageCssClass || 'disabled',
-          nextPageCssClass: this.props.nextPageCssClass || 'next',
-          prevPageCssClass: this.props.prevPageCssClass || 'prev',
-          firstPageCssClass: this.props.firstPageCssClass || 'first',
-          lastPageCssClass: this.props.lastPageCssClass || 'last',
-          nextPageLabel: this.props.nextPageLabel || '»',
-          prevPageLabel: this.props.prevPageLabel || '«',
-          firstPageLabel: this.props.firstPageLabel || null,
-          lastPageLabel: this.props.lastPageLabel || null,
-          tableId: this.id
-        })
-      );
-    }
-  }]);
-
-  return GridView;
-}(_react.Component);
-
-exports.default = GridView;
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
-
-/***/ }),
-/* 10 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-/* WEBPACK VAR INJECTION */(function(React) {
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _react = __webpack_require__(0);
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var PageButton = function (_Component) {
-  _inherits(PageButton, _Component);
-
-  function PageButton(props) {
-    _classCallCheck(this, PageButton);
-
-    var _this = _possibleConstructorReturn(this, (PageButton.__proto__ || Object.getPrototypeOf(PageButton)).call(this, props));
-
-    _this.clickTag = _this.clickTag.bind(_this);
-    return _this;
+    this.id = __webpack_require__(7)();
+    this.showHeader = this.props.showHeader || true;
+    this.showFooter = this.props.showFooter || false;
+    this.placeFooterAfterBody = this.props.placeFooterAfterBody || false;
+    this.options = this.props.options || { className: 'grid-view' };
+    this.captionOptions = this.props.captionOptions || {};
+    this.headerRowOptions = this.props.headerRowOptions || {};
+    this.footerRowOptions = this.props.footerRowOptions || {};
+    this.rowOptions = this.props.rowOptions || {};
+    this.tableOptions = this.props.tableOptions || {
+      className: ['table', 'table-striped', 'table-bordered'].join(' ')
+    };
+    this.notSetText = this.props.notSetText || '(not set)';
+    this.filters = this.props.filters || null;
   }
 
-  _createClass(PageButton, [{
-    key: 'clickTag',
-    value: function clickTag(e) {
+  render() {
+    let tableContent = [React.createElement(__WEBPACK_IMPORTED_MODULE_3__TableBody__["a" /* default */], {
+      data: this.props.data.map(item => this._prepareRow(item)),
+      options: this.rowOptions,
+      tableId: this.id,
+      key: `tbody-${this.id}`
+    })];
+    if (this.showHeader) {
+      tableContent.unshift(React.createElement(__WEBPACK_IMPORTED_MODULE_2__TableHeader__["a" /* default */], {
+        headerCells: this._prepareRow(this.props.headerCells, true),
+        options: this.headerRowOptions,
+        tableId: this.id,
+        filters: this.filters ? this._prepareFilters() : null,
+        onFilterChange: this.props.onFilterChange,
+        key: `thead-${this.id}`
+      }));
+    }
+    if (this.props.caption) {
+      tableContent.unshift(React.createElement(__WEBPACK_IMPORTED_MODULE_1__TableCaption__["a" /* default */], { text: this.props.caption, options: this.captionOptions, key: `tcaption-${this.id}` }));
+    }
+    if (this.showFooter) {
+      let footer = React.createElement(__WEBPACK_IMPORTED_MODULE_4__TableFooter__["a" /* default */], { footerCells: ['d', 'e', 'f'], options: this.footerRowOptions, tableId: this.id });
+      this.placeFooterAfterBody ? tableContent.push(footer) : tableContent.unshift(footer);
+    }
+    return React.createElement(
+      'div',
+      this.options,
+      React.createElement(
+        'table',
+        this.tableOptions,
+        tableContent
+      ),
+      React.createElement(__WEBPACK_IMPORTED_MODULE_5__Pager__["a" /* default */], {
+        options: this.props.pagerOptions,
+        pageOptions: this.props.pageOptions,
+        currentPage: this.props.currentPage,
+        totalCount: this.props.totalCount,
+        onButtonClick: this.props.onPageButtonClick,
+
+        maxButtonCount: this.props.totalCount || 10,
+        pageSize: this.props.pageSize || 20,
+        pagerTag: this.props.pagerTag || 'ul',
+        pageTag: this.props.pageTag || 'li',
+        activePageCssClass: this.props.activePageCssClass || 'active',
+        disabledPageCssClass: this.props.disabledPageCssClass || 'disabled',
+        nextPageCssClass: this.props.nextPageCssClass || 'next',
+        prevPageCssClass: this.props.prevPageCssClass || 'prev',
+        firstPageCssClass: this.props.firstPageCssClass || 'first',
+        lastPageCssClass: this.props.lastPageCssClass || 'last',
+        nextPageLabel: this.props.nextPageLabel || '»',
+        prevPageLabel: this.props.prevPageLabel || '«',
+        firstPageLabel: this.props.firstPageLabel || null,
+        lastPageLabel: this.props.lastPageLabel || null,
+        tableId: this.id
+      })
+    );
+  }
+}
+
+/* harmony default export */ __webpack_exports__["default"] = (GridView);
+/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(0)))
+
+/***/ }),
+/* 9 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(React) {/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_react__);
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+
+
+class PageButton extends __WEBPACK_IMPORTED_MODULE_0_react__["Component"] {
+  constructor(...args) {
+    var _temp;
+
+    return _temp = super(...args), this.clickTag = e => {
       e.preventDefault();
       if (this.props.disabled) {
         return;
       }
       this.props.onButtonClick(this.props.page);
+    }, _temp;
+  }
+
+  render() {
+    let Tag = this.props.tag;
+    let LinkTag = 'a';
+    let options = {};
+    options.className = this.props.className;
+
+    if (typeof options.className === 'string') {
+      options.className = options.className.split(' ');
+    } else {
+      options.className = [];
     }
-  }, {
-    key: 'render',
-    value: function render() {
-      var Tag = this.props.tag;
-      var LinkTag = 'a';
-      var options = {};
-      options.className = this.props.className;
 
-      if (typeof options.className === 'string') {
-        options.className = options.className.split(' ');
-      } else {
-        options.className = [];
-      }
-
-      if (this.props.isNextPage) {
-        options.className.push(this.props.nextPageCssClass);
-      }
-      if (this.props.isPrevPage) {
-        options.className.push(this.props.prevPageCssClass);
-      }
-      if (this.props.isLastPage) {
-        options.className.push(this.props.lastPageCssClass);
-      }
-      if (this.props.isFirstPage) {
-        options.className.push(this.props.firstPageCssClass);
-      }
-      if (this.props.active) {
-        options.className.push(this.props.activePageCssClass);
-      }
-      if (this.props.disabled) {
-        options.className.push(this.props.disabledPageCssClass);
-        LinkTag = 'span';
-      }
-      if (options.className.length) {
-        options.className = options.className.join(' ');
-      } else {
-        delete options.className;
-      }
-      return React.createElement(
-        Tag,
-        null,
-        React.createElement(
-          LinkTag,
-          _extends({
-            onClick: this.clickTag
-          }, options),
-          this.props.content
-        )
-      );
+    if (this.props.isNextPage) {
+      options.className.push(this.props.nextPageCssClass);
     }
-  }]);
+    if (this.props.isPrevPage) {
+      options.className.push(this.props.prevPageCssClass);
+    }
+    if (this.props.isLastPage) {
+      options.className.push(this.props.lastPageCssClass);
+    }
+    if (this.props.isFirstPage) {
+      options.className.push(this.props.firstPageCssClass);
+    }
+    if (this.props.active) {
+      options.className.push(this.props.activePageCssClass);
+    }
+    if (this.props.disabled) {
+      options.className.push(this.props.disabledPageCssClass);
+      LinkTag = 'span';
+    }
+    if (options.className.length) {
+      options.className = options.className.join(' ');
+    } else {
+      delete options.className;
+    }
+    return React.createElement(
+      Tag,
+      null,
+      React.createElement(
+        LinkTag,
+        _extends({
+          onClick: this.clickTag
+        }, options),
+        this.props.content
+      )
+    );
+  }
+}
 
-  return PageButton;
-}(_react.Component);
+/* harmony default export */ __webpack_exports__["a"] = (PageButton);
+/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(0)))
 
-exports.default = PageButton;
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
+/***/ }),
+/* 10 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(React) {/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_react__);
+
+
+class TableCell extends __WEBPACK_IMPORTED_MODULE_0_react__["Component"] {
+  render() {
+    return React.createElement(
+      'td',
+      null,
+      this.props.cell
+    );
+  }
+}
+
+/* harmony default export */ __webpack_exports__["a"] = (TableCell);
+/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(0)))
 
 /***/ }),
 /* 11 */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* WEBPACK VAR INJECTION */(function(React) {
+/* WEBPACK VAR INJECTION */(function(React) {/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_react__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__TableRow__ = __webpack_require__(1);
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
 
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _react = __webpack_require__(0);
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+class TableFilter extends __WEBPACK_IMPORTED_MODULE_0_react__["Component"] {
+  constructor(props) {
+    super(props);
 
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+    this._renderFilters = () => {
+      let readyFilters = [];
+      for (let column in this.props.filters) {
+        let filter = this.props.filters[column];
+        readyFilters.push(this._prepareFilter(column, filter));
+      }
+      return readyFilters;
+    };
 
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+    this._getFieldName = column => {
+      return `search-${this.props.tableId}-${column}`;
+    };
 
-var TableCell = function (_Component) {
-  _inherits(TableCell, _Component);
+    this._renderFilter = (column, type, options = {}) => {
+      const name = this._getFieldName(column);
+      switch (type) {
+        case 'text':
+          return React.createElement('input', _extends({ name: name, type: 'text' }, options, { onChange: this.applyFilters }));
+        case 'checkbox':
+          return React.createElement('input', _extends({ name: name, type: 'checkbox' }, options, { onChange: this.applyFilters }));
+        case 'select':
+          let opts = [];
+          if (!options.data) {
+            throw new Error('Filter select has no options');
+          }
+          let idx = 0;
+          for (let val in options.data) {
+            opts.push(React.createElement(
+              'option',
+              { key: `${name}-${idx++}`, value: val },
+              options.data[val]
+            ));
+          }
+          return React.createElement(
+            'select',
+            { name: this._getFieldName(column), onChange: this.applyFilters },
+            opts
+          );
+      }
+      return null;
+    };
 
-  function TableCell() {
-    _classCallCheck(this, TableCell);
+    this._prepareFilter = (column, filter = null) => {
+      if (!filter) {
+        return '';
+      }
+      if (typeof filter === 'string') {
+        return this._renderFilter(column, filter);
+      }
+      if (typeof filter === 'object') {
+        return this._renderFilter(column, filter.type, filter.options || {});
+      }
+      if (typeof filter === 'function') {
+        return filter(this._getFieldName(column));
+      }
+      throw new Error('Invalid filter param');
+    };
 
-    return _possibleConstructorReturn(this, (TableCell.__proto__ || Object.getPrototypeOf(TableCell)).apply(this, arguments));
+    this.applyFilters = e => {
+      let filters = Object.assign({}, this.state.filters);
+      let property = e.target.name.split('-').pop();
+      filters[property] = e.target.value;
+      this.setState({ filters: filters }, () => this.props.onFilterChange(this.state.filters));
+    };
+
+    this.state = {
+      filters: {}
+    };
   }
 
-  _createClass(TableCell, [{
-    key: 'render',
-    value: function render() {
-      return React.createElement(
-        'td',
-        null,
-        this.props.cell
-      );
-    }
-  }]);
+  render() {
+    return React.createElement(__WEBPACK_IMPORTED_MODULE_1__TableRow__["a" /* default */], {
+      cells: this._renderFilters(),
+      id: this.id,
+      key: this.id
+    });
+  }
+}
 
-  return TableCell;
-}(_react.Component);
-
-exports.default = TableCell;
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
+/* harmony default export */ __webpack_exports__["a"] = (TableFilter);
+/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(0)))
 
 /***/ })
 /******/ ]);

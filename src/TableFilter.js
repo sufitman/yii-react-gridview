@@ -4,23 +4,22 @@ import TableRow from './TableRow';
 class TableFilter extends Component {
   constructor(props) {
     super(props);
-    this.applyFilters = this.applyFilters.bind(this);
     this.state = {
       filters: {}
     };
   }
-  _renderFilters() {
+  _renderFilters = () => {
     let readyFilters = [];
     for (let column in this.props.filters) {
       let filter = this.props.filters[column];
       readyFilters.push(this._prepareFilter(column, filter));
     }
     return readyFilters;
-  }
-  _getFieldName(column) {
+  };
+  _getFieldName = (column) => {
     return `search-${this.props.tableId}-${column}`;
-  }
-  _renderFilter(column, type, options = {}) {
+  };
+  _renderFilter = (column, type, options = {}) => {
     const name = this._getFieldName(column);
     switch (type) {
       case 'text':
@@ -39,8 +38,8 @@ class TableFilter extends Component {
         return <select name={this._getFieldName(column)} onChange={ this.applyFilters }>{opts}</select>
     }
     return null;
-  }
-  _prepareFilter(column, filter = null) {
+  };
+  _prepareFilter = (column, filter = null) => {
     if (!filter) {
       return '';
     }
@@ -54,12 +53,13 @@ class TableFilter extends Component {
       return filter(this._getFieldName(column));
     }
     throw new Error('Invalid filter param');
-  }
-  applyFilters(e) {
+  };
+  applyFilters = (e) => {
     let filters = Object.assign({}, this.state.filters);
-    filters[e.target.name] = e.target.value;
+    let property = e.target.name.split('-').pop();
+    filters[property] = e.target.value;
     this.setState({filters: filters}, () => this.props.onFilterChange(this.state.filters));
-  }
+  };
   render() {
     return <TableRow
       cells={ this._renderFilters() }

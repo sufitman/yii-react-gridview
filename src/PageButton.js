@@ -1,17 +1,13 @@
 import {Component} from 'react'
 
 class PageButton extends Component {
-  constructor(props) {
-    super(props);
-    this.clickTag = this.clickTag.bind(this);
-  }
-  clickTag(e) {
+  clickTag = (e) => {
     e.preventDefault();
     if (this.props.disabled) {
       return;
     }
     this.props.onButtonClick(this.props.page);
-  }
+  };
   render() {
     let Tag = this.props.tag;
     let LinkTag = 'a'

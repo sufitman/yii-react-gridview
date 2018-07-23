@@ -17,15 +17,15 @@ class Pager extends Component {
       isPrevPage: false,
       isNextPage: false,
       tag: this.props.pageTag
-    }
+    };
     this.pageCount = Math.ceil(this.props.totalCount / this.props.pageSize);
   }
-  _addPageButton(buttons, pageButtonOptions) {
+  _addPageButton = (buttons, pageButtonOptions) => {
     let options = Object.assign({}, this.generalOptions, pageButtonOptions);
     options.key = `pg-${this.props.tableId}-${pageButtonOptions.idx}`;
     buttons.push(<PageButton { ...options } />);
-  }
-  _addFirstPageButton(buttons) {
+  };
+  _addFirstPageButton = (buttons) => {
     let page = 0;
     let isActive = this.props.currentPage === page;
     this._addPageButton(buttons, {
@@ -36,8 +36,8 @@ class Pager extends Component {
       isFirstPage: true,
       idx: 'f'
     });
-  }
-  _addLastPageButton(buttons) {
+  };
+  _addLastPageButton = (buttons) => {
     this._addPageButton(buttons, {
       page: this.pageCount - 1,
       content: this.props.lastPageLabel || this.pageCount,
@@ -46,8 +46,8 @@ class Pager extends Component {
       isLastPage: true,
       idx: 'l'
     });
-  }
-  _addPrevPageButton(buttons) {
+  };
+  _addPrevPageButton = (buttons) => {
     let page;
     if ((page = this.props.currentPage - 1) < 0) {
       page = 0;
@@ -60,10 +60,10 @@ class Pager extends Component {
       isPrevPage: true,
       idx: 'p'
     });
-  }
-  _addNextPageButton(buttons) {
+  };
+  _addNextPageButton = (buttons) => {
     let page;
-    let penultimate = this.pageCount - 1
+    let penultimate = this.pageCount - 1;
     if ((page = this.props.currentPage + 1) >= penultimate) {
       page = penultimate;
     }
@@ -75,10 +75,10 @@ class Pager extends Component {
       isNextPage: true,
       idx: 'n'
     });
-  }
-  _addPages(buttons) {
+  };
+  _addPages = (buttons) => {
     let beginPage = Math.max(0, this.props.currentPage - Math.round(this.props.maxButtonCount / 2));
-    let endPage = beginPage + this.props.maxButtonCount - 1
+    let endPage = beginPage + this.props.maxButtonCount - 1;
     if (endPage >= this.pageCount) {
       endPage = this.pageCount - 1;
       beginPage = Math.max(0, endPage - this.props.maxButtonCount + 1);
@@ -94,7 +94,7 @@ class Pager extends Component {
         idx: i,
       })
     }
-  }
+  };
   render() {
     let Tag = this.props.pagerTag;
     let buttons = [];

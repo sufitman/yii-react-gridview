@@ -3,10 +3,6 @@ import TableRow from './TableRow';
 
 
 class TableBody extends Component {
-  constructor(props) {
-    super(props);
-  }
-
   render() {
     return <tbody>
     {this.props.data.map((item, idx) => {

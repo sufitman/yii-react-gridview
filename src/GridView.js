@@ -3,12 +3,11 @@ import TableCaption from './TableCaption';
 import TableHeader from './TableHeader';
 import TableBody from './TableBody';
 import TableFooter from './TableFooter';
-import TableFilter from './TableFilter';
 import Pager from './Pager';
 
 class GridView extends Component {
   constructor(props) {
-    super(props)
+    super(props);
     this.id = require('random-string')();
     this.showHeader = this.props.showHeader || true;
     this.showFooter = this.props.showFooter || false;
@@ -29,15 +28,15 @@ class GridView extends Component {
     this.filters = this.props.filters || null;
   }
 
-  _prepareCell(cell, rule) {
+  _prepareCell = (cell, rule) => {
     if (typeof rule === 'function') {
       return rule(cell)
     }
     // ToDo improve formatting logic
     return cell;
-  }
+  };
 
-  _prepareRow(row, isTh = false) {
+  _prepareRow = (row, isTh = false) => {
     let readyRow = [];
     for (let column in this.props.columns) {
       let cell;
@@ -54,15 +53,15 @@ class GridView extends Component {
       readyRow.push(cell)
     }
     return readyRow;
-  }
+  };
 
-  _prepareFilters() {
+  _prepareFilters = () => {
     let filters = {};
     for (let column in this.props.columns) {
       filters[column] = this.filters[column] || null;
     }
     return filters;
-  }
+  };
 
   render() {
     let tableContent = [<TableBody
