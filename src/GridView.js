@@ -33,6 +33,9 @@ class GridView extends Component {
     if (typeof rule === 'function') {
       return rule(cell, idx)
     }
+    if (rule === 'serial') {
+      return this.props.currentPage * this.props.pageSize + 1 + idx
+    }
     // ToDo improve formatting logic
     return cell;
   };
