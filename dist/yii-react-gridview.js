@@ -450,28 +450,26 @@ class GridView extends __WEBPACK_IMPORTED_MODULE_0_react__["Component"] {
   constructor(props) {
     super(props);
 
-    this._prepareCell = (cell, rule) => {
+    this._prepareCell = (cell, idx, rule) => {
       if (typeof rule === 'function') {
-        return rule(cell);
+        return rule(cell, idx);
       }
       // ToDo improve formatting logic
       return cell;
     };
 
-    this._prepareRow = (row, isTh = false) => {
+    this._prepareRow = (row, idx, isTh = false) => {
       let readyRow = [];
       for (let column in this.props.columns) {
-        let cell;
-        if (row[column]) {
-          cell = this._prepareCell(row[column], this.props.columns[column]);
-        } else {
-          if (isTh) {
-            let title = column.replace(/([A-Z])/g, " $1");
-            cell = (title.charAt(0).toUpperCase() + title.slice(1)).replace(/_/g, ' ');
-          } else {
-            cell = this.notSetText;
-          }
+        let cell = this._prepareCell(row[column], idx, this.props.columns[column]);
+        if (isTh) {
+          let title = column.replace(/([A-Z])/g, " $1");
+          cell = (title.charAt(0).toUpperCase() + title.slice(1)).replace(/_/g, ' ');
         }
+        if (!cell) {
+          cell = this.notSetText;
+        }
+
         readyRow.push(cell);
       }
       return readyRow;
@@ -507,7 +505,7 @@ class GridView extends __WEBPACK_IMPORTED_MODULE_0_react__["Component"] {
         somethingFound = true;
     if (this.props.data && this.props.data.length) {
       tableContent = [React.createElement(__WEBPACK_IMPORTED_MODULE_3__TableBody__["a" /* default */], {
-        data: this.props.data.map(item => this._prepareRow(item)),
+        data: this.props.data.map((item, idx) => this._prepareRow(item, idx)),
         options: this.rowOptions,
         tableId: this.id,
         key: `tbody-${this.id}`
@@ -518,7 +516,7 @@ class GridView extends __WEBPACK_IMPORTED_MODULE_0_react__["Component"] {
     }
     if (this.showHeader) {
       tableContent.unshift(React.createElement(__WEBPACK_IMPORTED_MODULE_2__TableHeader__["a" /* default */], {
-        headerCells: this._prepareRow(this.props.headerCells, true),
+        headerCells: this._prepareRow(this.props.headerCells, null, true),
         options: this.headerRowOptions,
         tableId: this.id,
         filters: this.filters ? this._prepareFilters() : null,
