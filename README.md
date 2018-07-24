@@ -5,7 +5,7 @@
 npm install --save yii-react-gridview
 ```
 ## Example
-```js
+```jsx
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import GridView from 'yii-react-gridview';
@@ -56,7 +56,7 @@ class App extends Component {
           maxButtonCount={ this.maxButtonCount }
           pageSize={this.pageSize }
           onPageButtonClick={ this.onPageButtonClicked }
-        ?>
+        />
       </div>
     );
   }
