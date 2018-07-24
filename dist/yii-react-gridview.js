@@ -361,17 +361,19 @@ class TableHeader extends __WEBPACK_IMPORTED_MODULE_0_react__["Component"] {
 
 
   render() {
-    let filtersRow = this.props.filters ? React.createElement(__WEBPACK_IMPORTED_MODULE_2__TableFilter__["a" /* default */], { filters: this.props.filters, tableId: this.props.tableId, onFilterChange: this.filterChanged }) : '';
+    let tableHeader = [React.createElement(__WEBPACK_IMPORTED_MODULE_1__TableRow__["a" /* default */], {
+      cells: this.props.headerCells,
+      options: this.props.options,
+      id: this.id,
+      key: this.id
+    })];
+    if (this.props.filters) {
+      tableHeader.push(React.createElement(__WEBPACK_IMPORTED_MODULE_2__TableFilter__["a" /* default */], { filters: this.props.filters, tableId: this.props.tableId, onFilterChange: this.filterChanged }));
+    }
     return React.createElement(
       'thead',
       null,
-      React.createElement(__WEBPACK_IMPORTED_MODULE_1__TableRow__["a" /* default */], {
-        cells: this.props.headerCells,
-        options: this.props.options,
-        id: this.id,
-        key: this.id
-      }),
-      filtersRow
+      tableHeader
     );
   }
 }

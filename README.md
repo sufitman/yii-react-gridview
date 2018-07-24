@@ -1,3 +1,13 @@
+# Yii2 GridView widget for react
+
+## Installing
+```
+npm install --save yii-react-gridview
+```
+## Example
+```
+
+```
 |Property|Type|Default value|Description|
 |:---:|:---:|:---:|:---|
 |`data`|Array|undefined|Array of models to show in list|

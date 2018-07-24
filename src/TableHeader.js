@@ -13,21 +13,19 @@ class TableHeader extends Component {
       clearTimeout(this.filterTimeout)
     }
     this.filterTimeout = setTimeout(() => this.props.onFilterChange(filters), this.props.filterDelay * 1000);
-  }
+  };
 
   render() {
-    let filtersRow = this.props.filters
-      ? <TableFilter filters={ this.props.filters } tableId={ this.props.tableId } onFilterChange={ this.filterChanged }/>
-      : '';
-    return <thead>
-    <TableRow
+    let tableHeader = [<TableRow
       cells={this.props.headerCells}
       options={this.props.options}
       id={this.id}
       key={this.id}
-    />
-    { filtersRow }
-    </thead>;
+    />];
+    if (this.props.filters) {
+      tableHeader.push(<TableFilter filters={ this.props.filters } tableId={ this.props.tableId } onFilterChange={ this.filterChanged }/>)
+    }
+    return <thead>{ tableHeader }</thead>;
   }
 }
 
