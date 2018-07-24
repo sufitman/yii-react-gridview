@@ -9,9 +9,9 @@ class GridView extends Component {
   constructor(props) {
     super(props);
     this.id = require('random-string')();
-    this.showHeader = this.props.showHeader || true;
-    this.showFooter = this.props.showFooter || false;
-    this.placeFooterAfterBody = this.props.placeFooterAfterBody || false;
+    this._setDefault('showHeader', true);
+    this._setDefault('showFooter', false);
+    this._setDefault('placeFooterAfterBody', false);
     this.options = this.props.options || {className: 'grid-view'};
     this.captionOptions = this.props.captionOptions || {};
     this.headerRowOptions = this.props.headerRowOptions || {};
@@ -29,6 +29,14 @@ class GridView extends Component {
     this.emptyCaption = this.props.emptyCaption || 'Nothing found';
   }
 
+  _setDefault = (prop, defaultValue) => {
+    if (typeof this.props[prop] !== 'undefined') {
+      this[prop] = this.props[prop];
+    } else {
+      this[prop] = defaultValue;
+    }
+  };
+
   _prepareCell = (cell, idx, rule) => {
     if (typeof rule === 'function') {
       return rule(cell, idx)
@@ -44,14 +52,14 @@ class GridView extends Component {
     let readyRow = [];
     for (let column in this.props.columns) {
       let cell = this._prepareCell(row[column], idx, this.props.columns[column]);
-      if (isTh) {
-        let title = column.replace(/([A-Z])/g, " $1");
-        cell = (title.charAt(0).toUpperCase() + title.slice(1)).replace(/_/g, ' ');
-      }
       if (!cell) {
-        cell = this.notSetText
+        if (isTh) {
+          let title = column.replace(/([A-Z])/g, " $1");
+          cell = (title.charAt(0).toUpperCase() + title.slice(1)).replace(/_/g, ' ');
+        } else {
+          cell = this.notSetText
+        }
       }
-
       readyRow.push(cell)
     }
     return readyRow;
@@ -78,9 +86,10 @@ class GridView extends Component {
       tableContent = [];
       somethingFound = false;
     }
+
     if (this.showHeader) {
       tableContent.unshift(<TableHeader
-        headerCells={ this._prepareRow(this.props.headerCells, null, true) }
+        headerCells={ this._prepareRow(this.props.headerCells || {}, null, true) }
         options={ this.headerRowOptions }
         tableId={ this.id }
         filters={ this.filters ? this._prepareFilters() : null }
@@ -110,7 +119,6 @@ class GridView extends Component {
         currentPage={ this.props.currentPage }
         totalCount={ this.props.totalCount }
         onButtonClick={ this.props.onPageButtonClick }
-
         maxButtonCount={ this.props.totalCount || 10 }
         pageSize={ this.props.pageSize || 20 }
         pagerTag={ this.props.pagerTag || 'ul' }
