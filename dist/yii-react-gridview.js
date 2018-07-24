@@ -347,11 +347,21 @@ class TableFooter extends __WEBPACK_IMPORTED_MODULE_0_react__["Component"] {
 class TableHeader extends __WEBPACK_IMPORTED_MODULE_0_react__["Component"] {
   constructor(props) {
     super(props);
+    this.filterTimeout = null;
+
+    this.filterChanged = filters => {
+      if (this.filterTimeout) {
+        clearTimeout(this.filterTimeout);
+      }
+      this.filterTimeout = setTimeout(() => this.props.onFilterChange(filters), this.props.filterDelay * 1000);
+    };
+
     this.id = `th-${this.props.tableId}`;
   }
 
+
   render() {
-    let filtersRow = this.props.filters ? React.createElement(__WEBPACK_IMPORTED_MODULE_2__TableFilter__["a" /* default */], { filters: this.props.filters, tableId: this.props.tableId, onFilterChange: this.props.onFilterChange }) : '';
+    let filtersRow = this.props.filters ? React.createElement(__WEBPACK_IMPORTED_MODULE_2__TableFilter__["a" /* default */], { filters: this.props.filters, tableId: this.props.tableId, onFilterChange: this.filterChanged }) : '';
     return React.createElement(
       'thead',
       null,
@@ -454,6 +464,9 @@ class GridView extends __WEBPACK_IMPORTED_MODULE_0_react__["Component"] {
       if (typeof rule === 'function') {
         return rule(cell, idx);
       }
+      if (rule === 'serial') {
+        return this.props.currentPage * this.props.pageSize + 1 + idx;
+      }
       // ToDo improve formatting logic
       return cell;
     };
@@ -521,6 +534,7 @@ class GridView extends __WEBPACK_IMPORTED_MODULE_0_react__["Component"] {
         tableId: this.id,
         filters: this.filters ? this._prepareFilters() : null,
         onFilterChange: this.props.onFilterChange,
+        filterDelay: this.props.filterDelay || 3,
         key: `thead-${this.id}`
       }));
     }

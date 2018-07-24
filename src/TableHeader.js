@@ -7,10 +7,17 @@ class TableHeader extends Component {
     super(props);
     this.id = `th-${this.props.tableId}`;
   }
+  filterTimeout = null;
+  filterChanged = (filters) => {
+    if (this.filterTimeout) {
+      clearTimeout(this.filterTimeout)
+    }
+    this.filterTimeout = setTimeout(() => this.props.onFilterChange(filters), this.props.filterDelay * 1000);
+  }
 
   render() {
     let filtersRow = this.props.filters
-      ? <TableFilter filters={ this.props.filters } tableId={ this.props.tableId } onFilterChange={ this.props.onFilterChange }/>
+      ? <TableFilter filters={ this.props.filters } tableId={ this.props.tableId } onFilterChange={ this.filterChanged }/>
       : '';
     return <thead>
     <TableRow

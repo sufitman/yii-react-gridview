@@ -85,6 +85,7 @@ class GridView extends Component {
         tableId={ this.id }
         filters={ this.filters ? this._prepareFilters() : null }
         onFilterChange={ this.props.onFilterChange }
+        filterDelay={ this.props.filterDelay || 3 }
         key={ `thead-${this.id}` }
       />);
     }
