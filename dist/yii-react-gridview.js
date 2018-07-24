@@ -574,7 +574,7 @@ class GridView extends __WEBPACK_IMPORTED_MODULE_0_react__["Component"] {
         currentPage: this.props.currentPage,
         totalCount: this.props.totalCount,
         onButtonClick: this.props.onPageButtonClick,
-        maxButtonCount: this.props.totalCount || 10,
+        maxButtonCount: this.props.maxButtonCount || 10,
         pageSize: this.props.pageSize || 20,
         pagerTag: this.props.pagerTag || 'ul',
         pageTag: this.props.pageTag || 'li',
