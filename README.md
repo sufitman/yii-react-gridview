@@ -6,7 +6,7 @@
 |`captionOptions`|Object|{}|HTML attributes of `caption`|
 |`tableOptions`|Object|{}|HTML attributes of table|
 |`showHeader`|Boolean|true|Whether show \<thead\> or not|
-|`showFooter`|Boolean|false|Whether show \<tfoo\t> or not|
+|`showFooter`|Boolean|false|Whether show \<tfoot\> or not|
 |`headerRowOptions`|Object|{}|HTML attributes of *thead > row*|
 |`footerRowOptions`|Object|{}|HTML attributes of *tfoot > row*|
 |`rowOptions`|Object|{}|HTML attributes of *tbody \> row*|
