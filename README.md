@@ -5,6 +5,7 @@
 npm install --save yii-react-gridview
 ```
 ## Example
+of component:
 ```jsx
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
@@ -17,7 +18,7 @@ class App extends Component {
     this.state = {
       data: null,
     };
-    Axios.get('/url/to/your/action').then(response => {
+    Axios.get('/your/get-data').then(response => {
       let dataProvider = response.data;
       this.pageSize = dataProvider.pageSize;
       this.headerCells = dataProvider.headerCells;
@@ -37,7 +38,7 @@ class App extends Component {
   }
   
   onPageButtonClicked = (currentPage) =>  {
-    Axios.get(/path/to/currentPage).then(response => {
+    Axios.get('/your/get-data').then(response => {
       this.setState({
         currentPage: currentPage,
         //...
@@ -64,6 +65,31 @@ class App extends Component {
 
 ReactDOM.render(<App/>, document.getElementById('root'));
 ```
+
+of action:
+```php
+class YourController extends Controller {
+    public function actionGetData($currentPage = 0, $pageSize = 20) {
+        \Yii::$app->response->format = Response::FORMAT_JSON;
+        return [
+            'data' => ArrayHelper::toArray(User::find()
+                ->offset($currentPage * $pageSize)
+                ->limit($pageSize)
+                ->all(), [
+                User::class => [
+                    'username',
+                    'email',
+                    'city',
+                ]
+            ]),
+            'headerCells' => (new User)->attributeLabels(),
+            'currentPage' => $currentPage,
+            'totalCount' => User::find()->count(),
+            'pageSize' => $pageSize,
+        ];
+    }        
+}
+``` 
 |Property|Type|Default value|Description|
 |:---:|:---:|:---:|:---|
 |`data`|Array|undefined|Array of models to show in list|
