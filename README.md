@@ -6,7 +6,63 @@ npm install --save yii-react-gridview
 ```
 ## Example
 ```
+import React, { Component } from 'react';
+import ReactDOM from 'react-dom';
+import GridView from 'yii-react-gridview';
+import Axios from 'axios';
 
+class App extends Component {
+  constructor (props) {
+    super(props);
+    this.state = {
+      data: null,
+    };
+    Axios.get('/url/to/your/action').then(response => {
+      let dataProvider = response.data;
+      this.pageSize = dataProvider.pageSize;
+      this.headerCells = dataProvider.headerCells;
+      this.maxButtonCount = dataProvider.maxButtonCount;
+      this.setState({
+        data: dataProvider.data,
+        currentPage: dataProvider.currentPage,
+        totalCount: dataProvider.totalCount,
+      });
+    });
+
+    this.columns = {
+      username: null,
+      email: null,
+      city: null,
+    }
+  }
+  
+  onPageButtonClicked = (currentPage) =>  {
+    Axios.get(/path/to/currentPage).then(response => {
+      this.setState({
+        currentPage: currentPage,
+        //...
+      });
+    })
+  };
+  render() {
+    return (
+      <div className="App">
+        <GridView
+          data={ this.state.data }
+          headerCells={ this.headerCells }
+          columns={ this.columns }
+          currentPage={ this.state.currentPage }
+          totalCount={this.state.totalCount}
+          maxButtonCount={ this.maxButtonCount }
+          pageSize={this.pageSize }
+          onPageButtonClick={ this.onPageButtonClicked }
+        ?>
+      </div>
+    );
+  }
+}
+
+ReactDOM.render(<App/>, document.getElementById('root'));
 ```
 |Property|Type|Default value|Description|
 |:---:|:---:|:---:|:---|
