@@ -89,6 +89,8 @@ class YourController extends Controller {
         ];
     }        
 }
+
+## Available `props`
 ``` 
 |Property|Type|Default value|Description|
 |:---:|:---:|:---:|:---|
