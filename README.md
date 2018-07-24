@@ -90,8 +90,8 @@ class YourController extends Controller {
     }        
 }
 
-## Available `props`
 ``` 
+## Available `props`
 |Property|Type|Default value|Description|
 |:---:|:---:|:---:|:---|
 |`data`|Array|undefined|Array of models to show in list|
