@@ -1,11 +1,11 @@
 # Yii2 GridView widget for react
 
 ## Installing
-```
+```bash
 npm install --save yii-react-gridview
 ```
 ## Example
-```
+```js
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import GridView from 'yii-react-gridview';
