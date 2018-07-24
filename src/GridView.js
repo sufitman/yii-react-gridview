@@ -107,7 +107,6 @@ class GridView extends Component {
       </table>
       <Pager
         options={ this.props.pagerOptions }
-        pageOptions={ this.props.pageOptions }
         currentPage={ this.props.currentPage }
         totalCount={ this.props.totalCount }
         onButtonClick={ this.props.onPageButtonClick }

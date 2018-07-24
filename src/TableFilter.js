@@ -35,7 +35,8 @@ class TableFilter extends Component {
         for (let val in options.data) {
           opts.push(<option key={ `${name}-${idx++}` } value={val}>{options.data[val]}</option>);
         }
-        return <select name={this._getFieldName(column)} onChange={ this.applyFilters }>{opts}</select>
+        delete options.data;
+        return <select name={this._getFieldName(column)} onChange={ this.applyFilters } { ...options }>{opts}</select>
     }
     return null;
   };

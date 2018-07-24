@@ -560,7 +560,6 @@ class GridView extends __WEBPACK_IMPORTED_MODULE_0_react__["Component"] {
       ),
       React.createElement(__WEBPACK_IMPORTED_MODULE_5__Pager__["a" /* default */], {
         options: this.props.pagerOptions,
-        pageOptions: this.props.pageOptions,
         currentPage: this.props.currentPage,
         totalCount: this.props.totalCount,
         onButtonClick: this.props.onPageButtonClick,
@@ -737,9 +736,10 @@ class TableFilter extends __WEBPACK_IMPORTED_MODULE_0_react__["Component"] {
               options.data[val]
             ));
           }
+          delete options.data;
           return React.createElement(
             'select',
-            { name: this._getFieldName(column), onChange: this.applyFilters },
+            _extends({ name: this._getFieldName(column), onChange: this.applyFilters }, options),
             opts
           );
       }
