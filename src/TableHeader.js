@@ -23,7 +23,12 @@ class TableHeader extends Component {
       key={this.id}
     />];
     if (this.props.filters) {
-      tableHeader.push(<TableFilter filters={ this.props.filters } tableId={ this.props.tableId } onFilterChange={ this.filterChanged }/>)
+      tableHeader.push(<TableFilter
+        key={ `${this.id}-filters` }
+        filters={ this.props.filters }
+        tableId={ this.props.tableId }
+        onFilterChange={ this.filterChanged }
+      />)
     }
     return <thead>{ tableHeader }</thead>;
   }

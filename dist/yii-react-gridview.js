@@ -368,7 +368,12 @@ class TableHeader extends __WEBPACK_IMPORTED_MODULE_0_react__["Component"] {
       key: this.id
     })];
     if (this.props.filters) {
-      tableHeader.push(React.createElement(__WEBPACK_IMPORTED_MODULE_2__TableFilter__["a" /* default */], { filters: this.props.filters, tableId: this.props.tableId, onFilterChange: this.filterChanged }));
+      tableHeader.push(React.createElement(__WEBPACK_IMPORTED_MODULE_2__TableFilter__["a" /* default */], {
+        key: `${this.id}-filters`,
+        filters: this.props.filters,
+        tableId: this.props.tableId,
+        onFilterChange: this.filterChanged
+      }));
     }
     return React.createElement(
       'thead',
