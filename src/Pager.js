@@ -18,7 +18,9 @@ class Pager extends Component {
       isNextPage: false,
       tag: this.props.pageTag
     };
-    this.pageCount = Math.ceil(this.props.totalCount / this.props.pageSize);
+  }
+  componentDidUpdate = () => {
+    this.pageCount = Math.ceil(this.props.totalCount / this.props.pageSize) || 0;
   }
   _addPageButton = (buttons, pageButtonOptions) => {
     let options = Object.assign({}, this.generalOptions, pageButtonOptions);
@@ -64,7 +66,7 @@ class Pager extends Component {
   _addNextPageButton = (buttons) => {
     let page;
     let penultimate = this.pageCount - 1;
-    if ((page = this.props.currentPage + 1) >= penultimate) {
+    if ((page = (+this.props.currentPage) + 1) >= penultimate) {
       page = penultimate;
     }
     this._addPageButton(buttons, {
@@ -85,7 +87,7 @@ class Pager extends Component {
     }
 
     for (let i = beginPage; i <= endPage; ++i) {
-      let isActive = this.props.currentPage === i;
+      let isActive = this.props.currentPage == i;
       this._addPageButton(buttons, {
         page: i,
         content: i + 1,

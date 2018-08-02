@@ -123,6 +123,10 @@ class Pager extends __WEBPACK_IMPORTED_MODULE_0_react__["Component"] {
   constructor(props) {
     super(props);
 
+    this.componentDidUpdate = () => {
+      this.pageCount = Math.ceil(this.props.totalCount / this.props.pageSize) || 0;
+    };
+
     this._addPageButton = (buttons, pageButtonOptions) => {
       let options = Object.assign({}, this.generalOptions, pageButtonOptions);
       options.key = `pg-${this.props.tableId}-${pageButtonOptions.idx}`;
@@ -171,7 +175,7 @@ class Pager extends __WEBPACK_IMPORTED_MODULE_0_react__["Component"] {
     this._addNextPageButton = buttons => {
       let page;
       let penultimate = this.pageCount - 1;
-      if ((page = this.props.currentPage + 1) >= penultimate) {
+      if ((page = +this.props.currentPage + 1) >= penultimate) {
         page = penultimate;
       }
       this._addPageButton(buttons, {
@@ -193,7 +197,7 @@ class Pager extends __WEBPACK_IMPORTED_MODULE_0_react__["Component"] {
       }
 
       for (let i = beginPage; i <= endPage; ++i) {
-        let isActive = this.props.currentPage === i;
+        let isActive = this.props.currentPage == i;
         this._addPageButton(buttons, {
           page: i,
           content: i + 1,
@@ -218,7 +222,6 @@ class Pager extends __WEBPACK_IMPORTED_MODULE_0_react__["Component"] {
       isNextPage: false,
       tag: this.props.pageTag
     };
-    this.pageCount = Math.ceil(this.props.totalCount / this.props.pageSize);
   }
 
   render() {
