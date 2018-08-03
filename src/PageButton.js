@@ -1,15 +1,19 @@
 import {Component} from 'react'
 
 class PageButton extends Component {
+  constructor(props) {
+    super(props);
+    this.settings = this.props.settings;
+  }
   clickTag = (e) => {
     e.preventDefault();
     if (this.props.disabled) {
       return;
     }
-    this.props.onButtonClick(this.props.page);
+    this.settings.onButtonClick(this.props.page);
   };
   render() {
-    let Tag = this.props.tag;
+    let Tag = this.settings.tag;
     let LinkTag = 'a'
     let options = {};
     options.className = this.props.className;
@@ -21,22 +25,22 @@ class PageButton extends Component {
     }
 
     if (this.props.isNextPage) {
-      options.className.push(this.props.nextPageCssClass);
+      options.className.push(this.settings.nextPageCssClass);
     }
     if (this.props.isPrevPage) {
-      options.className.push(this.props.prevPageCssClass);
+      options.className.push(this.settings.prevPageCssClass);
     }
     if (this.props.isLastPage) {
-      options.className.push(this.props.lastPageCssClass);
+      options.className.push(this.settings.lastPageCssClass);
     }
     if (this.props.isFirstPage) {
-      options.className.push(this.props.firstPageCssClass);
+      options.className.push(this.settings.firstPageCssClass);
     }
     if (this.props.active) {
-      options.className.push(this.props.activePageCssClass);
+      options.className.push(this.settings.activePageCssClass);
     }
     if (this.props.disabled) {
-      options.className.push(this.props.disabledPageCssClass);
+      options.className.push(this.settings.disabledPageCssClass);
       LinkTag = 'span'
     }
     if (options.className.length) {

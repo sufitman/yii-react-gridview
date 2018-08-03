@@ -130,6 +130,7 @@ class Pager extends __WEBPACK_IMPORTED_MODULE_0_react__["Component"] {
     this._addPageButton = (buttons, pageButtonOptions) => {
       let options = Object.assign({}, this.generalOptions, pageButtonOptions);
       options.key = `pg-${this.props.tableId}-${pageButtonOptions.idx}`;
+      options.settings = this.buttonSettings;
       buttons.push(React.createElement(__WEBPACK_IMPORTED_MODULE_1__PageButton__["a" /* default */], options));
     };
 
@@ -138,7 +139,7 @@ class Pager extends __WEBPACK_IMPORTED_MODULE_0_react__["Component"] {
       let isActive = this.props.currentPage === page;
       this._addPageButton(buttons, {
         page: page,
-        content: this.props.firstPageLabel,
+        content: this.settings.firstPageLabel,
         active: isActive,
         disabled: isActive,
         isFirstPage: true,
@@ -149,7 +150,7 @@ class Pager extends __WEBPACK_IMPORTED_MODULE_0_react__["Component"] {
     this._addLastPageButton = buttons => {
       this._addPageButton(buttons, {
         page: this.pageCount - 1,
-        content: this.props.lastPageLabel || this.pageCount,
+        content: this.settings.lastPageLabel || this.pageCount,
         active: false,
         disabled: this.props.currentPage >= this.pageCount - 1,
         isLastPage: true,
@@ -164,7 +165,7 @@ class Pager extends __WEBPACK_IMPORTED_MODULE_0_react__["Component"] {
       }
       this._addPageButton(buttons, {
         page: page,
-        content: this.props.prevPageLabel,
+        content: this.settings.prevPageLabel,
         active: false,
         disabled: this.props.currentPage <= 0,
         isPrevPage: true,
@@ -180,7 +181,7 @@ class Pager extends __WEBPACK_IMPORTED_MODULE_0_react__["Component"] {
       }
       this._addPageButton(buttons, {
         page: page,
-        content: this.props.nextPageLabel,
+        content: this.settings.nextPageLabel,
         active: false,
         disabled: this.props.currentPage >= penultimate,
         isNextPage: true,
@@ -189,55 +190,58 @@ class Pager extends __WEBPACK_IMPORTED_MODULE_0_react__["Component"] {
     };
 
     this._addPages = buttons => {
-      let beginPage = Math.max(0, this.props.currentPage - Math.round(this.props.maxButtonCount / 2));
-      let endPage = beginPage + this.props.maxButtonCount - 1;
+      let beginPage = Math.max(0, this.props.currentPage - Math.round(this.settings.maxButtonCount / 2));
+      let endPage = beginPage + this.settings.maxButtonCount - 1;
       if (endPage >= this.pageCount) {
         endPage = this.pageCount - 1;
-        beginPage = Math.max(0, endPage - this.props.maxButtonCount + 1);
+        beginPage = Math.max(0, endPage - this.settings.maxButtonCount + 1);
       }
 
-      for (let i = beginPage; i <= endPage; ++i) {
+      for (let i = beginPage, idx = 0; i <= endPage; ++i) {
         let isActive = this.props.currentPage == i;
         this._addPageButton(buttons, {
           page: i,
           content: i + 1,
           active: isActive,
           disabled: isActive,
-          idx: i
+          idx: idx++
         });
       }
     };
 
+    this.settings = this.props.settings;
+    this.buttonSettings = {
+      activePageCssClass: this.settings.activePageCssClass,
+      disabledPageCssClass: this.settings.disabledPageCssClass,
+      nextPageCssClass: this.settings.nextPageCssClass,
+      prevPageCssClass: this.settings.prevPageCssClass,
+      lastPageCssClass: this.settings.lastPageCssClass,
+      firstPageCssClass: this.settings.firstPageCssClass,
+      tag: this.settings.pageTag,
+      onButtonClick: this.props.onButtonClick
+    };
     this.generalOptions = {
-      onButtonClick: this.props.onButtonClick,
-      activePageCssClass: this.props.activePageCssClass,
-      disabledPageCssClass: this.props.disabledPageCssClass,
-      nextPageCssClass: this.props.nextPageCssClass,
-      prevPageCssClass: this.props.prevPageCssClass,
-      lastPageCssClass: this.props.lastPageCssClass,
-      firstPageCssClass: this.props.firstPageCssClass,
       isFirstPage: false,
       isLastPage: false,
       isPrevPage: false,
-      isNextPage: false,
-      tag: this.props.pageTag
+      isNextPage: false
     };
   }
 
   render() {
-    let Tag = this.props.pagerTag;
+    let Tag = this.settings.pagerTag;
     let buttons = [];
-    if (this.props.firstPageLabel) {
+    if (this.settings.firstPageLabel) {
       this._addFirstPageButton(buttons);
     }
-    if (this.props.prevPageLabel) {
+    if (this.settings.prevPageLabel) {
       this._addPrevPageButton(buttons);
     }
     this._addPages(buttons);
-    if (this.props.nextPageLabel) {
+    if (this.settings.nextPageLabel) {
       this._addNextPageButton(buttons);
     }
-    if (this.props.lastPageLabel) {
+    if (this.settings.lastPageLabel) {
       this._addLastPageButton(buttons);
     }
     return React.createElement(
@@ -529,6 +533,21 @@ class GridView extends __WEBPACK_IMPORTED_MODULE_0_react__["Component"] {
     this.notSetText = this.props.notSetText || '(not set)';
     this.filters = this.props.filters || null;
     this.emptyCaption = this.props.emptyCaption || 'Nothing found';
+    this.pagerSettings = {
+      maxButtonCount: this.props.maxButtonCount || 10,
+      pagerTag: this.props.pagerTag || 'ul',
+      pageTag: this.props.pageTag || 'li',
+      activePageCssClass: this.props.activePageCssClass || 'active',
+      disabledPageCssClass: this.props.disabledPageCssClass || 'disabled',
+      nextPageCssClass: this.props.nextPageCssClass || 'next',
+      prevPageCssClass: this.props.prevPageCssClass || 'prev',
+      firstPageCssClass: this.props.firstPageCssClass || 'first',
+      lastPageCssClass: this.props.lastPageCssClass || 'last',
+      nextPageLabel: this.props.nextPageLabel || '»',
+      prevPageLabel: this.props.prevPageLabel || '«',
+      firstPageLabel: this.props.firstPageLabel || null,
+      lastPageLabel: this.props.lastPageLabel || null
+    };
   }
 
   render() {
@@ -582,21 +601,9 @@ class GridView extends __WEBPACK_IMPORTED_MODULE_0_react__["Component"] {
         currentPage: this.props.currentPage,
         totalCount: this.props.totalCount,
         onButtonClick: this.props.onPageButtonClick,
-        maxButtonCount: this.props.maxButtonCount || 10,
         pageSize: this.props.pageSize || 20,
-        pagerTag: this.props.pagerTag || 'ul',
-        pageTag: this.props.pageTag || 'li',
-        activePageCssClass: this.props.activePageCssClass || 'active',
-        disabledPageCssClass: this.props.disabledPageCssClass || 'disabled',
-        nextPageCssClass: this.props.nextPageCssClass || 'next',
-        prevPageCssClass: this.props.prevPageCssClass || 'prev',
-        firstPageCssClass: this.props.firstPageCssClass || 'first',
-        lastPageCssClass: this.props.lastPageCssClass || 'last',
-        nextPageLabel: this.props.nextPageLabel || '»',
-        prevPageLabel: this.props.prevPageLabel || '«',
-        firstPageLabel: this.props.firstPageLabel || null,
-        lastPageLabel: this.props.lastPageLabel || null,
-        tableId: this.id
+        tableId: this.id,
+        settings: this.pagerSettings
       })
     );
   }
@@ -617,20 +624,22 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 
 class PageButton extends __WEBPACK_IMPORTED_MODULE_0_react__["Component"] {
-  constructor(...args) {
-    var _temp;
+  constructor(props) {
+    super(props);
 
-    return _temp = super(...args), this.clickTag = e => {
+    this.clickTag = e => {
       e.preventDefault();
       if (this.props.disabled) {
         return;
       }
-      this.props.onButtonClick(this.props.page);
-    }, _temp;
+      this.settings.onButtonClick(this.props.page);
+    };
+
+    this.settings = this.props.settings;
   }
 
   render() {
-    let Tag = this.props.tag;
+    let Tag = this.settings.tag;
     let LinkTag = 'a';
     let options = {};
     options.className = this.props.className;
@@ -642,22 +651,22 @@ class PageButton extends __WEBPACK_IMPORTED_MODULE_0_react__["Component"] {
     }
 
     if (this.props.isNextPage) {
-      options.className.push(this.props.nextPageCssClass);
+      options.className.push(this.settings.nextPageCssClass);
     }
     if (this.props.isPrevPage) {
-      options.className.push(this.props.prevPageCssClass);
+      options.className.push(this.settings.prevPageCssClass);
     }
     if (this.props.isLastPage) {
-      options.className.push(this.props.lastPageCssClass);
+      options.className.push(this.settings.lastPageCssClass);
     }
     if (this.props.isFirstPage) {
-      options.className.push(this.props.firstPageCssClass);
+      options.className.push(this.settings.firstPageCssClass);
     }
     if (this.props.active) {
-      options.className.push(this.props.activePageCssClass);
+      options.className.push(this.settings.activePageCssClass);
     }
     if (this.props.disabled) {
-      options.className.push(this.props.disabledPageCssClass);
+      options.className.push(this.settings.disabledPageCssClass);
       LinkTag = 'span';
     }
     if (options.className.length) {

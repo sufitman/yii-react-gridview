@@ -4,19 +4,22 @@ import PageButton from './PageButton';
 class Pager extends Component {
   constructor(props) {
     super(props);
-    this.generalOptions = {
+    this.settings = this.props.settings;
+    this.buttonSettings = {
+      activePageCssClass: this.settings.activePageCssClass,
+      disabledPageCssClass: this.settings.disabledPageCssClass,
+      nextPageCssClass: this.settings.nextPageCssClass,
+      prevPageCssClass: this.settings.prevPageCssClass,
+      lastPageCssClass: this.settings.lastPageCssClass,
+      firstPageCssClass: this.settings.firstPageCssClass,
+      tag: this.settings.pageTag,
       onButtonClick: this.props.onButtonClick,
-      activePageCssClass: this.props.activePageCssClass,
-      disabledPageCssClass: this.props.disabledPageCssClass,
-      nextPageCssClass: this.props.nextPageCssClass,
-      prevPageCssClass: this.props.prevPageCssClass,
-      lastPageCssClass: this.props.lastPageCssClass,
-      firstPageCssClass: this.props.firstPageCssClass,
+    };
+    this.generalOptions = {
       isFirstPage: false,
       isLastPage: false,
       isPrevPage: false,
       isNextPage: false,
-      tag: this.props.pageTag
     };
   }
   componentDidUpdate = () => {
@@ -25,6 +28,7 @@ class Pager extends Component {
   _addPageButton = (buttons, pageButtonOptions) => {
     let options = Object.assign({}, this.generalOptions, pageButtonOptions);
     options.key = `pg-${this.props.tableId}-${pageButtonOptions.idx}`;
+    options.settings = this.buttonSettings
     buttons.push(<PageButton { ...options } />);
   };
   _addFirstPageButton = (buttons) => {
@@ -32,7 +36,7 @@ class Pager extends Component {
     let isActive = this.props.currentPage === page;
     this._addPageButton(buttons, {
       page: page,
-      content: this.props.firstPageLabel,
+      content: this.settings.firstPageLabel,
       active: isActive,
       disabled: isActive,
       isFirstPage: true,
@@ -42,7 +46,7 @@ class Pager extends Component {
   _addLastPageButton = (buttons) => {
     this._addPageButton(buttons, {
       page: this.pageCount - 1,
-      content: this.props.lastPageLabel || this.pageCount,
+      content: this.settings.lastPageLabel || this.pageCount,
       active: false,
       disabled: this.props.currentPage >= this.pageCount - 1,
       isLastPage: true,
@@ -56,7 +60,7 @@ class Pager extends Component {
     }
     this._addPageButton(buttons, {
       page: page,
-      content: this.props.prevPageLabel,
+      content: this.settings.prevPageLabel,
       active: false,
       disabled: this.props.currentPage <= 0,
       isPrevPage: true,
@@ -71,7 +75,7 @@ class Pager extends Component {
     }
     this._addPageButton(buttons, {
       page: page,
-      content: this.props.nextPageLabel,
+      content: this.settings.nextPageLabel,
       active: false,
       disabled: this.props.currentPage >= penultimate,
       isNextPage: true,
@@ -79,38 +83,38 @@ class Pager extends Component {
     });
   };
   _addPages = (buttons) => {
-    let beginPage = Math.max(0, this.props.currentPage - Math.round(this.props.maxButtonCount / 2));
-    let endPage = beginPage + this.props.maxButtonCount - 1;
+    let beginPage = Math.max(0, this.props.currentPage - Math.round(this.settings.maxButtonCount / 2));
+    let endPage = beginPage + this.settings.maxButtonCount - 1;
     if (endPage >= this.pageCount) {
       endPage = this.pageCount - 1;
-      beginPage = Math.max(0, endPage - this.props.maxButtonCount + 1);
+      beginPage = Math.max(0, endPage - this.settings.maxButtonCount + 1);
     }
 
-    for (let i = beginPage; i <= endPage; ++i) {
+    for (let i = beginPage, idx = 0; i <= endPage; ++i) {
       let isActive = this.props.currentPage == i;
       this._addPageButton(buttons, {
         page: i,
         content: i + 1,
         active: isActive,
         disabled: isActive,
-        idx: i,
+        idx: idx++,
       })
     }
   };
   render() {
-    let Tag = this.props.pagerTag;
+    let Tag = this.settings.pagerTag;
     let buttons = [];
-    if (this.props.firstPageLabel) {
+    if (this.settings.firstPageLabel) {
       this._addFirstPageButton(buttons);
     }
-    if (this.props.prevPageLabel) {
+    if (this.settings.prevPageLabel) {
       this._addPrevPageButton(buttons);
     }
     this._addPages(buttons);
-    if (this.props.nextPageLabel) {
+    if (this.settings.nextPageLabel) {
       this._addNextPageButton(buttons);
     }
-    if (this.props.lastPageLabel) {
+    if (this.settings.lastPageLabel) {
       this._addLastPageButton(buttons);
     }
     return <Tag { ...this.props.options }>
