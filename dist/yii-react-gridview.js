@@ -753,13 +753,14 @@ class TableCell extends __WEBPACK_IMPORTED_MODULE_0_react__["Component"] {
   render() {
     let cell = this.props.cell;
     if (cell.value) {
-      cell = cell.value;
       if (cell.enableSorting) {
         cell = React.createElement(
           'a',
           { className: cell.sort, onClick: this.setSort, 'data-column': cell.column },
-          cell
+          cell.value
         );
+      } else {
+        cell = cell.value;
       }
     }
     return React.createElement(

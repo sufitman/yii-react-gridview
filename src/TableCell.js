@@ -16,11 +16,12 @@ class TableCell extends Component {
   render() {
     let cell = this.props.cell;
     if (cell.value) {
-      cell = cell.value;
       if (cell.enableSorting) {
         cell = <a className={ cell.sort } onClick={ this.setSort } data-column={ cell.column }>
-          { cell }
+          { cell.value }
         </a>;
+      } else {
+        cell = cell.value;
       }
     }
     return <td>{ cell }</td>;
