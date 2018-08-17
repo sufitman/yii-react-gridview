@@ -45,6 +45,22 @@ class App extends Component {
       });
     })
   };
+  
+  onSortChanged = (sort) =>  {
+    this.setState({sort: sort});
+    Axios.get('/your/get-data', {
+      params: {
+        // Pass 'sort' as is (js-object) or prepare it to be compatible with Query::orderBy()
+        orderBy: sort,
+        //...
+      }
+    }).then(response => {
+      this.setState({
+        //...
+      });
+    });
+  };
+  
   render() {
     return (
       <div className="App">
@@ -57,6 +73,7 @@ class App extends Component {
           maxButtonCount={ this.maxButtonCount }
           pageSize={this.pageSize }
           onPageButtonClick={ this.onPageButtonClicked }
+          onSortChange={ this.onSortChanged }
         />
       </div>
     );
@@ -69,11 +86,24 @@ ReactDOM.render(<App/>, document.getElementById('root'));
 of action:
 ```php
 class YourController extends Controller {
-    public function actionGetData($currentPage = 0, $pageSize = 20) {
+    public function actionGetData($currentPage = 0, $pageSize = 20, $orderBy = '') {
         \Yii::$app->response->format = Response::FORMAT_JSON;
+        
+        // Prepare orderBy object here or do it in 'onSortChange' callback
+        // Anyway make it compatible with '->orderBy($orderBy)'
+        $preparedOrderBy = [];
+        if ($orderBy) {
+            foreach (Json::decode($orderBy) as $col => $sort) {
+                $preparedOrderBy[] = "{$col} {$sort}";
+            }
+            if (!empty($preparedOrderBy)) {
+                $preparedOrderBy = implode(',', $preparedOrderBy);
+            }
+        }
         return [
             'data' => ArrayHelper::toArray(User::find()
                 ->offset($currentPage * $pageSize)
+                ->orderBy($preparedOrderBy)
                 ->limit($pageSize)
                 ->all(), [
                 User::class => [
@@ -95,7 +125,7 @@ class YourController extends Controller {
 |Property|Type|Default value|Description|
 |:---:|:---:|:---:|:---|
 |`data`|Array|undefined|Array of models to show in list|
-|`headerCells`|Object|{}|Key-value pairs of names of data models properties. It should contain the same keys as keys of an Object in `data`. Values of `headerCells` could be either strings or object of following structure:```js { value: 'Column Title', column: 'attrbute_name', enableSorting: true, sort: 'ASC' }```. If `enableSorting` is `true` then `column` required. `sort` (if specified) must be either 'ASC' or 'DESC'|
+|`headerCells`|Object|{}|Key-value pairs of names of data models properties. It should contain the same keys as keys of an Object in `data`.<br>Values of `headerCells` could be either strings or object of following structure: <br>` { value: 'Column Title', column: 'attrbute_name', enableSorting: true, sort: 'ASC' }`.<br>If `enableSorting` is `true` then `column` required. `sort` (if specified) must be either 'ASC' or 'DESC'|
 |`caption`|String|undefined|A string for caption if necessary|
 |`captionOptions`|Object|{}|HTML attributes of `caption`|
 |`tableOptions`|Object|{}|HTML attributes of table|
@@ -104,8 +134,8 @@ class YourController extends Controller {
 |`headerRowOptions`|Object|{}|HTML attributes of *thead > row*|
 |`footerRowOptions`|Object|{}|HTML attributes of *tfoot > row*|
 |`rowOptions`|Object|{}|HTML attributes of *tbody \> row*|
-|`columns`|Object|undefined|Keys of the object are whether properties of a model in data (then the title will be provided by `headerCells`) or custom strings that will be a column titles. Values of the object are either null (to provide a model value as is) or `function (cell)` (to decorate a model value with its result). Also string `'serial'` can be set to provide models numeration|
-|`filters`|Object|null|Contain *filters* for specified columns. *Filters* can be: a) string `'text'` renders simple input of `type="text"`; b) Object `{ type: ..., options: {...} }` where type can be either `'text'` (input of `type="text"`), `'checkbox'` or `'select'`. Options typically are HTML attributes of the inputs. If type is `'select'` then `options` should contain `data` - object of options (where key is value attribute of an \<option\> and value is its text); c) `function (name)` to render custom input with name="`name`"|
+|`columns`|Object|undefined|Keys of the object are whether properties of a model in data (then the title will be provided by `headerCells`) or custom strings that will be a column titles.<br>Values of the object are either null (to provide a model value as is) or `function (cell)` (to decorate a model value with its result).<br>Also string `'serial'` can be set to provide models numeration|
+|`filters`|Object|null|Contain *filters* for specified columns. *Filters* can be:<br>a) string `'text'` renders simple input of `type="text"`;<br>b) Object `{ type: ..., options: {...} }` where type can be either `'text'` (input of `type="text"`), `'checkbox'` or `'select'`. Options typically are HTML attributes of the inputs. If type is `'select'` then `options` should contain `data` - object of options (where key is value attribute of an \<option\> and value is its text);<br>c) `function (name)` to render custom input with name="`name`"|
 |`onSortChange`|`function(sort)`|undefined|Callback to sort the data with `sort` - key-value object (```js { column:'ASC' /* or 'DESC' */ }```) to sort the `data`. The way of is up to you|
 |`onFilterChange`|`function(filters)`|undefined|Callback to filter the data with `filters` - key-value object to filter the `data`. **Required** when filters are specified. The way of filtering depends on you|
 |`filterDelay`|int(seconds)|3|Delay in seconds before execute `onFilterChange` after a filter was changed. It prevents unnecessary execution of the callback after each key pressed|
