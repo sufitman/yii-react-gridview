@@ -90,17 +90,24 @@ module.exports = __WEBPACK_EXTERNAL_MODULE_0__;
 /* WEBPACK VAR INJECTION */(function(React) {/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_react__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__TableCell__ = __webpack_require__(10);
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
 
 
 
 class TableRow extends __WEBPACK_IMPORTED_MODULE_0_react__["Component"] {
   render() {
+    let optionalProps = {};
+    if (this.props.setSort) {
+      optionalProps['setSort'] = this.props.setSort;
+    }
     return React.createElement(
       'tr',
       this.props.options,
-      this.props.cells.map((cell, idx) => React.createElement(__WEBPACK_IMPORTED_MODULE_1__TableCell__["a" /* default */], {
+      this.props.cells.map((cell, idx) => React.createElement(__WEBPACK_IMPORTED_MODULE_1__TableCell__["a" /* default */], _extends({
         key: `${this.props.id}-td-${idx}`,
-        cell: cell }))
+        cell: cell
+      }, optionalProps)))
     );
   }
 }
@@ -372,7 +379,8 @@ class TableHeader extends __WEBPACK_IMPORTED_MODULE_0_react__["Component"] {
       cells: this.props.headerCells,
       options: this.props.options,
       id: this.id,
-      key: this.id
+      key: this.id,
+      setSort: this.props.setSort
     })];
     if (this.props.filters) {
       tableHeader.push(React.createElement(__WEBPACK_IMPORTED_MODULE_2__TableFilter__["a" /* default */], {
@@ -474,6 +482,17 @@ class GridView extends __WEBPACK_IMPORTED_MODULE_0_react__["Component"] {
   constructor(props) {
     super(props);
 
+    this.setSort = (column, sort) => {
+      if (sort) {
+        this.sort[column] = sort;
+      } else {
+        delete this.sort[column];
+      }
+      if (this.props.onSortChange) {
+        this.props.onSortChange(this.sort);
+      }
+    };
+
     this._setDefault = (prop, defaultValue) => {
       if (typeof this.props[prop] !== 'undefined') {
         this[prop] = this.props[prop];
@@ -500,6 +519,14 @@ class GridView extends __WEBPACK_IMPORTED_MODULE_0_react__["Component"] {
         if (isTh) {
           if (this.props.headerCells && this.props.headerCells[column]) {
             cell = this.props.headerCells[column];
+            if (typeof cell === 'string') {
+              cell = {
+                value: cell,
+                enableSorting: true,
+                column: column,
+                sort: this.sort[column] || null
+              };
+            }
           } else {
             let title = column.replace(/([A-Z])/g, " $1");
             cell = (title.charAt(0).toUpperCase() + title.slice(1)).replace(/_/g, ' ');
@@ -551,6 +578,7 @@ class GridView extends __WEBPACK_IMPORTED_MODULE_0_react__["Component"] {
       firstPageLabel: this.props.firstPageLabel || null,
       lastPageLabel: this.props.lastPageLabel || null
     };
+    this.sort = {};
   }
 
   render() {
@@ -576,7 +604,8 @@ class GridView extends __WEBPACK_IMPORTED_MODULE_0_react__["Component"] {
         filters: this.filters ? this._prepareFilters() : null,
         onFilterChange: this.props.onFilterChange,
         filterDelay: this.props.filterDelay || 3,
-        key: `thead-${this.id}`
+        key: `thead-${this.id}`,
+        setSort: this.setSort
       }));
     }
     if (this.props.caption || !somethingFound) {
@@ -704,11 +733,39 @@ class PageButton extends __WEBPACK_IMPORTED_MODULE_0_react__["Component"] {
 
 
 class TableCell extends __WEBPACK_IMPORTED_MODULE_0_react__["Component"] {
+  constructor(...args) {
+    var _temp;
+
+    return _temp = super(...args), this.setSort = e => {
+      e.preventDefault();
+      let sort;
+      if (!this.props.cell.sort) {
+        sort = 'ASC';
+      } else if (this.props.cell.sort === 'ASC') {
+        sort = 'DESC';
+      } else {
+        sort = null;
+      }
+      this.props.setSort(e.target.getAttribute('data-column'), sort);
+    }, _temp;
+  }
+
   render() {
+    let cell = this.props.cell;
+    if (cell.value) {
+      cell = cell.value;
+      if (cell.enableSorting) {
+        cell = React.createElement(
+          'a',
+          { className: cell.sort, onClick: this.setSort, 'data-column': cell.column },
+          cell
+        );
+      }
+    }
     return React.createElement(
       'td',
       null,
-      this.props.cell
+      cell
     );
   }
 }

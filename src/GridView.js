@@ -42,8 +42,19 @@ class GridView extends Component {
       firstPageLabel: this.props.firstPageLabel || null,
       lastPageLabel: this.props.lastPageLabel || null,
     }
+    this.sort = {};
   }
 
+  setSort = (column, sort) => {
+    if (sort) {
+      this.sort[column] = sort;
+    } else {
+      delete this.sort[column];
+    }
+    if (this.props.onSortChange) {
+      this.props.onSortChange(this.sort);
+    }
+  }
   _setDefault = (prop, defaultValue) => {
     if (typeof this.props[prop] !== 'undefined') {
       this[prop] = this.props[prop];
@@ -70,6 +81,14 @@ class GridView extends Component {
       if (isTh) {
           if (this.props.headerCells && this.props.headerCells[column]) {
             cell = this.props.headerCells[column];
+            if (typeof cell === 'string') {
+              cell = {
+                value: cell,
+                enableSorting: true,
+                column: column,
+                sort: this.sort[column] || null
+              }
+            }
           } else {
             let title = column.replace(/([A-Z])/g, " $1");
             cell = (title.charAt(0).toUpperCase() + title.slice(1)).replace(/_/g, ' ');
@@ -114,6 +133,7 @@ class GridView extends Component {
         onFilterChange={ this.props.onFilterChange }
         filterDelay={ this.props.filterDelay || 3 }
         key={ `thead-${this.id}` }
+        setSort={ this.setSort }
       />);
     }
     if (this.props.caption || !somethingFound) {

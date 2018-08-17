@@ -17,10 +17,11 @@ class TableHeader extends Component {
 
   render() {
     let tableHeader = [<TableRow
-      cells={this.props.headerCells}
-      options={this.props.options}
-      id={this.id}
-      key={this.id}
+      cells={ this.props.headerCells }
+      options={ this.props.options }
+      id={ this.id }
+      key={ this.id }
+      setSort={ this.props.setSort }
     />];
     if (this.props.filters) {
       tableHeader.push(<TableFilter

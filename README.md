@@ -95,7 +95,7 @@ class YourController extends Controller {
 |Property|Type|Default value|Description|
 |:---:|:---:|:---:|:---|
 |`data`|Array|undefined|Array of models to show in list|
-|`headerCells`|Object|{}|Key-value pairs of names of data models properties. It should contain the same properties as an Object in `data`|
+|`headerCells`|Object|{}|Key-value pairs of names of data models properties. It should contain the same keys as keys of an Object in `data`. Values of `headerCells` could be either strings or object of following structure:```js { value: 'Column Title', column: 'attrbute_name', enableSorting: true, sort: 'ASC' }```. If `enableSorting` is `true` then `column` required. `sort` (if specified) must be either 'ASC' or 'DESC'|
 |`caption`|String|undefined|A string for caption if necessary|
 |`captionOptions`|Object|{}|HTML attributes of `caption`|
 |`tableOptions`|Object|{}|HTML attributes of table|
@@ -106,6 +106,7 @@ class YourController extends Controller {
 |`rowOptions`|Object|{}|HTML attributes of *tbody \> row*|
 |`columns`|Object|undefined|Keys of the object are whether properties of a model in data (then the title will be provided by `headerCells`) or custom strings that will be a column titles. Values of the object are either null (to provide a model value as is) or `function (cell)` (to decorate a model value with its result). Also string `'serial'` can be set to provide models numeration|
 |`filters`|Object|null|Contain *filters* for specified columns. *Filters* can be: a) string `'text'` renders simple input of `type="text"`; b) Object `{ type: ..., options: {...} }` where type can be either `'text'` (input of `type="text"`), `'checkbox'` or `'select'`. Options typically are HTML attributes of the inputs. If type is `'select'` then `options` should contain `data` - object of options (where key is value attribute of an \<option\> and value is its text); c) `function (name)` to render custom input with name="`name`"|
+|`onSortChange`|`function(sort)`|undefined|Callback to sort the data with `sort` - key-value object (```js { column:'ASC' /* or 'DESC' */ }```) to sort the `data`. The way of is up to you|
 |`onFilterChange`|`function(filters)`|undefined|Callback to filter the data with `filters` - key-value object to filter the `data`. **Required** when filters are specified. The way of filtering depends on you|
 |`filterDelay`|int(seconds)|3|Delay in seconds before execute `onFilterChange` after a filter was changed. It prevents unnecessary execution of the callback after each key pressed|
 |`pagerOptions`|object|undefined|HTML attributes of pager container|
