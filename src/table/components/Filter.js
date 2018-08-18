@@ -1,7 +1,7 @@
-import {Component} from 'react'
-import TableRow from './TableRow';
+import React, {Component} from 'react';
+import Row from './Row';
 
-class TableFilter extends Component {
+class Filter extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -22,21 +22,23 @@ class TableFilter extends Component {
   _renderFilter = (column, type, options = {}) => {
     const name = this._getFieldName(column);
     switch (type) {
-      case 'text':
-        return <input name={ name } type="text" {...options} onChange={ this.applyFilters } />;
-      case 'checkbox':
-        return <input name={ name } type="checkbox" {...options} onChange={ this.applyFilters } />;
-      case 'select':
-        let opts = [];
-        if (!options.data) {
-          throw new Error('Filter select has no options');
-        }
-        let idx = 0;
-        for (let val in options.data) {
-          opts.push(<option key={ `${name}-${idx++}` } value={val}>{options.data[val]}</option>);
-        }
-        delete options.data;
-        return <select name={this._getFieldName(column)} onChange={ this.applyFilters } { ...options }>{opts}</select>
+    case 'text':
+      return <input name={ name } type="text" {...options} onChange={ this.applyFilters } />;
+    case 'checkbox':
+      return <input name={ name } type="checkbox" {...options} onChange={ this.applyFilters } />;
+    case 'select': {
+      let opts = [];
+      if (!options.data) {
+        throw new Error('Filter select has no options');
+      }
+      let idx = 0;
+      for (let val in options.data) {
+        opts.push(<option key={ `${name}-${idx++}` } value={val}>{options.data[val]}</option>);
+      }
+      delete options.data;
+      return <select name={this._getFieldName(column)} onChange={ this.applyFilters } { ...options }>{opts}</select>;
+    }
+
     }
     return null;
   };
@@ -58,11 +60,15 @@ class TableFilter extends Component {
   applyFilters = (e) => {
     let filters = Object.assign({}, this.state.filters);
     let property = e.target.name.split('-').pop();
-    filters[property] = e.target.value;
+    if (e.target.value) {
+      filters[property] = e.target.value;
+    } else {
+      delete filters[property];
+    }
     this.setState({filters: filters}, () => this.props.onFilterChange(this.state.filters));
   };
   render() {
-    return <TableRow
+    return <Row
       cells={ this._renderFilters() }
       id={this.id}
       key={this.id}
@@ -70,4 +76,4 @@ class TableFilter extends Component {
   }
 }
 
-export default TableFilter;
+export default Filter;

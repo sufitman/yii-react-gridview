@@ -1,6 +1,6 @@
 {
   "name": "yii-react-gridview",
-  "version": "0.3.1",
+  "version": "0.4.0",
   "description": "React render of Yii gridview",
   "main": "dist/yii-react-gridview.js",
   "scripts": {
@@ -27,7 +27,7 @@
   "devDependencies": {
     "babel-cli": "^6.26.0",
     "babel-core": "^6.25.5",
-    "babel-loader": "^6.2.10",
+    "babel-loader": "^7.1.5",
     "babel-preset-es2017": "^6.24.1",
     "babel-preset-react": "^6.22.0",
     "babel-preset-stage-2": "^6.24.1",
@@ -38,6 +38,10 @@
     "react": "^16.4.1",
     "react-dom": "^16.4.1",
     "react-scripts": "1.1.4",
-    "webpack": "^2.2.1"
+    "webpack": "^4.16.5",
+    "webpack-cli": "^3.1.0"
+  },
+  "dependencies": {
+    "prop-types": "^15.6.2"
   }
 }
