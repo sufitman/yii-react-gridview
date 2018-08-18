@@ -7,7 +7,7 @@ class GridView extends Component {
   constructor(props) {
     super(props);
     this.id = require('random-string')();
-    this.sort = {};
+    this.state = { sort: {} };
   }
   
   static propTypes = {
@@ -63,12 +63,16 @@ class GridView extends Component {
 
   setSort = (column, sort) => {
     if (this.props.onSortChange) {
+      let newSort = { ...this.state.sort };
       if (sort) {
-        this.sort[column] = sort;
+        newSort[column] = sort;
       } else {
-        delete this.sort[column];
+        delete newSort[column];
       }
-      this.props.onSortChange(this.sort);
+      this.setState({
+          sort: newSort
+      })
+      this.props.onSortChange(this.state.sort);
     }
   }
 
@@ -99,7 +103,7 @@ class GridView extends Component {
       onPageButtonClick: pagerSpecificProps.onPageButtonClick,
       ...tableSpecificProps
     } = this.props);
-    tableSpecificProps.sort = this.sort;
+    tableSpecificProps.sort = this.state.sort;
     tableSpecificProps.setSort = this.setSort;
 
     return <div { ...this.props.containerOptions }>
