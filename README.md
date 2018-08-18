@@ -86,7 +86,7 @@ ReactDOM.render(<App/>, document.getElementById('root'));
 of action:
 ```php
 class YourController extends Controller {
-    public function actionGetData($currentPage = 0, $pageSize = 20, $orderBy = '') {
+    public function actionGetData($currentPage = 0, $pageSize = 20, $filters = [], $orderBy = '') {
         \Yii::$app->response->format = Response::FORMAT_JSON;
         
         // Prepare orderBy object here or do it in 'onSortChange' callback
@@ -100,8 +100,12 @@ class YourController extends Controller {
                 $preparedOrderBy = implode(',', $preparedOrderBy);
             }
         }
+        // Probably $filters should be also prepared
+        // ...
+        
         return [
             'data' => ArrayHelper::toArray(User::find()
+                ->andFilterWhere($filters)
                 ->offset($currentPage * $pageSize)
                 ->orderBy($preparedOrderBy)
                 ->limit($pageSize)
@@ -113,8 +117,8 @@ class YourController extends Controller {
                 ]
             ]),
             'headerCells' => (new User)->attributeLabels(),
-            'currentPage' => $currentPage,
-            'totalCount' => User::find()->count(),
+            'currentPage' => (int) $currentPage,
+            'totalCount' => (int) User::find()->count(),
             'pageSize' => $pageSize,
         ];
     }        
@@ -125,9 +129,13 @@ class YourController extends Controller {
 |Property|Type|Default value|Description|
 |:---:|:---:|:---:|:---|
 |`data`|Array|undefined|Array of models to show in list|
+|`notSetText`|string|'(not set)'|Text will be shown when a cell in a row is not set|
 |`headerCells`|Object|{}|Key-value pairs of names of data models properties. It should contain the same keys as keys of an Object in `data`.<br>Values of `headerCells` could be either strings or object of following structure: <br>` { value: 'Column Title', column: 'attrbute_name', enableSorting: true, sort: 'ASC' }`.<br>If `enableSorting` is `true` then `column` required. `sort` (if specified) must be either 'ASC' or 'DESC'|
+|`footerCells`|Array|[]|Array of strings or components corresponding cells of `tfoot`-row. Make sure the array length match the table|
 |`caption`|String|undefined|A string for caption if necessary|
+|`emptyCaption`|String|'Nothing found'|The text will be shown when no data rows are loaded|
 |`captionOptions`|Object|{}|HTML attributes of `caption`|
+|`containerOptions`|Object|{}|HTML attributes of GridView instance conteiner (div that wraping the table and the pager)|
 |`tableOptions`|Object|{}|HTML attributes of table|
 |`showHeader`|Boolean|true|Whether show \<thead\> or not|
 |`showFooter`|Boolean|false|Whether show \<tfoot\> or not|
