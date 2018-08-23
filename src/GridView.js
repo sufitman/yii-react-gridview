@@ -79,6 +79,7 @@ class GridView extends Component {
   render() {
     const generalProps = {
       currentPage: this.props.currentPage,
+      pageSize: this.props.pageSize,
       tableId: this.id,
     };
     let pagerSpecificProps = {};
@@ -86,7 +87,6 @@ class GridView extends Component {
     ({
       pagerOptions: pagerSpecificProps.pagerOptions,
       totalCount: pagerSpecificProps.totalCount,
-      pageSize: pagerSpecificProps.pageSize,
       maxButtonCount: pagerSpecificProps.maxButtonCount,
       pagerTag: pagerSpecificProps.pagerTag,
       pageTag: pagerSpecificProps.pageTag,
