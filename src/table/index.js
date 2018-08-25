@@ -6,6 +6,7 @@ import Footer from './components/Footer';
 
 class Table extends Component {
   static defaultProps = {
+    data: [],
     headerCells: {},
     footerCells: [],
     captionOptions: {},
@@ -16,37 +17,56 @@ class Table extends Component {
     footerRowOptions: {},
     rowOptions: {},
     filters: null,
-    filterDelay: 3,
+    filterDelay: 1,
     notSetText: '(not set)',
-    emptyCaption: 'Nothing found', 
+    emptyCaption: 'Nothing found',
+    allRowsChecked: false
   }
 
-  _prepareCell = (cell, idx, rule) => {
-    if (typeof rule === 'function') {
-      return rule(cell, idx);
+  _prepareCellData = (cellOptions) => {
+    if (typeof cellOptions.rule === 'function') {
+      return cellOptions.rule(cellOptions.cellData, cellOptions.idx);
     }
-    if (rule === 'serial') {
-      return this.props.currentPage * this.props.pageSize + 1 + idx;
+    if (cellOptions.rule === 'serial') {
+      return this.props.currentPage * this.props.pageSize + 1 + cellOptions.idx;
     }
-    // ToDo improve formatting logic
-    return cell;
+    if (cellOptions.rule === 'checkbox' && this.props.rowSelect) {
+      return {
+        type: 'checkbox',
+        selectionChange: (checked) => {
+          if (cellOptions.rowId !== undefined) {
+            this.props.rowSelect(cellOptions.rowId, checked);
+          } else {
+            this.props.allRowsSelect(checked);
+          }
+        },
+        checked: cellOptions.checked,
+      }
+    }
+    return cellOptions.cellData;
   };
 
-  _prepareRow = (row, idx, isTh = false) => {
+  _prepareRowData = (rowOptions) => {
     let readyRow = [];
     for (let column in this.props.columns) {
-      let cell = this._prepareCell(row[column], idx, this.props.columns[column]);
-      if (isTh) {
-        if (this.props.headerCells && this.props.headerCells[column]) {
-          cell = this.props.headerCells[column];
+      let cell = this._prepareCellData({
+          cellData: rowOptions.row[column],
+          idx: rowOptions.idx,
+          rowId: rowOptions.rowId,
+          rule: this.props.columns[column],
+          checked: rowOptions.checked,
+      });
+      if (rowOptions.isTh && column !== 'checkbox') {
+        if (rowOptions.row[column]) {
+          cell = rowOptions.row[column];
           if (typeof cell === 'string') {
             cell = {
               value: cell,
               enableSorting: true,
               column: column,
-              sort: this.props.sort[column]
             };
           }
+          cell.sort = this.props.sort[column]
         } else {
           let title = column.replace(/([A-Z])/g, ' $1');
           cell = (title.charAt(0).toUpperCase() + title.slice(1)).replace(/_/g, ' ');
@@ -69,22 +89,37 @@ class Table extends Component {
   };
 
   render() {
-    let tableContent, somethingFound = true;
-    if (this.props.data && this.props.data.length) {
-      tableContent = [<Body
-        data={ this.props.data.map((item, idx) => this._prepareRow(item, idx)) }
+    let tableContent = [];
+    let somethingFound = true;
+    if (this.props.data.length) {
+      let preparedData = {};
+      this.props.data.forEach((item, idx) => {
+        let rowId = item[this.props.rowIdColumn]
+        preparedData[rowId] = this._prepareRowData({
+          row: item,
+          rowId: rowId,
+          idx,
+          checked: this.props.selection.indexOf(rowId) !== -1
+        });
+      });
+      tableContent.push(<Body
+        data={ preparedData }
         options={ this.props.rowOptions }
         tableId={ this.props.tableId }
         key={ `tbody-${this.props.tableId}` }
-      />];
+      />);
     } else {
-      tableContent = [];
       somethingFound = false;
     }
 
     if (this.props.showHeader) {
       tableContent.unshift(<Header
-        headerCells={ this._prepareRow(this.props.headerCells, null, true) }
+        headerCells={ this._prepareRowData({
+          row: this.props.headerCells,
+          idx: 0,
+          isTh: true,
+          checked: this.props.allRowsChecked,
+        }) }
         options={ this.props.headerRowOptions }
         tableId={ this.props.tableId }
         filters={ this.props.filters ? this._prepareFilters() : null }

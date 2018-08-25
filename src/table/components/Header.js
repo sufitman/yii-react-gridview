@@ -38,6 +38,7 @@ class Header extends Component {
     if (this.props.filters) {
       tableHeader.push(<Filter
         key={ `${this.id}-filters` }
+        id={ this.id }
         filters={ this.props.filters }
         tableId={ this.props.tableId }
         onFilterChange={ this.filterChanged }

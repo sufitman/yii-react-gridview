@@ -118,7 +118,7 @@ class YourController extends Controller {
             ]),
             'headerCells' => (new User)->attributeLabels(),
             'currentPage' => (int) $currentPage,
-            'totalCount' => (int) User::find()->count(),
+            'totalCount' => (int) User::find()->andFilterWhere($filters)->count(),
             'pageSize' => $pageSize,
         ];
     }        
@@ -142,11 +142,11 @@ class YourController extends Controller {
 |`headerRowOptions`|Object|{}|HTML attributes of *thead > row*|
 |`footerRowOptions`|Object|{}|HTML attributes of *tfoot > row*|
 |`rowOptions`|Object|{}|HTML attributes of *tbody \> row*|
-|`columns`|Object|undefined|Keys of the object are whether properties of a model in data (then the title will be provided by `headerCells`) or custom strings that will be a column titles.<br>Values of the object are either null (to provide a model value as is) or `function (cell)` (to decorate a model value with its result).<br>Also string `'serial'` can be set to provide models numeration|
+|`columns`|Object|undefined|Keys of the object are whether properties of a model in data (then the title will be provided by `headerCells`) or custom strings that will be a column titles.<br>Values of the object are either null (to provide a model value as is) or `function (cell)` (to decorate a model value with its result).<br>Also string `'serial'` can be set to provide models numeration.<br>If `'checkbox'` is set as a key and its value (just value at least) then column of checkboxes will be rendered in order to select row(s) ids (a value that specified in `rowIdColumn`)|
 |`filters`|Object|null|Contain *filters* for specified columns. *Filters* can be:<br>a) string `'text'` renders simple input of `type="text"`;<br>b) Object `{ type: ..., options: {...} }` where type can be either `'text'` (input of `type="text"`), `'checkbox'` or `'select'`. Options typically are HTML attributes of the inputs. If type is `'select'` then `options` should contain `data` - object of options (where key is value attribute of an \<option\> and value is its text);<br>c) `function (name)` to render custom input with name="`name`"|
 |`onSortChange`|`function(sort)`|undefined|Callback to sort the data with `sort` - key-value object (```js { column:'ASC' /* or 'DESC' */ }```) to sort the `data`. The way of is up to you|
 |`onFilterChange`|`function(filters)`|undefined|Callback to filter the data with `filters` - key-value object to filter the `data`. **Required** when filters are specified. The way of filtering depends on you|
-|`filterDelay`|int(seconds)|3|Delay in seconds before execute `onFilterChange` after a filter was changed. It prevents unnecessary execution of the callback after each key pressed|
+|`filterDelay`|int(seconds)|1|Delay in seconds before execute `onFilterChange` after a filter was changed. It prevents unnecessary execution of the callback after each key pressed|
 |`pagerOptions`|object|undefined|HTML attributes of pager container|
 |`currentPage`|integer|undefined|Number of current page (begins from 0). **Should be provided by `data` provider**|
 |`totalCount`|integer|undefined|Total count of models given in `data`. **Should be provided by `data` provider**|
@@ -165,3 +165,5 @@ class YourController extends Controller {
 |`firstPageLabel`|string|null|Label of 'first' page link|
 |`lastPageLabel`|string|null|Label of 'last' page link|
 |`onPageButtonClick`|`function(currentPage)`|null|Callback of click on pager link with given page number. Originally it should replace `currentPage` with its page number and reload the `data`, but it's up to you whatever it does.|
+|`onSelectionChange`|`function(selection)`|null|Callback which will be applied when a row is (or all rows are) selected. Array of selected values specified in `rowIdColumn` will be passed in `selection`|
+|`rowIdColumn`|string|'id'|Column name that could be used as primary key for selection. If `onSelectionChange` is set, then array of values of selected rowIdColumn will be passed as an argument|

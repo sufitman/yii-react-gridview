@@ -4,6 +4,7 @@ import Row from './Row';
 class Filter extends Component {
   constructor(props) {
     super(props);
+    this.id = `filter-${this.props.id}`;
     this.state = {
       filters: {}
     };
@@ -22,23 +23,24 @@ class Filter extends Component {
   _renderFilter = (column, type, options = {}) => {
     const name = this._getFieldName(column);
     switch (type) {
-    case 'text':
-      return <input name={ name } type="text" {...options} onChange={ this.applyFilters } />;
-    case 'checkbox':
-      return <input name={ name } type="checkbox" {...options} onChange={ this.applyFilters } />;
-    case 'select': {
-      let opts = [];
-      if (!options.data) {
-        throw new Error('Filter select has no options');
+      case 'text': {
+        let textInputOptions = { className: 'form-control', ...options };
+        return <input name={ name } type="text" { ...textInputOptions }  onChange={ this.applyFilters } />;
       }
-      let idx = 0;
-      for (let val in options.data) {
-        opts.push(<option key={ `${name}-${idx++}` } value={val}>{options.data[val]}</option>);
+      case 'checkbox':
+        return <input name={ name } type="checkbox" {...options} onChange={ this.applyFilters } />;
+      case 'select': {
+        let opts = [];
+        if (!options.data) {
+          throw new Error('Filter select has no options');
+        }
+        let idx = 0;
+        for (let val in options.data) {
+          opts.push(<option key={ `${name}-${idx++}` } value={val}>{options.data[val]}</option>);
+        }
+        delete options.data;
+        return <select name={this._getFieldName(column)} onChange={ this.applyFilters } { ...options }>{opts}</select>;
       }
-      delete options.data;
-      return <select name={this._getFieldName(column)} onChange={ this.applyFilters } { ...options }>{opts}</select>;
-    }
-
     }
     return null;
   };

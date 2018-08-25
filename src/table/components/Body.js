@@ -5,23 +5,22 @@ import PropTypes from 'prop-types';
 class Body extends Component {
   static propTypes = {
     tableId: PropTypes.string,
-    data: PropTypes.array,
+    data: PropTypes.object,
     options: PropTypes.object,
   }
   static defaultProps = {
-    data: [],
     options: {},
   }
   render() {
-    let content = this.props.data.map((item, idx) => {
-      let id = `tr-${this.props.tableId}-${idx}`;
-      return <Row
-        cells={item}
-        options={this.props.options}
-        id={id}
-        key={id}
-      />;
-    });
+    let content = [];
+    for (let rowId in this.props.data) {
+      content.push(<Row
+        cells={ this.props.data[rowId] }
+        options={ this.props.options }
+        id={ rowId }
+        key={ `tr-${this.props.tableId}-${rowId}` }
+      />);
+    }
     return <tbody>{ content }</tbody>;
   }
 }

@@ -31,9 +31,7 @@ class Pager extends Component {
       isNextPage: false,
     };
   }
-  componentDidUpdate = () => {
-    this.pageCount = Math.ceil(this.props.totalCount / this.props.pageSize) || 0;
-  }
+
   _addButton = (buttons, pageButtonOptions) => {
     let options = Object.assign({}, this.generalOptions, pageButtonOptions, this.buttonSettings);
     options.key = `pg-${this.props.tableId}-${pageButtonOptions.idx}`;
@@ -110,6 +108,7 @@ class Pager extends Component {
     }
   };
   render() {
+    this.pageCount = Math.ceil(this.props.totalCount / this.props.pageSize) || 0;
     let Tag = this.props.pagerTag;
     let buttons = [];
     if (this.props.firstPageLabel) {

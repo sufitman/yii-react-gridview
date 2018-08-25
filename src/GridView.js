@@ -7,7 +7,8 @@ class GridView extends Component {
   constructor(props) {
     super(props);
     this.id = require('random-string')();
-    this.state = { sort: {} };
+    this.defaultSelectionState = { selection: [], allRowsChecked: false };
+    this.state = { sort: {}, ...this.defaultSelectionState };
   }
   
   static propTypes = {
@@ -48,6 +49,8 @@ class GridView extends Component {
     onPageButtonClick: PropTypes.func,
     notSetText: PropTypes.string,
     emptyCaption: PropTypes.string,
+    rowIdColumn: PropTypes.string,
+    onSelectionChange: PropTypes.func,
   }
 
   static defaultProps = {
@@ -59,6 +62,7 @@ class GridView extends Component {
         'table-bordered'
       ].join(' ')
     },
+    rowIdColumn: 'id',
   }
 
   setSort = (column, sort) => {
@@ -70,10 +74,47 @@ class GridView extends Component {
         delete newSort[column];
       }
       this.setState({
+          ...this.defaultSelectionState,
           sort: newSort
-      })
-      this.props.onSortChange(this.state.sort);
+      }, () => this.props.onSortChange(this.state.sort));
     }
+  }
+
+  rowSelect = (id, checked) => {
+    this.setState(prevState => {
+      let selection = [ ...prevState.selection ];
+      if (checked) {
+        selection.push(id)
+      } else {
+        let idx = selection.indexOf(id);
+        if (idx !== -1) {
+          selection.splice(idx, 1);
+        }
+      }
+      return { selection };
+    }, () => this.props.onSelectionChange(this.state.selection));
+  }
+  
+  allRowsSelect = (checked) => {
+    this.setState(prevState => {
+      let selection = [];
+      if (checked) {
+        this.props.data.forEach((item) => {
+          selection.push(item[this.props.rowIdColumn]);
+        });
+      }
+      return { selection, allRowsChecked: checked };
+    }, () => {
+      this.props.onSelectionChange(this.state.selection)
+    });
+  }
+
+  pageButtonClick = (currentPage) => {
+    this.setState(this.defaultSelectionState, () => this.props.onPageButtonClick(currentPage));
+  }
+
+  filterChange = (filters) => {
+    this.setState(this.defaultSelectionState, () => this.props.onFilterChange(filters));
   }
 
   render() {
@@ -100,11 +141,18 @@ class GridView extends Component {
       prevPageLabel: pagerSpecificProps.prevPageLabel,
       firstPageLabel: pagerSpecificProps.firstPageLabel,
       lastPageLabel: pagerSpecificProps.lastPageLabel,
-      onPageButtonClick: pagerSpecificProps.onPageButtonClick,
       ...tableSpecificProps
     } = this.props);
     tableSpecificProps.sort = this.state.sort;
     tableSpecificProps.setSort = this.setSort;
+    tableSpecificProps.rowSelect = this.rowSelect;
+    tableSpecificProps.allRowsSelect = this.allRowsSelect;
+    tableSpecificProps.allRowsChecked = this.state.allRowsChecked;
+    tableSpecificProps.selection = this.state.selection;
+    delete tableSpecificProps.onPageButtonClick;
+    pagerSpecificProps.onPageButtonClick = this.pageButtonClick;
+    delete tableSpecificProps.onFilterChange;
+    tableSpecificProps.onFilterChange = this.filterChange;
 
     return <div { ...this.props.containerOptions }>
       <Table { ...generalProps } { ...tableSpecificProps } />
