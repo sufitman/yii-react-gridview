@@ -7,9 +7,12 @@ class GridView extends Component {
   constructor(props) {
     super(props);
     this.id = require('random-string')();
-    //@TODO make state be available through the props
-    this.defaultSelectionState = { selection: [], allRowsChecked: false };
-    this.state = { sort: {}, filterData: {}, ...this.defaultSelectionState };
+    this.defaultSelectionState = { selectedRowIds: [], allRowsChecked: false };
+    this.state = this._setConditionalState({
+      sort: {},
+      filterData: {},
+      ...this.defaultSelectionState
+    }, false);
   }
   
   static propTypes = {
@@ -52,6 +55,10 @@ class GridView extends Component {
     emptyCaption: PropTypes.string,
     rowIdColumn: PropTypes.string,
     onSelectionChange: PropTypes.func,
+    selectedRowIds: PropTypes.array,
+    allRowsChecked: PropTypes.bool,
+    sort: PropTypes.object,
+    filterData: PropTypes.object,
   }
 
   static defaultProps = {
@@ -66,63 +73,103 @@ class GridView extends Component {
     rowIdColumn: 'id',
   }
 
+  _setConditionalState = (newState, setState = true) => {
+    let state = {};
+    if (this.props.selectedRowIds === undefined && newState.selectedRowIds) {
+      state.selectedRowIds = newState.selectedRowIds;
+    }
+    if (this.props.allRowsChecked === undefined && newState.allRowsChecked !== undefined) {
+      state.allRowsChecked = newState.allRowsChecked;
+    }
+    if (this.props.sort === undefined && newState.sort) {
+      state.sort = newState.sort;
+    }
+    if (this.props.filterData === undefined && newState.filterData) {
+      state.filterData = newState.filterData;
+    }
+    if (setState && Object.keys(state).length) {
+      this.setState(state);
+    }
+    return state;
+  }
+
+  _getPrevStateVar = (key) => {
+    let prevStateVar;
+    if (this.props[key] !== undefined) {
+        prevStateVar = this.props[key];
+    } else {
+        prevStateVar = this.state[key];
+    }
+    return prevStateVar;
+  }
+
   setSort = (column, sort) => {
     if (this.props.onSortChange) {
-      let newSort = { ...this.state.sort };
+      let prevSort = this._getPrevStateVar('sort');
+      if (typeof prevSort !== 'object') {
+        throw new Error(`sort must be an object, ${typeof prevSort} provided`);
+      }
+      let newSort = { ...prevSort };
       if (sort) {
         newSort[column] = sort;
       } else {
         delete newSort[column];
       }
-      this.setState({
-          ...this.defaultSelectionState,
-          sort: newSort
-      }, () => this.props.onSortChange(this.state.sort));
+      this.props.onSortChange(newSort);
+      this._setConditionalState({
+        ...this.defaultSelectionState,
+        sort: newSort
+      });
     }
   }
 
-  rowSelect = (id, checked) => {
-    this.setState(prevState => {
-      let selection = [ ...prevState.selection ];
-      if (checked) {
-        selection.push(id)
-      } else {
-        let idx = selection.indexOf(id);
-        if (idx !== -1) {
-          selection.splice(idx, 1);
-        }
+  rowSelect = (rowId, checked) => {
+    let prevSelectedRowIds = this._getPrevStateVar('selectedRowIds');
+    if (!Array.isArray(prevSelectedRowIds)) {
+        throw new Error(`selectedRowIds must be an array, ${typeof prevSelectedRowIds} provided`);
+    }
+    let selectedRowIds = [ ...prevSelectedRowIds ];
+    if (checked) {
+      selectedRowIds.push(rowId)
+    } else {
+      let idx = selectedRowIds.indexOf(rowId);
+      if (idx !== -1) {
+        selectedRowIds.splice(idx, 1);
       }
-      return { selection };
-    }, () => this.props.onSelectionChange(this.state.selection));
+    }
+    this.props.onSelectionChange(selectedRowIds);
+    this._setConditionalState({ selectedRowIds });
   }
   
   allRowsSelect = (checked) => {
-    this.setState(prevState => {
-      let selection = [];
-      if (checked) {
-        this.props.data.forEach((item) => {
-          selection.push(item[this.props.rowIdColumn]);
-        });
-      }
-      return { selection, allRowsChecked: checked };
-    }, () => {
-      this.props.onSelectionChange(this.state.selection)
-    });
+    let selectedRowIds = [];
+    if (checked) {
+      this.props.data.forEach((row) => {
+        selectedRowIds.push(row[this.props.rowIdColumn]);
+      });
+    }
+    this.props.onSelectionChange(selectedRowIds);
+    this._setConditionalState({ selectedRowIds, allRowsChecked: checked });
   }
 
   pageButtonClick = (currentPage) => {
-    this.setState(this.defaultSelectionState, () => this.props.onPageButtonClick(currentPage));
+    this.props.onPageButtonClick(currentPage);
+    this._setConditionalState(this.defaultSelectionState);
   }
 
   applyFilter = (column, value) => {
-    let filterData = { ...this.state.filterData };
+    let prevFilterData = this._getPrevStateVar('filterData');
+    if (typeof prevFilterData !== 'object') {
+      throw new Error(`filterData must be an object, ${typeof prevFilterData} provided`);
+    }
+    let filterData = { ...prevFilterData };
     if (value) {
       filterData[column] = value;
     } else {
       delete filterData[column];
     }
-    this.setState({ ...this.defaultSelectionState, filterData});
     this.props.onFilterChange(filterData);
+    this._setConditionalState({ ...this.defaultSelectionState, filterData});
   }
 
   render() {
@@ -151,12 +198,12 @@ class GridView extends Component {
       lastPageLabel: pagerSpecificProps.lastPageLabel,
       ...tableSpecificProps
     } = this.props);
-    tableSpecificProps.sort = this.state.sort;
+    tableSpecificProps.sort = this._getPrevStateVar('sort');
     tableSpecificProps.setSort = this.setSort;
     tableSpecificProps.rowSelect = this.rowSelect;
     tableSpecificProps.allRowsSelect = this.allRowsSelect;
-    tableSpecificProps.allRowsChecked = this.state.allRowsChecked;
-    tableSpecificProps.selection = this.state.selection;
+    tableSpecificProps.allRowsChecked = this._getPrevStateVar('allRowsChecked');
+    tableSpecificProps.selectedRowIds = this._getPrevStateVar('selectedRowIds');
     delete tableSpecificProps.onPageButtonClick;
     pagerSpecificProps.onPageButtonClick = this.pageButtonClick;
     delete tableSpecificProps.onFilterChange;

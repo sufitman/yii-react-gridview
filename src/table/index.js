@@ -99,7 +99,7 @@ class Table extends Component {
           row: item,
           rowId: rowId,
           idx,
-          checked: this.props.selection.indexOf(rowId) !== -1
+          checked: this.props.selectedRowIds.indexOf(rowId) !== -1
         });
       });
       tableContent.push(<Body
