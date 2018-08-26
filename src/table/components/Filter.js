@@ -5,9 +5,6 @@ class Filter extends Component {
   constructor(props) {
     super(props);
     this.id = `filter-${this.props.id}`;
-    this.state = {
-      filters: {}
-    };
   }
   _renderFilters = () => {
     let readyFilters = [];
@@ -25,10 +22,10 @@ class Filter extends Component {
     switch (type) {
       case 'text': {
         let textInputOptions = { className: 'form-control', ...options };
-        return <input name={ name } type="text" { ...textInputOptions }  onChange={ this.applyFilters } />;
+        return <input name={ name } type="text" { ...textInputOptions }  onChange={ this.applyFilter } />;
       }
       case 'checkbox':
-        return <input name={ name } type="checkbox" {...options} onChange={ this.applyFilters } />;
+        return <input name={ name } type="checkbox" {...options} onChange={ this.applyFilter } />;
       case 'select': {
         let opts = [];
         if (!options.data) {
@@ -39,7 +36,7 @@ class Filter extends Component {
           opts.push(<option key={ `${name}-${idx++}` } value={val}>{options.data[val]}</option>);
         }
         delete options.data;
-        return <select name={this._getFieldName(column)} onChange={ this.applyFilters } { ...options }>{opts}</select>;
+        return <select name={this._getFieldName(column)} onChange={ this.applyFilter } { ...options }>{opts}</select>;
       }
     }
     return null;
@@ -59,15 +56,9 @@ class Filter extends Component {
     }
     throw new Error('Invalid filter param');
   };
-  applyFilters = (e) => {
-    let filters = Object.assign({}, this.state.filters);
-    let property = e.target.name.split('-').pop();
-    if (e.target.value) {
-      filters[property] = e.target.value;
-    } else {
-      delete filters[property];
-    }
-    this.setState({filters: filters}, () => this.props.onFilterChange(this.state.filters));
+  applyFilter = (e) => {
+    let column = e.target.name.split('-').pop();
+    this.props.applyFilter(column, e.target.value);
   };
   render() {
     return <Row

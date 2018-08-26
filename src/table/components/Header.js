@@ -20,11 +20,11 @@ class Header extends Component {
   }
 
   filterTimeout = null;
-  filterChanged = (filters) => {
+  applyFilter = (column, value) => {
     if (this.filterTimeout) {
       clearTimeout(this.filterTimeout);
     }
-    this.filterTimeout = setTimeout(() => this.props.onFilterChange(filters), this.props.filterDelay * 1000);
+    this.filterTimeout = setTimeout(() => this.props.applyFilter(column, value), this.props.filterDelay * 1000);
   };
 
   render() {
@@ -41,7 +41,7 @@ class Header extends Component {
         id={ this.id }
         filters={ this.props.filters }
         tableId={ this.props.tableId }
-        onFilterChange={ this.filterChanged }
+        applyFilter={ this.applyFilter }
       />);
     }
     return <thead>{ tableHeader }</thead>;

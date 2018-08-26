@@ -7,8 +7,9 @@ class GridView extends Component {
   constructor(props) {
     super(props);
     this.id = require('random-string')();
+    //@TODO make state be available through the props
     this.defaultSelectionState = { selection: [], allRowsChecked: false };
-    this.state = { sort: {}, ...this.defaultSelectionState };
+    this.state = { sort: {}, filterData: {}, ...this.defaultSelectionState };
   }
   
   static propTypes = {
@@ -113,8 +114,15 @@ class GridView extends Component {
     this.setState(this.defaultSelectionState, () => this.props.onPageButtonClick(currentPage));
   }
 
-  filterChange = (filters) => {
-    this.setState(this.defaultSelectionState, () => this.props.onFilterChange(filters));
+  applyFilter = (column, value) => {
+    let filterData = { ...this.state.filterData };
+    if (value) {
+      filterData[column] = value;
+    } else {
+      delete filterData[column];
+    }
+    this.setState({ ...this.defaultSelectionState, filterData});
+    this.props.onFilterChange(filterData);
   }
 
   render() {
@@ -152,7 +160,7 @@ class GridView extends Component {
     delete tableSpecificProps.onPageButtonClick;
     pagerSpecificProps.onPageButtonClick = this.pageButtonClick;
     delete tableSpecificProps.onFilterChange;
-    tableSpecificProps.onFilterChange = this.filterChange;
+    tableSpecificProps.applyFilter = this.applyFilter;
 
     return <div { ...this.props.containerOptions }>
       <Table { ...generalProps } { ...tableSpecificProps } />

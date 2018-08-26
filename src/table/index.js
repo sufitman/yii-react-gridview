@@ -123,7 +123,7 @@ class Table extends Component {
         options={ this.props.headerRowOptions }
         tableId={ this.props.tableId }
         filters={ this.props.filters ? this._prepareFilters() : null }
-        onFilterChange={ this.props.onFilterChange }
+        applyFilter={ this.props.applyFilter }
         filterDelay={ this.props.filterDelay }
         key={ `thead-${this.props.tableId}` }
         setSort={ this.props.setSort }
