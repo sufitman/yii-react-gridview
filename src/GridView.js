@@ -69,7 +69,8 @@ class GridView extends Component {
         'table-striped',
         'table-bordered'
       ].join(' ')
-    },
+    }, 
+    pagerOptions: { className: 'pagination' },
     rowIdColumn: 'id',
   }
 
