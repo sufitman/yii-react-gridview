@@ -1,5 +1,7 @@
 # Yii2 GridView widget for react
+This component is created to simplify moving from php rendering of built-in Yii2 Gridview widget to React-based application using some of its familiar settings.
 
+[Simple example](https://codepen.io/sufitman/project/editor/XVamYV)
 ## Installing
 ```bash
 npm install --save yii-react-gridview
