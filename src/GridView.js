@@ -144,8 +144,8 @@ class GridView extends Component {
   allRowsSelect = (checked) => {
     let selectedRowIds = [];
     if (checked) {
-      this.props.data.forEach((row) => {
-        selectedRowIds.push(row[this.props.rowIdColumn]);
+      this.props.data.forEach((row, idx) => {
+        selectedRowIds.push(row[this.props.rowIdColumn] || idx);
       });
     }
     this.props.onSelectionChange(selectedRowIds);

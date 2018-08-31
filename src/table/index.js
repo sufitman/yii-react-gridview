@@ -94,10 +94,10 @@ class Table extends Component {
     if (this.props.data.length) {
       let preparedData = {};
       this.props.data.forEach((item, idx) => {
-        let rowId = item[this.props.rowIdColumn]
+        let rowId = item[this.props.rowIdColumn] || idx;
         preparedData[rowId] = this._prepareRowData({
           row: item,
-          rowId: rowId,
+          rowId,
           idx,
           checked: this.props.selectedRowIds.indexOf(rowId) !== -1
         });
