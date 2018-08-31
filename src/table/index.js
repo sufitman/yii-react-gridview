@@ -25,7 +25,7 @@ class Table extends Component {
 
   _prepareCellData = (cellOptions) => {
     if (typeof cellOptions.rule === 'function') {
-      return cellOptions.rule(cellOptions.cellData, cellOptions.idx);
+      return cellOptions.rule(cellOptions.cellData, cellOptions.rowId);
     }
     if (cellOptions.rule === 'serial') {
       return this.props.currentPage * this.props.pageSize + 1 + cellOptions.idx;
