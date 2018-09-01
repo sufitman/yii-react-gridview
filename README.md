@@ -1,5 +1,5 @@
 # Yii2 GridView widget for react
-This component is created to simplify moving from php rendering of built-in Yii2 Gridview widget to React-based application using some of its familiar settings.
+This component is created to simplify moving from php rendering of built-in [Yii2 Gridview widget](https://www.yiiframework.com/doc/api/2.0/yii-grid-gridview) to React-based application using some of its familiar settings.
 
 [Simple example](https://codepen.io/sufitman/project/editor/XVamYV)
 ## Installing
@@ -8,7 +8,7 @@ npm install --save yii-react-gridview
 ```
 
 ## Setting `props`
-Instead of using `pager` or `dataProvider` objects as it used in Yii2 GridView widget, some of its properties (or equivalents) should be set as props directly in GridView component. It makes more suitable way for React of re-rendering the component in case if some prop will be changed.
+Instead of using `pager` or `dataProvider` objects as it used in [Yii2 Gridview widget](https://www.yiiframework.com/doc/api/2.0/yii-grid-gridview), some of its properties (or equivalents) should be set as props directly in GridView component. It makes more suitable way for React of re-rendering the component in case if some prop will be changed.
 
 ## Example
 of component:
