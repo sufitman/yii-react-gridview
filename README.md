@@ -8,7 +8,7 @@ npm install --save yii-react-gridview
 ```
 
 ## Setting `props`
-Instead of using `pager` or `dataProvider` objects as it used in [Yii2 Gridview widget](https://www.yiiframework.com/doc/api/2.0/yii-grid-gridview), some of its properties (or equivalents) should be set as props directly in GridView component. It makes more suitable way for React of re-rendering the component in case if some prop will be changed.
+Instead of using `pager` or `dataProvider` objects as it used in [Yii2 Gridview widget](https://www.yiiframework.com/doc/api/2.0/yii-grid-gridview), some of its properties (or equivalents) should be set as props directly in GridView component. It makes more suitable way for React of re-rendering the component in case if some prop will be changed. See [Available props](#available-props) to find out how to set up your GridView. 
 
 ## Example
 of component:
