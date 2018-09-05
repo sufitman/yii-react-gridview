@@ -12,7 +12,6 @@ class Header extends Component {
   static propTypes = {
     tableId: PropTypes.string,
     onFilterChange: PropTypes.func,
-    filterDelay: PropTypes.number,
     headerCells: PropTypes.array,
     options: PropTypes.object,
     filters: PropTypes.object,
@@ -20,12 +19,6 @@ class Header extends Component {
   }
 
   filterTimeout = null;
-  applyFilter = (column, value) => {
-    if (this.filterTimeout) {
-      clearTimeout(this.filterTimeout);
-    }
-    this.filterTimeout = setTimeout(() => this.props.applyFilter(column, value), this.props.filterDelay * 1000);
-  };
 
   render() {
     let tableHeader = [<Row
@@ -41,7 +34,7 @@ class Header extends Component {
         id={ this.id }
         filters={ this.props.filters }
         tableId={ this.props.tableId }
-        applyFilter={ this.applyFilter }
+        applyFilter={ this.props.applyFilter }
       />);
     }
     return <thead>{ tableHeader }</thead>;

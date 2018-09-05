@@ -32,7 +32,6 @@ class GridView extends Component {
     filters: PropTypes.object,
     onSortChange: PropTypes.func,
     onFilterChange: PropTypes.func,
-    filterDelay: PropTypes.number,
     pagerOptions: PropTypes.object,
     currentPage: PropTypes.number,
     totalCount: PropTypes.number,

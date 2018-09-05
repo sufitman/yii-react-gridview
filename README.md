@@ -152,7 +152,6 @@ class YourController extends Controller {
 |`filters`|Object|null|Contain *filters* for specified columns. *Filters* can be:<br>a) string `'text'` renders simple input of `type="text"`;<br>b) Object `{ type: ..., options: {...} }` where type can be either `'text'` (input of `type="text"`), `'checkbox'` or `'select'`. Options typically are HTML attributes of the inputs. If type is `'select'` then `options` should contain `data` - object of options (where key is value attribute of an \<option\> and value is its text);<br>c) `function (name)` to render custom input with name="`name`"|
 |`onSortChange`|`function(sort)`|undefined|Callback to sort the data with `sort` - key-value object (```js { column:'ASC' /* or 'DESC' */ }```) to sort the `data`. The way of is up to you|
 |`onFilterChange`|`function(filters)`|undefined|Callback to filter the data with `filters` - key-value object to filter the `data`. **Required** when filters are specified. The way of filtering depends on you|
-|`filterDelay`|int(seconds)|1|Delay in seconds before execute `onFilterChange` after a filter was changed. It prevents unnecessary execution of the callback after each key pressed|
 |`pagerOptions`|object|undefined|HTML attributes of pager container|
 |`currentPage`|integer|undefined|Number of current page (begins from 0). **Should be provided by `data` provider**|
 |`totalCount`|integer|undefined|Total count of models given in `data`. **Should be provided by `data` provider**|

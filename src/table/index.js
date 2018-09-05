@@ -17,7 +17,6 @@ class Table extends Component {
     footerRowOptions: {},
     rowOptions: {},
     filters: null,
-    filterDelay: 1,
     notSetText: '(not set)',
     emptyCaption: 'Nothing found',
     allRowsChecked: false
@@ -124,7 +123,6 @@ class Table extends Component {
         tableId={ this.props.tableId }
         filters={ this.props.filters ? this._prepareFilters() : null }
         applyFilter={ this.props.applyFilter }
-        filterDelay={ this.props.filterDelay }
         key={ `thead-${this.props.tableId}` }
         setSort={ this.props.setSort }
       />);
