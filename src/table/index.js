@@ -79,14 +79,6 @@ class Table extends Component {
     return readyRow;
   };
 
-  _prepareFilters = () => {
-    let filters = {};
-    for (let column in this.props.columns) {
-      filters[column] = this.props.filters[column];
-    }
-    return filters;
-  };
-
   render() {
     let tableContent = [];
     let somethingFound = true;
@@ -121,7 +113,8 @@ class Table extends Component {
         }) }
         options={ this.props.headerRowOptions }
         tableId={ this.props.tableId }
-        filters={ this.props.filters ? this._prepareFilters() : null }
+        columns={ Object.keys(this.props.columns) }
+        filters={ this.props.filters }
         applyFilter={ this.props.applyFilter }
         key={ `thead-${this.props.tableId}` }
         setSort={ this.props.setSort }

@@ -14,7 +14,7 @@ class Header extends Component {
     onFilterChange: PropTypes.func,
     headerCells: PropTypes.array,
     options: PropTypes.object,
-    filters: PropTypes.object,
+    columns: PropTypes.array,
     setSort: PropTypes.func,
   }
 
@@ -33,6 +33,7 @@ class Header extends Component {
         key={ `${this.id}-filters` }
         id={ this.id }
         filters={ this.props.filters }
+        columns={ this.props.columns }
         tableId={ this.props.tableId }
         applyFilter={ this.props.applyFilter }
       />);

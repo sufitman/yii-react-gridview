@@ -12,15 +12,15 @@ module.exports = [{
     libraryTarget: 'umd'
   },
   optimization: {
-    minimize: true
+    minimize: false
   },
   plugins: [
     new webpack.ProvidePlugin({
       React: 'react'
     }),
-    new webpack.LoaderOptionsPlugin({
-      minimize: true
-    })
+    // new webpack.LoaderOptionsPlugin({
+    //   minimize: true
+    // })
   ],
   externals: [
     {

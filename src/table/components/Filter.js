@@ -8,10 +8,9 @@ class Filter extends Component {
   }
   _renderFilters = () => {
     let readyFilters = [];
-    for (let column in this.props.filters) {
-      let filter = this.props.filters[column];
-      readyFilters.push(this._prepareFilter(column, filter));
-    }
+    this.props.columns.forEach((column) => {
+      readyFilters.push(this._prepareFilter(column, this.props.filters[column]));
+    });
     return readyFilters;
   };
   _getFieldName = (column) => {
@@ -36,7 +35,9 @@ class Filter extends Component {
           opts.push(<option key={ `${name}-${idx++}` } value={val}>{options.data[val]}</option>);
         }
         delete options.data;
-        return <select name={this._getFieldName(column)} onChange={ this.applyFilter } { ...options }>{opts}</select>;
+        return <select name={ this._getFieldName(column) } onChange={ this.applyFilter } { ...options }>
+          {opts}
+        </select>;
       }
     }
     return null;
