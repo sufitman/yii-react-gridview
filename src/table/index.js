@@ -22,81 +22,21 @@ class Table extends Component {
     allRowsChecked: false
   }
 
-  _prepareCellData = (cellOptions) => {
-    if (typeof cellOptions.rule === 'function') {
-      return cellOptions.rule(cellOptions.cellData, cellOptions.rowId);
-    }
-    if (cellOptions.rule === 'serial') {
-      return this.props.currentPage * this.props.pageSize + 1 + cellOptions.idx;
-    }
-    if (cellOptions.rule === 'checkbox' && this.props.rowSelect) {
-      return {
-        type: 'checkbox',
-        selectionChange: (checked) => {
-          if (cellOptions.rowId !== undefined) {
-            this.props.rowSelect(cellOptions.rowId, checked);
-          } else {
-            this.props.allRowsSelect(checked);
-          }
-        },
-        checked: cellOptions.checked,
-      }
-    }
-    return cellOptions.cellData;
-  };
-
-  _prepareRowData = (rowOptions) => {
-    let readyRow = [];
-    for (let column in this.props.columns) {
-      let cell = this._prepareCellData({
-          cellData: rowOptions.row[column],
-          idx: rowOptions.idx,
-          rowId: rowOptions.rowId,
-          rule: this.props.columns[column],
-          checked: rowOptions.checked,
-      });
-      if (rowOptions.isTh && column !== 'checkbox') {
-        if (rowOptions.row[column]) {
-          cell = rowOptions.row[column];
-          if (typeof cell === 'string') {
-            cell = {
-              value: cell,
-              enableSorting: true,
-              column: column,
-            };
-          }
-          cell.sort = this.props.sort[column]
-        } else {
-          let title = column.replace(/([A-Z])/g, ' $1');
-          cell = (title.charAt(0).toUpperCase() + title.slice(1)).replace(/_/g, ' ');
-        }
-      }
-      if (!cell) {
-        cell = this.props.notSetText;
-      }
-      readyRow.push(cell);
-    }
-    return readyRow;
-  };
-
   render() {
     let tableContent = [];
     let somethingFound = true;
     if (this.props.data.length) {
-      let preparedData = {};
-      this.props.data.forEach((item, idx) => {
-        let rowId = item[this.props.rowIdColumn] || idx;
-        preparedData[rowId] = this._prepareRowData({
-          row: item,
-          rowId,
-          idx,
-          checked: this.props.selectedRowIds.indexOf(rowId) !== -1
-        });
-      });
       tableContent.push(<Body
-        data={ preparedData }
+        data={ this.props.data }
         options={ this.props.rowOptions }
+        rowIdColumn={ this.props.rowIdColumn }
+        selectedRowIds={ this.props.selectedRowIds }
+        rowSelect={ this.props.rowSelect }
+        notSetText={ this.props.notSetText }
+        currentPage={ this.props.currentPage }
+        pageSize={ this.props.pageSize }
         tableId={ this.props.tableId }
+        columns={ this.props.columns }
         key={ `tbody-${this.props.tableId}` }
       />);
     } else {
@@ -105,15 +45,13 @@ class Table extends Component {
 
     if (this.props.showHeader) {
       tableContent.unshift(<Header
-        headerCells={ this._prepareRowData({
-          row: this.props.headerCells,
-          idx: 0,
-          isTh: true,
-          checked: this.props.allRowsChecked,
-        }) }
+        headerCells={ this.props.headerCells }
+        allRowsChecked={ this.props.allRowsChecked }
+        allRowsSelect={ this.props.allRowsSelect }
         options={ this.props.headerRowOptions }
         tableId={ this.props.tableId }
-        columns={ Object.keys(this.props.columns) }
+        columns={ this.props.columns }
+        sort={ this.props.sort }
         filters={ this.props.filters }
         applyFilter={ this.props.applyFilter }
         key={ `thead-${this.props.tableId}` }
@@ -132,6 +70,7 @@ class Table extends Component {
       let footer = <Footer
         footerCells={ this.props.footerCells }
         options={ this.props.footerRowOptions }
+        columns={ this.props.columns }
         tableId={ this.props.tableId }
         key={ `tfoot-${this.props.tableId}` }
       />;

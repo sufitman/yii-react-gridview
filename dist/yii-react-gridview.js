@@ -265,6 +265,32 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 
 class cell_Cell extends external_root_React_commonjs2_react_commonjs_react_amd_react_umd_react_["Component"] {
+  constructor(...args) {
+    var _temp;
+
+    return _temp = super(...args), this._prepareContent = cellOptions => {
+      if (typeof cellOptions.rule === 'function') {
+        return cellOptions.rule(cellOptions.cellData, cellOptions.rowId);
+      }
+      if (cellOptions.rule === 'serial' && cellOptions.idx !== undefined) {
+        return this.props.currentPage * this.props.pageSize + 1 + cellOptions.idx;
+      }
+      if (cellOptions.rule === 'checkbox' && (this.props.rowSelect || this.props.allRowsSelect)) {
+        return {
+          type: 'checkbox',
+          selectionChange: checked => {
+            if (cellOptions.rowId !== undefined) {
+              this.props.rowSelect && this.props.rowSelect(cellOptions.rowId, checked);
+            } else {
+              this.props.allRowsSelect && this.props.allRowsSelect(checked);
+            }
+          },
+          checked: cellOptions.checked
+        };
+      }
+      return cellOptions.cellData;
+    }, _temp;
+  }
 
   render() {
     let content = this.props.content;
@@ -272,7 +298,11 @@ class cell_Cell extends external_root_React_commonjs2_react_commonjs_react_amd_r
       if (content.enableSorting) {
         content = external_root_React_commonjs2_react_commonjs_react_amd_react_umd_react_default.a.createElement(content_SortLink, _extends({}, content, { setSort: this.props.setSort }));
       } else {
-        content = content.value;
+        if (typeof content.value === 'object') {
+          content = this._prepareContent(content.value);
+        } else {
+          content = content.value;
+        }
       }
     }
     if (content.type) {
@@ -300,6 +330,47 @@ var Row_extends = Object.assign || function (target) { for (var i = 1; i < argum
 
 
 class Row_Row extends external_root_React_commonjs2_react_commonjs_react_amd_react_umd_react_["Component"] {
+  constructor(...args) {
+    var _temp;
+
+    return _temp = super(...args), this._prepareData = rowOptions => {
+      let readyRow = [];
+      for (let column in this.props.columns) {
+        let cell = {
+          value: {
+            cellData: rowOptions.row[column],
+            idx: rowOptions.idx,
+            rowId: rowOptions.rowId,
+            rule: this.props.columns[column],
+            checked: rowOptions.checked
+          },
+          column
+        };
+        if (rowOptions.isTh && column !== 'checkbox') {
+          if (rowOptions.row[column]) {
+            cell = rowOptions.row[column];
+            if (typeof cell === 'string') {
+              cell = {
+                value: cell,
+                enableSorting: true,
+                column
+              };
+            }
+            cell.sort = this.props.sort[column];
+          } else {
+            let title = column.replace(/([A-Z])/g, ' $1');
+            cell = (title.charAt(0).toUpperCase() + title.slice(1)).replace(/_/g, ' ');
+          }
+        }
+        if (!cell) {
+          cell = this.props.notSetText;
+        }
+        readyRow.push(cell);
+      }
+      return readyRow;
+    }, _temp;
+  }
+
   render() {
     let optionalProps = {};
     if (this.props.setSort) {
@@ -308,14 +379,21 @@ class Row_Row extends external_root_React_commonjs2_react_commonjs_react_amd_rea
     return external_root_React_commonjs2_react_commonjs_react_amd_react_umd_react_default.a.createElement(
       'tr',
       this.props.options,
-      this.props.cells.map((cell, idx) => external_root_React_commonjs2_react_commonjs_react_amd_react_umd_react_default.a.createElement(components_cell, Row_extends({
+      this._prepareData(this.props.data).map((cell, idx) => external_root_React_commonjs2_react_commonjs_react_amd_react_umd_react_default.a.createElement(components_cell, Row_extends({
         key: `${this.props.id}-td-${idx}`,
-        content: cell
+        content: cell,
+        currentPage: this.props.currentPage,
+        pageSize: this.props.pageSize,
+        rowSelect: this.props.rowSelect,
+        allRowsSelect: this.props.allRowsSelect
       }, optionalProps)))
     );
   }
 }
 
+Row_Row.defaultProps = {
+  notSetText: ''
+};
 /* harmony default export */ var components_Row = (Row_Row);
 // CONCATENATED MODULE: ./table/components/Filter.js
 var Filter_extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
@@ -328,9 +406,9 @@ class Filter_Filter extends external_root_React_commonjs2_react_commonjs_react_a
     super(props);
 
     this._renderFilters = () => {
-      let readyFilters = [];
-      this.props.columns.forEach(column => {
-        readyFilters.push(this._prepareFilter(column, this.props.filters[column]));
+      let readyFilters = { row: {} };
+      Object.keys(this.props.columns).forEach(columnName => {
+        readyFilters.row[columnName] = this._prepareFilter(columnName, this.props.filters[columnName]);
       });
       return readyFilters;
     };
@@ -341,32 +419,33 @@ class Filter_Filter extends external_root_React_commonjs2_react_commonjs_react_a
 
     this._renderFilter = (column, type, options = {}) => {
       const name = this._getFieldName(column);
+      let filterOptions = Filter_extends({}, options, { onChange: this.applyFilter });
       switch (type) {
         case 'text':
           {
-            let textInputOptions = Filter_extends({ className: 'form-control' }, options);
-            return external_root_React_commonjs2_react_commonjs_react_amd_react_umd_react_default.a.createElement('input', Filter_extends({ name: name, type: 'text' }, textInputOptions, { onChange: this.applyFilter }));
+            let textInputOptions = Filter_extends({ className: 'form-control', name, type }, filterOptions);
+            return external_root_React_commonjs2_react_commonjs_react_amd_react_umd_react_default.a.createElement('input', textInputOptions);
           }
         case 'checkbox':
-          return external_root_React_commonjs2_react_commonjs_react_amd_react_umd_react_default.a.createElement('input', Filter_extends({ name: name, type: 'checkbox' }, options, { onChange: this.applyFilter }));
+          return external_root_React_commonjs2_react_commonjs_react_amd_react_umd_react_default.a.createElement('input', Filter_extends({ name, type }, filterOptions));
         case 'select':
           {
             let opts = [];
-            if (!options.data) {
+            if (!filterOptions.data) {
               throw new Error('Filter select has no options');
             }
             let idx = 0;
-            for (let val in options.data) {
+            for (let val in filterOptions.data) {
               opts.push(external_root_React_commonjs2_react_commonjs_react_amd_react_umd_react_default.a.createElement(
                 'option',
                 { key: `${name}-${idx++}`, value: val },
-                options.data[val]
+                filterOptions.data[val]
               ));
             }
-            delete options.data;
+            delete filterOptions.data;
             return external_root_React_commonjs2_react_commonjs_react_amd_react_umd_react_default.a.createElement(
               'select',
-              Filter_extends({ name: this._getFieldName(column), onChange: this.applyFilter }, options),
+              Filter_extends({ name: name }, filterOptions),
               opts
             );
           }
@@ -385,14 +464,15 @@ class Filter_Filter extends external_root_React_commonjs2_react_commonjs_react_a
         return this._renderFilter(column, filter.type, filter.options || {});
       }
       if (typeof filter === 'function') {
-        return filter(this._getFieldName(column));
+        return filter(this._getFieldName(column), this.applyFilter);
       }
       throw new Error('Invalid filter param');
     };
 
     this.applyFilter = e => {
       let column = e.target.name.split('-').pop();
-      this.props.applyFilter(column, e.target.value);
+      let value = e.target.type === 'checkbox' && e.target.checked.toString() || e.target.value;
+      this.props.applyFilter(column, value);
     };
 
     this.id = `filter-${this.props.id}`;
@@ -400,8 +480,9 @@ class Filter_Filter extends external_root_React_commonjs2_react_commonjs_react_a
 
   render() {
     return external_root_React_commonjs2_react_commonjs_react_amd_react_umd_react_default.a.createElement(components_Row, {
-      cells: this._renderFilters(),
+      data: this._renderFilters(),
       id: this.id,
+      columns: this.props.columns,
       key: this.id
     });
   }
@@ -423,8 +504,16 @@ class Header_Header extends external_root_React_commonjs2_react_commonjs_react_a
 
   render() {
     let tableHeader = [external_root_React_commonjs2_react_commonjs_react_amd_react_umd_react_default.a.createElement(components_Row, {
-      cells: this.props.headerCells,
+      data: {
+        row: this.props.headerCells,
+        idx: 0,
+        isTh: true,
+        checked: this.props.allRowsChecked
+      },
       options: this.props.options,
+      columns: this.props.columns,
+      sort: this.props.sort,
+      allRowsSelect: this.props.allRowsSelect,
       id: this.id,
       key: this.id,
       setSort: this.props.setSort
@@ -433,6 +522,7 @@ class Header_Header extends external_root_React_commonjs2_react_commonjs_react_a
       tableHeader.push(external_root_React_commonjs2_react_commonjs_react_amd_react_umd_react_default.a.createElement(components_Filter, {
         key: `${this.id}-filters`,
         id: this.id,
+        sort: this.sort,
         filters: this.props.filters,
         columns: this.props.columns,
         tableId: this.props.tableId,
@@ -450,10 +540,13 @@ class Header_Header extends external_root_React_commonjs2_react_commonjs_react_a
 Header_Header.propTypes = {
   tableId: external_root_PropTypes_commonjs2_prop_types_commonjs_prop_types_amd_prop_types_umd_prop_types_default.a.string,
   onFilterChange: external_root_PropTypes_commonjs2_prop_types_commonjs_prop_types_amd_prop_types_umd_prop_types_default.a.func,
-  headerCells: external_root_PropTypes_commonjs2_prop_types_commonjs_prop_types_amd_prop_types_umd_prop_types_default.a.array,
+  headerCells: external_root_PropTypes_commonjs2_prop_types_commonjs_prop_types_amd_prop_types_umd_prop_types_default.a.object,
   options: external_root_PropTypes_commonjs2_prop_types_commonjs_prop_types_amd_prop_types_umd_prop_types_default.a.object,
-  columns: external_root_PropTypes_commonjs2_prop_types_commonjs_prop_types_amd_prop_types_umd_prop_types_default.a.array,
-  setSort: external_root_PropTypes_commonjs2_prop_types_commonjs_prop_types_amd_prop_types_umd_prop_types_default.a.func
+  columns: external_root_PropTypes_commonjs2_prop_types_commonjs_prop_types_amd_prop_types_umd_prop_types_default.a.object,
+  setSort: external_root_PropTypes_commonjs2_prop_types_commonjs_prop_types_amd_prop_types_umd_prop_types_default.a.func,
+  allRowsChecked: external_root_PropTypes_commonjs2_prop_types_commonjs_prop_types_amd_prop_types_umd_prop_types_default.a.bool,
+  allRowsSelect: external_root_PropTypes_commonjs2_prop_types_commonjs_prop_types_amd_prop_types_umd_prop_types_default.a.func,
+  sort: external_root_PropTypes_commonjs2_prop_types_commonjs_prop_types_amd_prop_types_umd_prop_types_default.a.object
 };
 /* harmony default export */ var components_Header = (Header_Header);
 // CONCATENATED MODULE: ./table/components/Body.js
@@ -464,10 +557,24 @@ Header_Header.propTypes = {
 class Body_Body extends external_root_React_commonjs2_react_commonjs_react_amd_react_umd_react_["Component"] {
   render() {
     let content = [];
-    for (let rowId in this.props.data) {
+    let preparedData = {};
+    this.props.data.forEach((item, idx) => {
+      let rowId = item[this.props.rowIdColumn] || idx;
+      preparedData[rowId] = {
+        row: item,
+        rowId,
+        idx,
+        checked: this.props.selectedRowIds.indexOf(rowId) !== -1
+      };
+    });
+    for (let rowId in preparedData) {
       content.push(external_root_React_commonjs2_react_commonjs_react_amd_react_umd_react_default.a.createElement(components_Row, {
-        cells: this.props.data[rowId],
+        currentPage: this.props.currentPage,
+        rowSelect: this.props.rowSelect,
+        pageSize: this.props.pageSize,
+        data: preparedData[rowId],
         options: this.props.options,
+        columns: this.props.columns,
         id: rowId,
         key: `tr-${this.props.tableId}-${rowId}`
       }));
@@ -482,8 +589,12 @@ class Body_Body extends external_root_React_commonjs2_react_commonjs_react_amd_r
 
 Body_Body.propTypes = {
   tableId: external_root_PropTypes_commonjs2_prop_types_commonjs_prop_types_amd_prop_types_umd_prop_types_default.a.string,
-  data: external_root_PropTypes_commonjs2_prop_types_commonjs_prop_types_amd_prop_types_umd_prop_types_default.a.object,
-  options: external_root_PropTypes_commonjs2_prop_types_commonjs_prop_types_amd_prop_types_umd_prop_types_default.a.object
+  data: external_root_PropTypes_commonjs2_prop_types_commonjs_prop_types_amd_prop_types_umd_prop_types_default.a.array,
+  options: external_root_PropTypes_commonjs2_prop_types_commonjs_prop_types_amd_prop_types_umd_prop_types_default.a.object,
+  rowIdColumn: external_root_PropTypes_commonjs2_prop_types_commonjs_prop_types_amd_prop_types_umd_prop_types_default.a.string,
+  selectedRowIds: external_root_PropTypes_commonjs2_prop_types_commonjs_prop_types_amd_prop_types_umd_prop_types_default.a.array,
+  columns: external_root_PropTypes_commonjs2_prop_types_commonjs_prop_types_amd_prop_types_umd_prop_types_default.a.object,
+  rowSelect: external_root_PropTypes_commonjs2_prop_types_commonjs_prop_types_amd_prop_types_umd_prop_types_default.a.func
 };
 Body_Body.defaultProps = {
   options: {}
@@ -501,17 +612,26 @@ class Footer_Footer extends external_root_React_commonjs2_react_commonjs_react_a
   }
 
   render() {
+    let row = {};
+    Object.keys(this.props.columns).forEach((column, idx) => {
+      row[column] = this.props.footerCells[idx];
+    });
     return external_root_React_commonjs2_react_commonjs_react_amd_react_umd_react_default.a.createElement(
       'tfoot',
       null,
-      external_root_React_commonjs2_react_commonjs_react_amd_react_umd_react_default.a.createElement(components_Row, { cells: this.props.footerCells, key: this.id, id: this.id })
+      external_root_React_commonjs2_react_commonjs_react_amd_react_umd_react_default.a.createElement(components_Row, {
+        data: { row },
+        key: this.id, id: this.id,
+        columns: this.props.columns
+      })
     );
   }
 }
 
 Footer_Footer.propTypes = {
   tableId: external_root_PropTypes_commonjs2_prop_types_commonjs_prop_types_amd_prop_types_umd_prop_types_default.a.string,
-  footerCells: external_root_PropTypes_commonjs2_prop_types_commonjs_prop_types_amd_prop_types_umd_prop_types_default.a.array
+  footerCells: external_root_PropTypes_commonjs2_prop_types_commonjs_prop_types_amd_prop_types_umd_prop_types_default.a.array,
+  columns: external_root_PropTypes_commonjs2_prop_types_commonjs_prop_types_amd_prop_types_umd_prop_types_default.a.object
 };
 /* harmony default export */ var components_Footer = (Footer_Footer);
 // CONCATENATED MODULE: ./table/index.js
@@ -522,83 +642,22 @@ Footer_Footer.propTypes = {
 
 
 class table_Table extends external_root_React_commonjs2_react_commonjs_react_amd_react_umd_react_["Component"] {
-  constructor(...args) {
-    var _temp;
-
-    return _temp = super(...args), this._prepareCellData = cellOptions => {
-      if (typeof cellOptions.rule === 'function') {
-        return cellOptions.rule(cellOptions.cellData, cellOptions.rowId);
-      }
-      if (cellOptions.rule === 'serial') {
-        return this.props.currentPage * this.props.pageSize + 1 + cellOptions.idx;
-      }
-      if (cellOptions.rule === 'checkbox' && this.props.rowSelect) {
-        return {
-          type: 'checkbox',
-          selectionChange: checked => {
-            if (cellOptions.rowId !== undefined) {
-              this.props.rowSelect(cellOptions.rowId, checked);
-            } else {
-              this.props.allRowsSelect(checked);
-            }
-          },
-          checked: cellOptions.checked
-        };
-      }
-      return cellOptions.cellData;
-    }, this._prepareRowData = rowOptions => {
-      let readyRow = [];
-      for (let column in this.props.columns) {
-        let cell = this._prepareCellData({
-          cellData: rowOptions.row[column],
-          idx: rowOptions.idx,
-          rowId: rowOptions.rowId,
-          rule: this.props.columns[column],
-          checked: rowOptions.checked
-        });
-        if (rowOptions.isTh && column !== 'checkbox') {
-          if (rowOptions.row[column]) {
-            cell = rowOptions.row[column];
-            if (typeof cell === 'string') {
-              cell = {
-                value: cell,
-                enableSorting: true,
-                column: column
-              };
-            }
-            cell.sort = this.props.sort[column];
-          } else {
-            let title = column.replace(/([A-Z])/g, ' $1');
-            cell = (title.charAt(0).toUpperCase() + title.slice(1)).replace(/_/g, ' ');
-          }
-        }
-        if (!cell) {
-          cell = this.props.notSetText;
-        }
-        readyRow.push(cell);
-      }
-      return readyRow;
-    }, _temp;
-  }
 
   render() {
     let tableContent = [];
     let somethingFound = true;
     if (this.props.data.length) {
-      let preparedData = {};
-      this.props.data.forEach((item, idx) => {
-        let rowId = item[this.props.rowIdColumn] || idx;
-        preparedData[rowId] = this._prepareRowData({
-          row: item,
-          rowId,
-          idx,
-          checked: this.props.selectedRowIds.indexOf(rowId) !== -1
-        });
-      });
       tableContent.push(external_root_React_commonjs2_react_commonjs_react_amd_react_umd_react_default.a.createElement(components_Body, {
-        data: preparedData,
+        data: this.props.data,
         options: this.props.rowOptions,
+        rowIdColumn: this.props.rowIdColumn,
+        selectedRowIds: this.props.selectedRowIds,
+        rowSelect: this.props.rowSelect,
+        notSetText: this.props.notSetText,
+        currentPage: this.props.currentPage,
+        pageSize: this.props.pageSize,
         tableId: this.props.tableId,
+        columns: this.props.columns,
         key: `tbody-${this.props.tableId}`
       }));
     } else {
@@ -607,15 +666,13 @@ class table_Table extends external_root_React_commonjs2_react_commonjs_react_amd
 
     if (this.props.showHeader) {
       tableContent.unshift(external_root_React_commonjs2_react_commonjs_react_amd_react_umd_react_default.a.createElement(components_Header, {
-        headerCells: this._prepareRowData({
-          row: this.props.headerCells,
-          idx: 0,
-          isTh: true,
-          checked: this.props.allRowsChecked
-        }),
+        headerCells: this.props.headerCells,
+        allRowsChecked: this.props.allRowsChecked,
+        allRowsSelect: this.props.allRowsSelect,
         options: this.props.headerRowOptions,
         tableId: this.props.tableId,
-        columns: Object.keys(this.props.columns),
+        columns: this.props.columns,
+        sort: this.props.sort,
         filters: this.props.filters,
         applyFilter: this.props.applyFilter,
         key: `thead-${this.props.tableId}`,
@@ -634,6 +691,7 @@ class table_Table extends external_root_React_commonjs2_react_commonjs_react_amd
       let footer = external_root_React_commonjs2_react_commonjs_react_amd_react_umd_react_default.a.createElement(components_Footer, {
         footerCells: this.props.footerCells,
         options: this.props.footerRowOptions,
+        columns: this.props.columns,
         tableId: this.props.tableId,
         key: `tfoot-${this.props.tableId}`
       });

@@ -7,9 +7,9 @@ class Filter extends Component {
     this.id = `filter-${this.props.id}`;
   }
   _renderFilters = () => {
-    let readyFilters = [];
-    this.props.columns.forEach((column) => {
-      readyFilters.push(this._prepareFilter(column, this.props.filters[column]));
+    let readyFilters = { row: {} };
+    Object.keys(this.props.columns).forEach((columnName) => {
+      readyFilters.row[columnName] = this._prepareFilter(columnName, this.props.filters[columnName]);
     });
     return readyFilters;
   };
@@ -18,24 +18,25 @@ class Filter extends Component {
   };
   _renderFilter = (column, type, options = {}) => {
     const name = this._getFieldName(column);
+    let filterOptions = { ...options, onChange: this.applyFilter };
     switch (type) {
       case 'text': {
-        let textInputOptions = { className: 'form-control', ...options };
-        return <input name={ name } type="text" { ...textInputOptions }  onChange={ this.applyFilter } />;
+        let textInputOptions = { className: 'form-control', name, type, ...filterOptions };
+        return <input { ...textInputOptions } />;
       }
       case 'checkbox':
-        return <input name={ name } type="checkbox" {...options} onChange={ this.applyFilter } />;
+        return <input { ...{ name, type } } { ...filterOptions } />;
       case 'select': {
         let opts = [];
-        if (!options.data) {
+        if (!filterOptions.data) {
           throw new Error('Filter select has no options');
         }
         let idx = 0;
-        for (let val in options.data) {
-          opts.push(<option key={ `${name}-${idx++}` } value={val}>{options.data[val]}</option>);
+        for (let val in filterOptions.data) {
+          opts.push(<option key={ `${name}-${idx++}` } value={val}>{ filterOptions.data[val] }</option>);
         }
-        delete options.data;
-        return <select name={ this._getFieldName(column) } onChange={ this.applyFilter } { ...options }>
+        delete filterOptions.data;
+        return <select name={ name } { ...filterOptions }>
           {opts}
         </select>;
       }
@@ -53,18 +54,20 @@ class Filter extends Component {
       return this._renderFilter(column, filter.type, filter.options || {});
     }
     if (typeof filter === 'function') {
-      return filter(this._getFieldName(column));
+      return filter(this._getFieldName(column), this.applyFilter);
     }
     throw new Error('Invalid filter param');
   };
   applyFilter = (e) => {
     let column = e.target.name.split('-').pop();
-    this.props.applyFilter(column, e.target.value);
+    let value = (e.target.type === 'checkbox' && e.target.checked.toString()) || e.target.value;
+    this.props.applyFilter(column, value);
   };
   render() {
     return <Row
-      cells={ this._renderFilters() }
+      data={ this._renderFilters() }
       id={this.id}
+      columns={ this.props.columns }
       key={this.id}
     />;
   }

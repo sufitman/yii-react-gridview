@@ -12,18 +12,29 @@ class Header extends Component {
   static propTypes = {
     tableId: PropTypes.string,
     onFilterChange: PropTypes.func,
-    headerCells: PropTypes.array,
+    headerCells: PropTypes.object,
     options: PropTypes.object,
-    columns: PropTypes.array,
+    columns: PropTypes.object,
     setSort: PropTypes.func,
+    allRowsChecked: PropTypes.bool,
+    allRowsSelect: PropTypes.func,
+    sort: PropTypes.object,
   }
 
   filterTimeout = null;
 
   render() {
     let tableHeader = [<Row
-      cells={ this.props.headerCells }
+      data={ {
+        row: this.props.headerCells,
+        idx: 0,
+        isTh: true,
+        checked: this.props.allRowsChecked,
+      } }
       options={ this.props.options }
+      columns={ this.props.columns }
+      sort={ this.props.sort }
+      allRowsSelect={ this.props.allRowsSelect }
       id={ this.id }
       key={ this.id }
       setSort={ this.props.setSort }
@@ -32,6 +43,7 @@ class Header extends Component {
       tableHeader.push(<Filter
         key={ `${this.id}-filters` }
         id={ this.id }
+        sort={ this.sort }
         filters={ this.props.filters }
         columns={ this.props.columns }
         tableId={ this.props.tableId }
