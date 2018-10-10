@@ -1,6 +1,6 @@
 {
   "name": "yii-react-gridview",
-  "version": "0.5.6",
+  "version": "0.5.7",
   "description": "React render of Yii gridview",
   "main": "dist/yii-react-gridview.min.js",
   "scripts": {
