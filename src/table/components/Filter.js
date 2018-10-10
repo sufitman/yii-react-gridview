@@ -1,8 +1,11 @@
-import React, {Component} from 'react';
+/* @flow */
+import * as React from 'react';
 import Row from './Row';
+import type {FilterProps, FilterOptions, ApplyFilter} from "../../flow-typed/gridViewLibDef";
 
-class Filter extends Component {
-  constructor(props) {
+export default class Filter extends React.Component<FilterProps> {
+  id: string;
+  constructor(props: FilterProps) {
     super(props);
     this.id = `filter-${this.props.id}`;
   }
@@ -13,10 +16,10 @@ class Filter extends Component {
     });
     return readyFilters;
   };
-  _getFieldName = (column) => {
+  _getFieldName = (column: string): string => {
     return `search-${this.props.tableId}-${column}`;
   };
-  _renderFilter = (column, type, options = {}) => {
+  _renderFilter = (column: string, type: string, options: FilterOptions = {}) => {
     const name = this._getFieldName(column);
     let filterOptions = { ...options, onChange: this.applyFilter };
     switch (type) {
@@ -33,7 +36,7 @@ class Filter extends Component {
         }
         let idx = 0;
         for (let val in filterOptions.data) {
-          opts.push(<option key={ `${name}-${idx++}` } value={val}>{ filterOptions.data[val] }</option>);
+          opts.push(<option key={ `${name}-${idx++}` } value={ val }>{ filterOptions.data[val] }</option>);
         }
         delete filterOptions.data;
         return <select name={ name } { ...filterOptions }>
@@ -43,7 +46,7 @@ class Filter extends Component {
     }
     return null;
   };
-  _prepareFilter = (column, filter = null) => {
+  _prepareFilter = (column: string, filter: (string | FilterOptions | ApplyFilter) = null) => {
     if (!filter) {
       return '';
     }
@@ -58,12 +61,12 @@ class Filter extends Component {
     }
     throw new Error('Invalid filter param');
   };
-  applyFilter = (e) => {
+  applyFilter = (e: SyntheticInputEvent<>) => {
     let column = e.target.name.split('-').pop();
     let value = (e.target.type === 'checkbox' && e.target.checked.toString()) || e.target.value;
     this.props.applyFilter(column, value);
   };
-  render() {
+  render(): React.Node {
     return <Row
       data={ this._renderFilters() }
       id={this.id}
@@ -72,5 +75,3 @@ class Filter extends Component {
     />;
   }
 }
-
-export default Filter;

@@ -1,14 +1,9 @@
-import React, {Component} from 'react';
-import PropTypes from 'prop-types';
+/* @flow */
+import * as React from 'react';
+import type { SortLinkProps } from "../../../../flow-typed/gridViewLibDef";
 
-class SortLink extends Component {
-  static propTypes = {
-    column: PropTypes.string,
-    value: PropTypes.string,
-    sort: PropTypes.string,
-    setSort: PropTypes.func,
-  }
-  setSort = (e) => {
+export default class SortLink extends React.PureComponent<SortLinkProps> {
+  setSort = (e: SyntheticInputEvent<>) => {
     e.preventDefault();
     let sort;
     if (!this.props.sort) {
@@ -19,12 +14,10 @@ class SortLink extends Component {
       sort = null;
     }
     this.props.setSort(e.target.getAttribute('data-column'), sort);
-  }
-  render() {
+  };
+  render(): React.Node {
     return <a className={ this.props.sort } onClick={ this.setSort } data-column={ this.props.column }>
       { this.props.value }
     </a>;
   }
 }
-
-export default SortLink;

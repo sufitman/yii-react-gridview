@@ -1,19 +1,11 @@
-import React, {Component} from 'react';
-import PropTypes from 'prop-types';
+/* @flow */
+import * as React from 'react';
 import SelectionCheckbox from './content/SelectionCheckbox';
 import SortLink from './content/SortLink';
+import type { CellProps, CellOptions, SortLinkProps, SelectionCheckboxProps } from "../../../flow-typed/gridViewLibDef";
 
-class Cell extends Component {
-  static propTypes = {
-    content: PropTypes.oneOfType([
-      PropTypes.string,
-      PropTypes.node,
-      PropTypes.object,
-    ]),
-    setSort: PropTypes.func,
-  }
-
-  _prepareContent = (cellOptions) => {
+export default class Cell extends React.Component<CellProps> {
+  _prepareContent = (cellOptions: CellOptions) => {
     if (typeof cellOptions.rule === 'function') {
       return cellOptions.rule(cellOptions.cellData, cellOptions.rowId);
     }
@@ -23,7 +15,7 @@ class Cell extends Component {
     if (cellOptions.rule === 'checkbox' && (this.props.rowSelect || this.props.allRowsSelect)) {
       return {
         type: 'checkbox',
-        selectionChange: (checked) => {
+        selectionChange: (checked: boolean) => {
           if (cellOptions.rowId !== undefined) {
             this.props.rowSelect && this.props.rowSelect(cellOptions.rowId, checked);
           } else {
@@ -36,8 +28,8 @@ class Cell extends Component {
     return cellOptions.cellData;
   };
   
-  render() {
-    let content = this.props.content;
+  render(): React.Node {
+    let content: SortLinkProps | SelectionCheckboxProps = this.props.content;
     if (content.value) {
       if (content.enableSorting) {
         content = <SortLink { ...content } setSort={ this.props.setSort }/>;
@@ -49,13 +41,12 @@ class Cell extends Component {
         }
       }
     }
-    if (content.type) {
+    if (typeof content === 'object' && content.type) {
       if (content.type === 'checkbox') {
         content = <SelectionCheckbox { ...content }/>;
       }
     }
+
     return <td>{ content }</td>;
   }
 }
-
-export default Cell;

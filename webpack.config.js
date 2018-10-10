@@ -1,26 +1,29 @@
-var webpack = require('webpack');
+const webpack = require('webpack');
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 
 module.exports = [{
+  mode: 'none',
   context: `${__dirname}/src`,
   entry: {
-    javascript: './GridView.js'
+    'yii-react-gridview': './GridView.js',
+    'yii-react-gridview.min': './GridView.js'
   },
   output: {
-    filename: 'yii-react-gridview.js',
+    filename: '[name].js',
     path: `${__dirname}/dist`,
     library: 'YiiReactGridView',
     libraryTarget: 'umd'
   },
   optimization: {
-    minimize: false
+    minimize: true,
+    minimizer: [new UglifyJsPlugin({
+      test: /\.min\.js$/
+    })]
   },
   plugins: [
     new webpack.ProvidePlugin({
       React: 'react'
     }),
-    // new webpack.LoaderOptionsPlugin({
-    //   minimize: true
-    // })
   ],
   externals: [
     {
@@ -38,20 +41,6 @@ module.exports = [{
         amd: 'react-dom',
         umd: 'react-dom',
       },
-      'react-dom': {
-        root: 'ReactDOM',
-        commonjs2: 'react-dom',
-        commonjs: 'react-dom',
-        amd: 'react-dom',
-        umd: 'react-dom',
-      },
-      'prop-types': {
-        root: 'PropTypes',
-        commonjs2: 'prop-types',
-        commonjs: 'prop-types',
-        amd: 'prop-types',
-        umd: 'prop-types',
-      },
     }
   ],
   module: {
@@ -61,7 +50,7 @@ module.exports = [{
         include: /src/,
         loader: 'babel-loader',
         query: {
-          presets: ['es2017', 'stage-2', 'react']
+          presets: ['es2015', 'es2017', 'stage-2', 'react', 'flow']
         }
       }
     ]

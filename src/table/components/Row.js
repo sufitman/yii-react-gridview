@@ -1,12 +1,15 @@
-import React, {Component} from 'react';
+/* @flow */
+import * as React from 'react';
 import Cell from './cell';
+import type { RowProps, RowOptions } from "../../flow-typed/gridViewLibDef";
 
-class Row extends Component {
+export default class Row extends React.Component<RowProps> {
   static defaultProps = {
     notSetText: '',
-  }
+    sort: {},
+  };
   
-  _prepareData = (rowOptions) => {
+  _prepareData = (rowOptions: RowOptions) => {
     let readyRow = [];
     for (let column in this.props.columns) {
       let cell = {
@@ -26,6 +29,7 @@ class Row extends Component {
             cell = {
               value: cell,
               enableSorting: true,
+              sort: undefined,
               column,
             };
           }
@@ -43,7 +47,7 @@ class Row extends Component {
     return readyRow;
   };
   
-  render() {
+  render(): React.Node {
     let optionalProps = {};
     if (this.props.setSort) {
       optionalProps['setSort'] = this.props.setSort;
@@ -61,5 +65,3 @@ class Row extends Component {
     </tr>;
   }
 }
-
-export default Row;

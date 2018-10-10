@@ -1,10 +1,12 @@
-import React, {Component} from 'react';
+/* @flow */
+import * as React from 'react';
 import Caption from './components/Caption';
 import Header from './components/Header';
 import Body from './components/Body';
 import Footer from './components/Footer';
+import type { TableProps } from "../flow-typed/gridViewLibDef";
 
-class Table extends Component {
+export default class Table extends React.Component<TableProps> {
   static defaultProps = {
     data: [],
     headerCells: {},
@@ -19,11 +21,12 @@ class Table extends Component {
     filters: null,
     notSetText: '(not set)',
     emptyCaption: 'Nothing found',
-    allRowsChecked: false
-  }
+    allRowsChecked: false,
+    placeFooterAfterBody: true
+  };
 
-  render() {
-    let tableContent = [];
+  render(): React.Node {
+    let tableContent: Array<React.Element<any>> = [];
     let somethingFound = true;
     if (this.props.data.length) {
       tableContent.push(<Body
@@ -64,8 +67,14 @@ class Table extends Component {
         key: `tcaption-${this.props.tableId}`,
         text: somethingFound ? this.props.caption : this.props.emptyCaption
       };
-      tableContent[somethingFound ? 'unshift' : 'push'](<Caption { ...captionProps }/>);
+      const caption = <Caption { ...captionProps }/>;
+      if (somethingFound) {
+        tableContent.unshift(caption);
+      } else {
+        tableContent.push(caption);
+      }
     }
+
     if (this.props.showFooter) {
       let footer = <Footer
         footerCells={ this.props.footerCells }
@@ -74,7 +83,7 @@ class Table extends Component {
         tableId={ this.props.tableId }
         key={ `tfoot-${this.props.tableId}` }
       />;
-      this.placeFooterAfterBody ? tableContent.push(footer) : tableContent.unshift(footer);
+      this.props.placeFooterAfterBody ? tableContent.push(footer) : tableContent.unshift(footer);
     }
     return (
       <table { ...this.props.tableOptions }>
@@ -83,5 +92,3 @@ class Table extends Component {
     );
   }
 }
-
-export default Table;

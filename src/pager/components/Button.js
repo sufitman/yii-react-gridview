@@ -1,6 +1,8 @@
-import React, {Component} from 'react';
+/* @flow */
+import * as React from 'react';
+import type { PagerButtonProps } from "../../flow-typed/gridViewLibDef";
 
-class Button extends Component {
+export default class Button extends React.PureComponent<PagerButtonProps> {
   static defaultProps = {
     pageTag: 'li',
     activePageCssClass: 'active',
@@ -10,16 +12,15 @@ class Button extends Component {
     firstPageCssClass: 'first',
     lastPageCssClass: 'last',
     onPageButtonClick: null,
-  }
-  
-  clickTag = (e) => {
+  };
+  clickTag = (e: SyntheticUIEvent<>) => {
     e.preventDefault();
     if (this.props.disabled) {
       return;
     }
     this.props.onPageButtonClick(this.props.page);
   };
-  render() {
+  render(): React.Node {
     let Tag = this.props.pageTag;
     let LinkTag = 'a';
     let options = {};
@@ -62,5 +63,3 @@ class Button extends Component {
     </Tag>;
   }
 }
-
-export default Button;

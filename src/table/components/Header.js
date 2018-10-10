@@ -1,29 +1,17 @@
-import React, {Component} from 'react';
+/* @flow */
+import * as React from 'react';
 import Row from './Row';
 import Filter from './Filter';
-import PropTypes from 'prop-types';
+import type { HeaderProps } from '../../flow-typed/gridViewLibDef';
 
-class Header extends Component {
-  constructor(props) {
+export default class Header extends React.Component<HeaderProps> {
+  id: string;
+  constructor(props: HeaderProps) {
     super(props);
     this.id = `th-${this.props.tableId}`;
   }
 
-  static propTypes = {
-    tableId: PropTypes.string,
-    onFilterChange: PropTypes.func,
-    headerCells: PropTypes.object,
-    options: PropTypes.object,
-    columns: PropTypes.object,
-    setSort: PropTypes.func,
-    allRowsChecked: PropTypes.bool,
-    allRowsSelect: PropTypes.func,
-    sort: PropTypes.object,
-  }
-
-  filterTimeout = null;
-
-  render() {
+  render(): React.Node {
     let tableHeader = [<Row
       data={ {
         row: this.props.headerCells,
@@ -43,7 +31,6 @@ class Header extends Component {
       tableHeader.push(<Filter
         key={ `${this.id}-filters` }
         id={ this.id }
-        sort={ this.sort }
         filters={ this.props.filters }
         columns={ this.props.columns }
         tableId={ this.props.tableId }
@@ -53,5 +40,3 @@ class Header extends Component {
     return <thead>{ tableHeader }</thead>;
   }
 }
-
-export default Header;

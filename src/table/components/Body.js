@@ -1,21 +1,14 @@
-import React, {Component} from 'react';
+/* @flow */
+import * as React from 'react';
 import Row from './Row';
-import PropTypes from 'prop-types';
+import type { BodyProps } from "../../flow-typed/gridViewLibDef";
 
-class Body extends Component {
-  static propTypes = {
-    tableId: PropTypes.string,
-    data: PropTypes.array,
-    options: PropTypes.object,
-    rowIdColumn: PropTypes.string,
-    selectedRowIds: PropTypes.array,
-    columns: PropTypes.object,
-    rowSelect: PropTypes.func,
-  }
+export default class Body extends React.Component<BodyProps> {
   static defaultProps = {
     options: {},
-  }
-  render() {
+    selectedRowIds: [],
+  };
+  render(): React.Node {
     let content = [];
     let preparedData = {};
     this.props.data.forEach((item, idx) => {
@@ -42,5 +35,3 @@ class Body extends Component {
     return <tbody>{ content }</tbody>;
   }
 }
-
-export default Body;
