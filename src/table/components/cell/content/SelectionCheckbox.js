@@ -1,14 +1,12 @@
-import React, {Component} from 'react';
-import PropTypes from 'prop-types';
+/* @flow */
+import * as React from 'react';
+import { SelectionCheckboxProps, SelectionChange } from '../../../../flow-typed/gridViewLibDef';
 
-class SelectionCheckbox extends Component {
-  static propTypes = {
-    type: PropTypes.string,
-    checked: PropTypes.bool,
-    selectionChange: PropTypes.func,
-  }
-  selectRow = (callback, e) => callback(e.target.checked);
-  render() {
+export default class SelectionCheckbox extends React.PureComponent<SelectionCheckboxProps> {
+  selectRow = (callback: SelectionChange, e: SyntheticInputEvent<HTMLInputElement>) => {
+    callback(e.currentTarget.checked)
+  };
+  render(): React.Node {
     return <input
       type={ this.props.type }
       checked={ this.props.checked }
@@ -16,5 +14,3 @@ class SelectionCheckbox extends Component {
     />;
   }
 }
-
-export default SelectionCheckbox;

@@ -1,7 +1,9 @@
-import React, {Component} from 'react';
+/* @flow */
+import * as React from 'react';
 import Button from './components/Button';
+import type { ButtonSettings, PagerProps, GeneralButtonOptions } from "../flow-typed/gridViewLibDef";
 
-class Pager extends Component {
+export default class Pager extends React.Component<PagerProps> {
   static defaultProps = {
     maxButtonCount: 10,
     pageSize: 20,
@@ -10,20 +12,23 @@ class Pager extends Component {
     prevPageLabel: '«',
     firstPageLabel: null,
     lastPageLabel: null,
-  }
-  constructor(props) {
+  };
+  buttonSettings: ButtonSettings;
+  pageCount: number;
+  generalOptions: GeneralButtonOptions;
+
+  constructor(props: PagerProps) {
     super(props);
     this.buttonSettings = {};
-    ({
-      activePageCssClass: this.buttonSettings.activePageCssClass,
-      disabledPageCssClass: this.buttonSettings.disabledPageCssClass,
-      nextPageCssClass: this.buttonSettings.nextPageCssClass,
-      prevPageCssClass: this.buttonSettings.prevPageCssClass,
-      lastPageCssClass: this.buttonSettings.lastPageCssClass,
-      firstPageCssClass: this.buttonSettings.firstPageCssClass,
-      pageTag: this.buttonSettings.pageTag,
-      onPageButtonClick: this.buttonSettings.onPageButtonClick,
-    } = this.props);
+    this.buttonSettings.activePageCssClass = this.props.activePageCssClass;
+    this.buttonSettings.disabledPageCssClass = this.props.disabledPageCssClass;
+    this.buttonSettings.nextPageCssClass = this.props.nextPageCssClass;
+    this.buttonSettings.prevPageCssClass = this.props.prevPageCssClass;
+    this.buttonSettings.lastPageCssClass = this.props.lastPageCssClass;
+    this.buttonSettings.firstPageCssClass = this.props.firstPageCssClass;
+    this.buttonSettings.pageTag = this.props.pageTag;
+    this.buttonSettings.onPageButtonClick = this.props.onPageButtonClick;
+    this.pageCount = 0;
     this.generalOptions = {
       isFirstPage: false,
       isLastPage: false,
@@ -32,12 +37,13 @@ class Pager extends Component {
     };
   }
 
-  _addButton = (buttons, pageButtonOptions) => {
+  _addButton = (buttons: Array<React.Node>, pageButtonOptions: {idx: string | number}) => {
     let options = Object.assign({}, this.generalOptions, pageButtonOptions, this.buttonSettings);
     options.key = `pg-${this.props.tableId}-${pageButtonOptions.idx}`;
     buttons.push(<Button { ...options } />);
   };
-  _addFirstButton = (buttons) => {
+
+  _addFirstButton = (buttons: Array<React.Node>) => {
     let page = 0;
     let isActive = this.props.currentPage === page;
     this._addButton(buttons, {
@@ -49,7 +55,7 @@ class Pager extends Component {
       idx: 'f'
     });
   };
-  _addLastButton = (buttons) => {
+  _addLastButton = (buttons: Array<React.Node>) => {
     this._addButton(buttons, {
       page: this.pageCount - 1,
       content: this.props.lastPageLabel || this.pageCount,
@@ -59,7 +65,7 @@ class Pager extends Component {
       idx: 'l'
     });
   };
-  _addPrevButton = (buttons) => {
+  _addPrevButton = (buttons: Array<React.Node>) => {
     let page;
     if ((page = this.props.currentPage - 1) < 0) {
       page = 0;
@@ -73,7 +79,7 @@ class Pager extends Component {
       idx: 'p'
     });
   };
-  _addNextButton = (buttons) => {
+  _addNextButton = (buttons: Array<React.Node>) => {
     let page;
     let penultimate = this.pageCount - 1;
     if ((page = (+this.props.currentPage) + 1) >= penultimate) {
@@ -88,7 +94,7 @@ class Pager extends Component {
       idx: 'n'
     });
   };
-  _addButtons = (buttons) => {
+  _addButtons = (buttons: Array<React.Node>) => {
     let beginPage = Math.max(0, this.props.currentPage - Math.round(this.props.maxButtonCount / 2));
     let endPage = beginPage + this.props.maxButtonCount - 1;
     if (endPage >= this.pageCount) {
@@ -97,7 +103,7 @@ class Pager extends Component {
     }
 
     for (let i = beginPage, idx = 0; i <= endPage; ++i) {
-      let isActive = this.props.currentPage == i;
+      let isActive = this.props.currentPage === i;
       this._addButton(buttons, {
         page: i,
         content: i + 1,
@@ -107,7 +113,7 @@ class Pager extends Component {
       });
     }
   };
-  render() {
+  render(): React.Node {
     this.pageCount = Math.ceil(this.props.totalCount / this.props.pageSize) || 0;
     let Tag = this.props.pagerTag;
     let buttons = [];
@@ -129,5 +135,3 @@ class Pager extends Component {
     </Tag>;
   }
 }
-
-export default Pager;

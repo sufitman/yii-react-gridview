@@ -1,67 +1,31 @@
-import React, {Component} from 'react';
+/* @flow */
+import * as React from 'react';
 import Table from './table';
 import Pager from './pager';
-import PropTypes from 'prop-types';
+import type {
+  GridViewProps,
+  GridViewState,
+  SortVariant,
+  Sort,
+  Filters, TableProps,
+  PagerProps
+} from './flow-typed/gridViewLibDef';
 
-class GridView extends Component {
-  constructor(props) {
+export default class GridView extends React.Component<GridViewProps, GridViewState> {
+  id: string;
+  defaultSelectionState: GridViewState = { selectedRowIds: [], allRowsChecked: false };
+  constructor(props: GridViewProps): void {
     super(props);
     this.id = require('random-string')();
-    this.defaultSelectionState = { selectedRowIds: [], allRowsChecked: false };
     this.state = this._setConditionalState({
       sort: {},
       filterData: {},
       ...this.defaultSelectionState
     }, false);
   }
-  
-  static propTypes = {
-    data: PropTypes.array,
-    headerCells: PropTypes.object,
-    footerCells: PropTypes.array,
-    caption: PropTypes.string,
-    captionOptions: PropTypes.object,
-    containerOptions: PropTypes.object,
-    tableOptions: PropTypes.object,
-    showHeader: PropTypes.bool,
-    showFooter: PropTypes.bool,
-    headerRowOptions: PropTypes.object,
-    footerRowOptions: PropTypes.object,
-    rowOptions: PropTypes.object,
-    columns: PropTypes.object,
-    filters: PropTypes.object,
-    onSortChange: PropTypes.func,
-    onFilterChange: PropTypes.func,
-    pagerOptions: PropTypes.object,
-    currentPage: PropTypes.number,
-    totalCount: PropTypes.number,
-    maxButtonCount: PropTypes.number,
-    pageSize: PropTypes.number,
-    pagerTag: PropTypes.string,
-    pageTag: PropTypes.string,
-    activePageCssClass: PropTypes.string,
-    disabledPageCssClass: PropTypes.string,
-    nextPageCssClass: PropTypes.string,
-    prevPageCssClass: PropTypes.string,
-    firstPageCssClass: PropTypes.string,
-    lastPageCssClass: PropTypes.string,
-    nextPageLabel: PropTypes.string,
-    prevPageLabel: PropTypes.string,
-    firstPageLabel: PropTypes.string,
-    lastPageLabel: PropTypes.string,
-    onPageButtonClick: PropTypes.func,
-    notSetText: PropTypes.string,
-    emptyCaption: PropTypes.string,
-    rowIdColumn: PropTypes.string,
-    onSelectionChange: PropTypes.func,
-    selectedRowIds: PropTypes.array,
-    allRowsChecked: PropTypes.bool,
-    sort: PropTypes.object,
-    filterData: PropTypes.object,
-  }
 
   static defaultProps = {
-    containerOptions: {className: 'grid-view'},
+    containerOptions: { className: 'grid-view' },
     tableOptions: {
       className: [
         'table',
@@ -71,63 +35,53 @@ class GridView extends Component {
     }, 
     pagerOptions: { className: 'pagination' },
     rowIdColumn: 'id',
-  }
+  };
 
-  _setConditionalState = (newState, setState = true) => {
-    let state = {};
-    if (this.props.selectedRowIds === undefined && newState.selectedRowIds) {
+  _setConditionalState = (newState: GridViewState, setState: boolean = true): GridViewState => {
+    let state: GridViewState = {};
+    if (typeof this.props.selectedRowIds === 'undefined' && newState.selectedRowIds) {
       state.selectedRowIds = newState.selectedRowIds;
     }
-    if (this.props.allRowsChecked === undefined && newState.allRowsChecked !== undefined) {
+    if (typeof this.props.allRowsChecked === 'undefined' && newState.allRowsChecked !== undefined) {
       state.allRowsChecked = newState.allRowsChecked;
     }
-    if (this.props.sort === undefined && newState.sort) {
+    if (typeof this.props.sort === 'undefined' && newState.sort) {
       state.sort = newState.sort;
     }
-    if (this.props.filterData === undefined && newState.filterData) {
+    if (typeof this.props.filterData === 'undefined' && newState.filterData) {
       state.filterData = newState.filterData;
     }
     if (setState && Object.keys(state).length) {
       this.setState(state);
     }
     return state;
-  }
+  };
 
-  _getPrevStateVar = (key) => {
-    let prevStateVar;
-    if (this.props[key] !== undefined) {
-        prevStateVar = this.props[key];
+  _getPrevStateVar = (key: string, defaultVal: any = undefined) => {
+    return ((this.props[key] !== undefined) ? this.props[key] : this.state[key]) || defaultVal;
+  };
+
+  _assignValue = (stateVar: string, col: string, val: mixed): {} => {
+    const prevObj: {} = this._getPrevStateVar(stateVar);
+    let newObj = { ...prevObj };
+    if (val) {
+      newObj[col] = val;
     } else {
-        prevStateVar = this.state[key];
+      delete newObj[col];
     }
-    return prevStateVar;
-  }
+    this._setConditionalState({ ...this.defaultSelectionState, [stateVar]: newObj });
+    return newObj
+  };
 
-  setSort = (column, sort) => {
+  setSort = (column: string, sort: ?SortVariant): void => {
     if (this.props.onSortChange) {
-      let prevSort = this._getPrevStateVar('sort');
-      if (typeof prevSort !== 'object') {
-        throw new Error(`sort must be an object, ${typeof prevSort} provided`);
-      }
-      let newSort = { ...prevSort };
-      if (sort) {
-        newSort[column] = sort;
-      } else {
-        delete newSort[column];
-      }
+      const newSort: Sort = this._assignValue('sort', column, sort);
       this.props.onSortChange(newSort);
-      this._setConditionalState({
-        ...this.defaultSelectionState,
-        sort: newSort
-      });
     }
-  }
+  };
 
-  rowSelect = (rowId, checked) => {
-    let prevSelectedRowIds = this._getPrevStateVar('selectedRowIds');
-    if (!Array.isArray(prevSelectedRowIds)) {
-        throw new Error(`selectedRowIds must be an array, ${typeof prevSelectedRowIds} provided`);
-    }
+  rowSelect = (rowId: mixed, checked: boolean): void  => {
+    const prevSelectedRowIds: Array<mixed> = this._getPrevStateVar('selectedRowIds', []);
     let selectedRowIds = [ ...prevSelectedRowIds ];
     if (checked) {
       selectedRowIds.push(rowId)
@@ -139,81 +93,85 @@ class GridView extends Component {
     }
     this.props.onSelectionChange(selectedRowIds);
     this._setConditionalState({ selectedRowIds });
-  }
+  };
   
-  allRowsSelect = (checked) => {
+  allRowsSelect = (checked: boolean): void  => {
     let selectedRowIds = [];
     if (checked) {
-      this.props.data.forEach((row, idx) => {
+      this.props.data.forEach((row: {}, idx: number) => {
         selectedRowIds.push(row[this.props.rowIdColumn] || idx);
       });
     }
     this.props.onSelectionChange(selectedRowIds);
     this._setConditionalState({ selectedRowIds, allRowsChecked: checked });
-  }
+  };
 
-  pageButtonClick = (currentPage) => {
+  pageButtonClick = (currentPage: number): void  => {
     this.props.onPageButtonClick(currentPage);
     this._setConditionalState(this.defaultSelectionState);
-  }
+  };
 
-  applyFilter = (column, value) => {
-    let prevFilterData = this._getPrevStateVar('filterData');
-    if (typeof prevFilterData !== 'object') {
-      throw new Error(`filterData must be an object, ${typeof prevFilterData} provided`);
-    }
-    let filterData = { ...prevFilterData };
-    if (value) {
-      filterData[column] = value;
-    } else {
-      delete filterData[column];
-    }
+  applyFilter = (column: string, value: mixed): void  => {
+    const filterData: Filters = this._assignValue('filterData', column, value);
     this.props.onFilterChange(filterData);
-    this._setConditionalState({ ...this.defaultSelectionState, filterData});
-  }
+  };
 
-  render() {
+  render(): React.Node {
     const generalProps = {
       currentPage: this.props.currentPage,
       pageSize: this.props.pageSize,
       tableId: this.id,
     };
-    let pagerSpecificProps = {};
-    let tableSpecificProps = {};
-    ({
-      pagerOptions: pagerSpecificProps.pagerOptions,
-      totalCount: pagerSpecificProps.totalCount,
-      maxButtonCount: pagerSpecificProps.maxButtonCount,
-      pagerTag: pagerSpecificProps.pagerTag,
-      pageTag: pagerSpecificProps.pageTag,
-      activePageCssClass: pagerSpecificProps.activePageCssClass,
-      disabledPageCssClass: pagerSpecificProps.disabledPageCssClass,
-      nextPageCssClass: pagerSpecificProps.nextPageCssClass,
-      prevPageCssClass: pagerSpecificProps.prevPageCssClass,
-      firstPageCssClass: pagerSpecificProps.firstPageCssClass,
-      lastPageCssClass: pagerSpecificProps.lastPageCssClass,
-      nextPageLabel: pagerSpecificProps.nextPageLabel,
-      prevPageLabel: pagerSpecificProps.prevPageLabel,
-      firstPageLabel: pagerSpecificProps.firstPageLabel,
-      lastPageLabel: pagerSpecificProps.lastPageLabel,
-      ...tableSpecificProps
-    } = this.props);
-    tableSpecificProps.sort = this._getPrevStateVar('sort');
-    tableSpecificProps.setSort = this.setSort;
-    tableSpecificProps.rowSelect = this.rowSelect;
-    tableSpecificProps.allRowsSelect = this.allRowsSelect;
-    tableSpecificProps.allRowsChecked = this._getPrevStateVar('allRowsChecked');
-    tableSpecificProps.selectedRowIds = this._getPrevStateVar('selectedRowIds');
-    delete tableSpecificProps.onPageButtonClick;
-    pagerSpecificProps.onPageButtonClick = this.pageButtonClick;
-    delete tableSpecificProps.onFilterChange;
-    tableSpecificProps.applyFilter = this.applyFilter;
 
+    let pagerSpecificProps: PagerProps = {
+      pagerOptions: this.props.pagerOptions,
+      totalCount: this.props.totalCount,
+      maxButtonCount: this.props.maxButtonCount,
+      pagerTag: this.props.pagerTag,
+      pageTag: this.props.pageTag,
+      activePageCssClass: this.props.activePageCssClass,
+      disabledPageCssClass: this.props.disabledPageCssClass,
+      nextPageCssClass: this.props.nextPageCssClass,
+      prevPageCssClass: this.props.prevPageCssClass,
+      firstPageCssClass: this.props.firstPageCssClass,
+      lastPageCssClass: this.props.lastPageCssClass,
+      nextPageLabel: this.props.nextPageLabel,
+      prevPageLabel: this.props.prevPageLabel,
+      firstPageLabel: this.props.firstPageLabel,
+      lastPageLabel: this.props.lastPageLabel,
+      onPageButtonClick: this.pageButtonClick,
+    };
+    let tableSpecificProps: TableProps = {
+      sort: this._getPrevStateVar('sort'),
+      setSort: this.setSort,
+      rowSelect: this.rowSelect,
+      allRowsSelect: this.allRowsSelect,
+      allRowsChecked: this._getPrevStateVar('allRowsChecked'),
+      selectedRowIds: this._getPrevStateVar('selectedRowIds'),
+      applyFilter: this.applyFilter,
+      data: this.props.data,
+      headerCells: this.props.headerCells,
+      footerCells: this.props.footerCells,
+      caption: this.props.caption,
+      captionOptions: this.props.captionOptions,
+      containerOptions: this.props.containerOptions,
+      tableOptions: this.props.tableOptions,
+      showHeader: this.props.showHeader,
+      showFooter: this.props.showFooter,
+      placeFooterAfterBody: this.props.placeFooterAfterBody,
+      headerRowOptions: this.props.headerRowOptions,
+      footerRowOptions: this.props.footerRowOptions,
+      rowOptions: this.props.rowOptions,
+      columns: this.props.columns,
+      filters: this.props.filters,
+      notSetText: this.props.notSetText,
+      emptyCaption: this.props.emptyCaption,
+      rowIdColumn: this.props.rowIdColumn,
+      filterData: this.props.filterData,
+    };
     return <div { ...this.props.containerOptions }>
       <Table { ...generalProps } { ...tableSpecificProps } />
       <Pager { ...generalProps } { ...pagerSpecificProps } />
     </div>;
   }
 }
-
-export default GridView;

@@ -145,11 +145,12 @@ class YourController extends Controller {
 |`tableOptions`|Object|{}|HTML attributes of table|
 |`showHeader`|Boolean|true|Whether show \<thead\> or not|
 |`showFooter`|Boolean|false|Whether show \<tfoot\> or not|
+|`placeFooterAfterBody`|Boolean|true|Whether place \<tfoot\> after body or not|
 |`headerRowOptions`|Object|{}|HTML attributes of *thead > row*|
 |`footerRowOptions`|Object|{}|HTML attributes of *tfoot > row*|
 |`rowOptions`|Object|{}|HTML attributes of *tbody \> row*|
 |`columns`|Object|undefined|Keys of the object are whether properties of a model in data (then the title will be provided by `headerCells`) or custom strings that will be a column titles.<br>Values of the object are either null (to provide a model value as is) or `function (cell, rowId)` (to decorate a model value with its result).<br>Also string `'serial'` can be set to provide models numeration.<br>If `'checkbox'` is set as a key and its value (just value at least) then column of checkboxes will be rendered in order to select row(s) ids (a value that specified in `rowIdColumn`)|
-|`filters`|Object|null|Contain *filters* for specified columns. *Filters* can be:<br>a) string `'text'` renders simple input of `type="text"`;<br>b) Object `{ type: ..., options: {...} }` where type can be either `'text'` (input of `type="text"`), `'checkbox'` or `'select'`. Options typically are HTML attributes of the inputs. If type is `'select'` then `options` should contain `data` - object of options (where key is value attribute of an \<option\> and value is its text);<br>c) `function (name)` to render custom input with name="`name`"|
+|`filters`|Object|null|Contain *filters* for specified columns. *Filters* can be:<br>a) string `'text'` renders simple input of `type="text"`;<br>b) Object `{ type: ..., options: {...} }` where type can be either `'text'` (input of `type="text"`), `'checkbox'` or `'select'`. Options typically are HTML attributes of the inputs. If type is `'select'` then `options` should contain `data` - object of options (where key is value attribute of an \<option\> and value is its text);<br>c) `function (name, onChange)` to render custom input with name={ `name` } and onChange={ `onChange` } (must return a React.Component/html) |
 |`onSortChange`|`function(sort)`|undefined|Callback to sort the data with `sort` - key-value object (```js { column:'ASC' /* or 'DESC' */ }```) to sort the `data`. The way of is up to you|
 |`onFilterChange`|`function(filters)`|undefined|Callback to filter the data with `filters` - key-value object to filter the `data`. **Required** when filters are specified. The way of filtering depends on you|
 |`pagerOptions`|object|undefined|HTML attributes of pager container|
