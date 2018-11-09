@@ -1,12 +1,10 @@
 const webpack = require('webpack');
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 
 module.exports = [{
   mode: 'none',
   context: `${__dirname}/src`,
   entry: {
-    'yii-react-gridview': './GridView.js',
-    'yii-react-gridview.min': './GridView.js'
+    'GridView': './GridView.js'
   },
   output: {
     filename: '[name].js',
@@ -16,9 +14,6 @@ module.exports = [{
   },
   optimization: {
     minimize: true,
-    minimizer: [new UglifyJsPlugin({
-      test: /\.min\.js$/
-    })]
   },
   plugins: [
     new webpack.ProvidePlugin({
@@ -50,7 +45,19 @@ module.exports = [{
         include: /src/,
         loader: 'babel-loader',
         query: {
-          presets: ['es2015', 'es2017', 'stage-2', 'react', 'flow']
+          presets: ['@babel/preset-env', '@babel/react', '@babel/flow'],
+          plugins: [
+            ["@babel/plugin-proposal-decorators", { "legacy": true }],
+            "@babel/plugin-proposal-function-sent",
+            "@babel/plugin-proposal-export-namespace-from",
+            "@babel/plugin-proposal-numeric-separator",
+            "@babel/plugin-proposal-throw-expressions",
+            "@babel/plugin-syntax-dynamic-import",
+            "@babel/plugin-syntax-import-meta",
+            ["@babel/plugin-proposal-class-properties", { "loose": false }],
+            "@babel/plugin-proposal-json-strings"
+
+          ]
         }
       }
     ]
