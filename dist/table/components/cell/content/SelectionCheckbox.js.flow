@@ -1,6 +1,6 @@
 /* @flow */
 import * as React from 'react';
-import { SelectionCheckboxProps, SelectionChange } from '../../../../gridViewTypes';
+import type { SelectionCheckboxProps, SelectionChange } from '../../../../gridViewTypes';
 
 export default class SelectionCheckbox extends React.PureComponent<SelectionCheckboxProps> {
   selectRow = (callback: SelectionChange, e: SyntheticInputEvent<HTMLInputElement>) => {
