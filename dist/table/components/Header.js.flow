@@ -2,41 +2,50 @@
 import * as React from 'react';
 import Row from './Row';
 import Filter from './Filter';
-import type { HeaderProps } from '../../gridViewTypes';
+import type { HeaderCells } from "../../GridView";
+import { PageContext } from "../../contexts/PageContext";
+import { ApplyFilterContext } from "../../contexts/ApplyFilterContext";
+import { ContentContext } from "../../contexts/ContentContext";
+
+type HeaderProps = {
+  headerCells: HeaderCells,
+  options: {},
+}
 
 export default class Header extends React.Component<HeaderProps> {
-  id: string;
-  constructor(props: HeaderProps) {
-    super(props);
-    this.id = `th-${this.props.tableId}`;
-  }
-
   render(): React.Node {
-    let tableHeader = [<Row
-      data={ {
-        row: this.props.headerCells,
-        idx: 0,
-        isTh: true,
-        checked: this.props.allRowsChecked,
-      } }
-      options={ this.props.options }
-      columns={ this.props.columns }
-      sort={ this.props.sort }
-      allRowsSelect={ this.props.allRowsSelect }
-      id={ this.id }
-      key={ this.id }
-      setSort={ this.props.setSort }
-    />];
-    if (this.props.filters) {
-      tableHeader.push(<Filter
-        key={ `${this.id}-filters` }
-        id={ this.id }
-        filters={ this.props.filters }
-        columns={ this.props.columns }
-        tableId={ this.props.tableId }
-        applyFilter={ this.props.applyFilter }
-      />);
-    }
-    return <thead>{ tableHeader }</thead>;
+    return <PageContext.Consumer>
+      {
+        ({ tableId, allRowsChecked }) => <ContentContext.Consumer>
+          {
+            ({ filters }) => <ApplyFilterContext.Consumer>
+              {
+                (applyFilter) => {
+                  const id = `th-${tableId}`;
+                  let tableHeader = [<Row
+                    data={ {
+                      row: this.props.headerCells,
+                      isTh: true,
+                      checked: allRowsChecked,
+                    } }
+                    options={ this.props.options }
+                    id={ id }
+                    key={ id }
+                  />];
+                  if (filters) {
+                    tableHeader.push(<Filter
+                      key={ `${id}-filters` }
+                      id={ id }
+                      applyFilter={ applyFilter }
+                    />);
+                  }
+                  return <thead>{ tableHeader }</thead>;
+                }
+              }
+            </ApplyFilterContext.Consumer>
+          }
+        </ContentContext.Consumer>
+      }
+    </PageContext.Consumer>;
   }
 }

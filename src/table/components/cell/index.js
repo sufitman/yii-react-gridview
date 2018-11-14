@@ -2,51 +2,71 @@
 import * as React from 'react';
 import SelectionCheckbox from './content/SelectionCheckbox';
 import SortLink from './content/SortLink';
-import type { CellProps, CellOptions, SortLinkProps, SelectionCheckboxProps } from "../../../gridViewTypes";
+import { PageContext } from "../../../contexts/PageContext";
+
+type CellProps = { content: any };
+type CellRule = ((cell: mixed, rowId?: string) => React.Node ) | 'serial' | 'checkbox';
+type CellOptions = {
+  rule: CellRule,
+  cellData: any,
+  rowId?: string,
+  idx: number,
+  checked?: boolean
+}
 
 export default class Cell extends React.Component<CellProps> {
-  _prepareContent = (cellOptions: CellOptions) => {
+  _prepareContent = (cellOptions: CellOptions, currentPage: number, pageSize: number) => {
     if (typeof cellOptions.rule === 'function') {
       return cellOptions.rule(cellOptions.cellData, cellOptions.rowId);
     }
     if (cellOptions.rule === 'serial' && cellOptions.idx !== undefined) {
-      return this.props.currentPage * this.props.pageSize + 1 + cellOptions.idx;
+      return currentPage * pageSize + 1 + cellOptions.idx;
     }
-    if (cellOptions.rule === 'checkbox' && (this.props.rowSelect || this.props.allRowsSelect)) {
-      return {
+    if (cellOptions.rule === 'checkbox' && cellOptions.cellData === undefined) {
+      return <SelectionCheckbox { ...{
         type: 'checkbox',
-        selectionChange: (checked: boolean) => {
-          if (cellOptions.rowId !== undefined) {
-            this.props.rowSelect && this.props.rowSelect(cellOptions.rowId, checked);
-          } else {
-            this.props.allRowsSelect && this.props.allRowsSelect(checked);
-          }
-        },
+        rowId: cellOptions.rowId,
         checked: cellOptions.checked,
-      }
+      } } />
     }
-    return cellOptions.cellData;
+    return cellOptions.cellData
   };
-  
-  render(): React.Node {
-    let content: SortLinkProps | SelectionCheckboxProps = this.props.content;
-    if (content.value) {
-      if (content.enableSorting) {
-        content = <SortLink { ...content } setSort={ this.props.setSort }/>;
-      } else {
-        if (typeof content.value === 'object') {
-          content = this._prepareContent(content.value)
-        } else {
-          content = content.value;
-        }
-      }
-    }
-    if (typeof content === 'object' && content.type) {
-      if (content.type === 'checkbox') {
-        content = <SelectionCheckbox { ...content }/>;
-      }
-    }
 
-    return <td>{ content }</td>;
+  shouldComponentUpdate(nextProps: CellProps) {
+    return !(this.props.content === nextProps.content ||
+      this.props.content.value === nextProps.content.value ||
+      this.props.content.isFilter ||
+      (
+        typeof this.props.content === 'object' &&
+        typeof nextProps === 'object' &&
+        typeof this.props.content.value === 'object' &&
+        typeof nextProps.content.value === 'object' &&
+        this.props.content.value.idx === nextProps.content.value.idx &&
+        this.props.content.value.cellData === nextProps.content.value.cellData
+      ));
+  }
+
+  render(): React.Node {
+    return <PageContext.Consumer>{
+      ({ pageSize, currentPage }) => {
+        let content = this.props.content;
+        let preparedContent;
+        if (content && typeof content === 'object' && content.value) {
+          if (content.enableSorting) {
+            preparedContent = <SortLink { ...content }/>;
+          } else {
+            if (typeof content.value === 'object') {
+              const cellOptions: cellOptions = content.value;
+              preparedContent = this._prepareContent(cellOptions, currentPage, pageSize)
+            } else {
+              preparedContent = content.value;
+            }
+          }
+        } else {
+          preparedContent = content;
+        }
+        return <td>{ preparedContent }</td>;
+      }
+    }</PageContext.Consumer>;
   }
 }

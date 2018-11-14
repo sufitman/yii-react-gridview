@@ -1,27 +1,34 @@
 /* @flow */
 import * as React from 'react';
 import Row from './Row';
-import type { FooterProps } from "../../gridViewTypes";
+import { PageContext } from "../../contexts/PageContext";
+import { ContentContext } from "../../contexts/ContentContext";
+
+type FooterProps = { footerCells: Array<mixed> }
 
 export default class Footer extends React.Component<FooterProps> {
-  id: string;
-  constructor(props: FooterProps) {
-    super(props);
-    this.id = `tf-${this.props.tableId}`;
-  }
-
   render(): React.Node {
-    let row = {};
-    Object.keys(this.props.columns).forEach((column, idx) => {
-      row[column] = this.props.footerCells[idx];
-    });
-    return <tfoot>
-      <Row
-        data={ { row } }
-        key={ this.id }
-        id={ this.id }
-        columns={ this.props.columns }
-      />
-    </tfoot>;
+    return <ContentContext.Consumer>
+      {
+        ({ columns }) => <PageContext.Consumer>
+          {
+            ({tableId}) => {
+              let row = {};
+              Object.keys(columns).forEach((column, idx) => {
+                row[column] = this.props.footerCells[idx];
+              });
+              const id = `tf-${tableId}`;
+              return <tfoot>
+                <Row
+                  data={{row}}
+                  key={id}
+                  id={id}
+                />
+              </tfoot>;
+            }
+          }
+        </PageContext.Consumer>
+      }
+    </ContentContext.Consumer>;
   }
 }

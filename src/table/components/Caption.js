@@ -1,6 +1,10 @@
 /* @flow */
 import * as React from 'react';
-import { CaptionProps } from '../../gridViewTypes';
+
+type CaptionProps = {
+  text: string,
+  options: {},
+}
 
 export default class Caption extends React.Component<CaptionProps> {
   render(): React.Node {

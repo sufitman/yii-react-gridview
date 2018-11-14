@@ -1,23 +1,51 @@
 /* @flow */
 import * as React from 'react';
-import type { SortLinkProps } from "../../../../gridViewTypes";
+import type { Sort, SortVariant } from "../../../../GridView";
+import { SetSortContext } from "../../../../contexts/SetSortContext";
+import { ContentContext } from "../../../../contexts/ContentContext";
+
+type SetSort = (column: ?string, sort: ?SortVariant) => void;
+type SortLinkProps = {|
+  column: string,
+  value: string,
+  enableSorting?: boolean
+|}
 
 export default class SortLink extends React.PureComponent<SortLinkProps> {
-  setSort = (e: SyntheticInputEvent<>) => {
+  setSort = (setSort: SetSort, sort: Sort, e: SyntheticInputEvent<>) => {
     e.preventDefault();
-    let sort;
-    if (!this.props.sort) {
-      sort = 'ASC';
-    } else if (this.props.sort === 'ASC') {
-      sort = 'DESC';
-    } else {
-      sort = null;
+    let newSort;
+    const column = e.target.getAttribute('data-column');
+    if (!column) {
+      throw new Error('Invalid column');
     }
-    this.props.setSort(e.target.getAttribute('data-column'), sort);
+    const oldSort = sort[column];
+    if (!oldSort) {
+      newSort = 'ASC';
+    } else if (oldSort === 'ASC') {
+      newSort = 'DESC';
+    } else {
+      newSort = null;
+    }
+    setSort(e.target.getAttribute('data-column'), newSort);
+    return newSort;
   };
   render(): React.Node {
-    return <a className={ this.props.sort } onClick={ this.setSort } data-column={ this.props.column }>
-      { this.props.value }
-    </a>;
+    return <SetSortContext.Consumer>
+      {
+        (setSort) => <ContentContext.Consumer>
+          {
+            ({ sort }) => {
+              let className = sort[this.props.column];
+              return <a
+                className={ (className && className.toLowerCase()) || 'no-sort' }
+                onClick={ this.setSort.bind(this, setSort, sort) }
+                data-column={ this.props.column }
+              >{ this.props.value }</a>
+            }
+          }
+        </ContentContext.Consumer>
+      }
+    </SetSortContext.Consumer>;
   }
 }

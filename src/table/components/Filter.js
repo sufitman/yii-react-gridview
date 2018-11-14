@@ -1,7 +1,15 @@
 /* @flow */
 import * as React from 'react';
 import Row from './Row';
-import type {FilterProps, FilterOptions, ApplyFilter} from "../../gridViewTypes";
+import type { FilterOptions, FilterCell, Columns, Filters } from "../../GridView";
+import { PageContext } from "../../contexts/PageContext";
+import { ContentContext } from "../../contexts/ContentContext";
+
+type ApplyFilter = (column: string, value: mixed) => void;
+type FilterProps = {
+  id: string,
+  applyFilter: ApplyFilter,
+}
 
 export default class Filter extends React.Component<FilterProps> {
   id: string;
@@ -9,18 +17,18 @@ export default class Filter extends React.Component<FilterProps> {
     super(props);
     this.id = `filter-${this.props.id}`;
   }
-  _renderFilters = () => {
-    let readyFilters = { row: {} };
-    Object.keys(this.props.columns).forEach((columnName) => {
-      readyFilters.row[columnName] = this._prepareFilter(columnName, this.props.filters[columnName]);
+  _renderFilters = (tableId: string, columns: Columns, filters: Filters) => {
+    let readyFilters = { row: {}, isFilter: true };
+    Object.keys(columns).forEach((columnName) => {
+      readyFilters.row[columnName] = this._prepareFilter(columnName, filters[columnName], tableId);
     });
     return readyFilters;
   };
-  _getFieldName = (column: string): string => {
-    return `search-${this.props.tableId}-${column}`;
+  _getFieldName = (column: string, tableId: string): string => {
+    return `search-${tableId}-${column}`;
   };
-  _renderFilter = (column: string, type: string, options: FilterOptions = {}) => {
-    const name = this._getFieldName(column);
+  _renderFilter = (column: string, type: string, tableId: string, options: FilterOptions = {}) => {
+    const name = this._getFieldName(column, tableId);
     let filterOptions = { ...options, onChange: this.applyFilter };
     switch (type) {
       case 'text': {
@@ -46,32 +54,39 @@ export default class Filter extends React.Component<FilterProps> {
     }
     return null;
   };
-  _prepareFilter = (column: string, filter: (string | FilterOptions | ApplyFilter) = null) => {
+  _prepareFilter = (column: string, filter: FilterCell, tableId: string) => {
     if (!filter) {
-      return '';
+      return null;
     }
     if (typeof filter === 'string') {
-      return this._renderFilter(column, filter);
+      return this._renderFilter(column, filter, tableId);
     }
     if (typeof filter === 'object') {
-      return this._renderFilter(column, filter.type, filter.options || {});
+      return this._renderFilter(column, filter.type, tableId, filter.options || {});
     }
     if (typeof filter === 'function') {
-      return filter(this._getFieldName(column), this.applyFilter);
+      return filter(this._getFieldName(column, tableId), this.applyFilter);
     }
     throw new Error('Invalid filter param');
   };
-  applyFilter = (e: SyntheticInputEvent<>) => {
+  applyFilter = (e: SyntheticInputEvent<*>) => {
     let column = e.target.name.split('-').pop();
     let value = (e.target.type === 'checkbox' && e.target.checked.toString()) || e.target.value;
     this.props.applyFilter(column, value);
   };
   render(): React.Node {
-    return <Row
-      data={ this._renderFilters() }
-      id={this.id}
-      columns={ this.props.columns }
-      key={this.id}
-    />;
+    return <ContentContext.Consumer>
+      {
+        ({ columns, filters })=> <PageContext.Consumer>
+          {
+            ({ tableId }) => <Row
+              data={ this._renderFilters(tableId, columns, filters) }
+              id={this.id}
+              key={this.id}
+            />
+          }
+        </PageContext.Consumer>
+      }
+    </ContentContext.Consumer>;
   }
 }

@@ -1,37 +1,45 @@
 /* @flow */
 import * as React from 'react';
 import Row from './Row';
-import type { BodyProps } from "../../gridViewTypes";
+import { PageContext } from "../../contexts/PageContext";
+
+type BodyProps = {
+  data: Array<{[col: string | number]: any}>,
+  options: {},
+  rowIdColumn: string,
+}
 
 export default class Body extends React.Component<BodyProps> {
   static defaultProps = {
     options: {},
-    selectedRowIds: [],
   };
   render(): React.Node {
-    let content = [];
-    let preparedData = {};
-    this.props.data.forEach((item, idx) => {
-      let rowId = item[this.props.rowIdColumn] || idx;
-      preparedData[rowId] = {
-        row: item,
-        rowId,
-        idx,
-        checked: this.props.selectedRowIds.indexOf(rowId) !== -1
-      };
-    });
-    for (let rowId in preparedData) {
-      content.push(<Row
-        currentPage={ this.props.currentPage }
-        rowSelect={ this.props.rowSelect }
-        pageSize={ this.props.pageSize }
-        data={ preparedData[rowId] }
-        options={ this.props.options }
-        columns={ this.props.columns }
-        id={ rowId }
-        key={ `tr-${this.props.tableId}-${rowId}` }
-      />);
-    }
-    return <tbody>{ content }</tbody>;
+    return <PageContext.Consumer>{
+      ({ tableId, selectedRowIds }) => {
+        let content = [];
+        let preparedData = {};
+        this.props.data.forEach((item, idx) => {
+          let rowId = item[this.props.rowIdColumn] || idx;
+          if (['string', 'number'].indexOf(typeof rowId) === -1) {
+            throw new Error('Invalid type of rowId');
+          }
+          preparedData[rowId] = {
+            row: item,
+            rowId,
+            idx,
+            checked: selectedRowIds.indexOf(rowId) !== -1
+          };
+        });
+        for (let rowId in preparedData) {
+          content.push(<Row
+            data={ preparedData[rowId] }
+            options={ this.props.options }
+            id={ rowId }
+            key={ `tr-${tableId}-${rowId}` }
+          />);
+        }
+        return <tbody>{ content }</tbody>;
+      }
+    }</PageContext.Consumer>;
   }
 }
