@@ -111,6 +111,9 @@ export default class Pager extends React.Component<PagerProps> {
     return <PageContext.Consumer>{
       ({ tableId, currentPage, pageSize }) => {
         this.pageCount = Math.ceil(this.props.totalCount / pageSize) || 0;
+        if (this.pageCount < 2) {
+          return null;
+        }
         let Tag = this.props.pagerTag;
         let buttons = [];
         if (this.props.firstPageLabel) {

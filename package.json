@@ -1,6 +1,6 @@
 {
   "name": "yii-react-gridview",
-  "version": "0.5.8",
+  "version": "0.5.9",
   "description": "React render of Yii gridview",
   "main": "dist/GridView.js",
   "scripts": {
@@ -55,5 +55,6 @@
     "uglifyjs-webpack-plugin": "^2.0.1",
     "webpack": "^4.20.2",
     "webpack-cli": "^3.1.0"
-  }
+  },
+  "dependencies": {}
 }
