@@ -9,14 +9,24 @@ type RowProps = {
   notSetText: string,
   options?: {},
   data: RowOptions,
+  hoveredRowId?: any,
+  onRowHover?: (rowId: any) => any
 };
-type RowOptions = {row: {}, idx?: string, rowId?: string, checked?: boolean, isTh?: boolean, isFilter?: boolean };
+type RowOptions = {
+  row: {},
+  idx?: string,
+  rowId?: string,
+  checked?: boolean,
+  isTh?: boolean,
+  isFilter?: boolean,
+  hoveredRowId?: any
+};
 
 export default class Row extends React.Component<RowProps> {
   static defaultProps = {
     notSetText: '',
   };
-  
+
   _prepareData = (rowOptions: RowOptions, columns: Columns, sort: Sort): Array<any> => {
     let readyRow = [];
     Object.keys(columns).forEach(column => {
@@ -27,6 +37,7 @@ export default class Row extends React.Component<RowProps> {
           rowId: rowOptions.rowId,
           rule: columns[column],
           checked: rowOptions.checked,
+          hoveredRowId: rowOptions.hoveredRowId,
         },
         isFilter: rowOptions.isFilter,
         column
@@ -60,11 +71,14 @@ export default class Row extends React.Component<RowProps> {
   };
 
   render(): React.Node {
+    const { data, hoveredRowId } = this.props
     return <ContentContext.Consumer>
       {
-        ({ columns, sort }) => <tr { ...this.props.options }>
+        ({ columns, sort }) => <tr
+          { ...this.props.options }
+          onMouseEnter={ () => this.props.onRowHover && this.props.onRowHover(this.props.id) }>
           {
-            this._prepareData(this.props.data, columns, sort).map(
+            this._prepareData({ ...data, hoveredRowId }, columns, sort).map(
               (cell, idx) => <Cell key={ `${this.props.id}-td-${idx}` } content={ cell }/>
             )
           }

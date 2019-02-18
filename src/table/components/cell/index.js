@@ -5,19 +5,20 @@ import SortLink from './content/SortLink';
 import { PageContext } from "../../../contexts/PageContext";
 
 type CellProps = { content: any };
-type CellRule = ((cell: mixed, rowId?: string) => React.Node ) | 'serial' | 'checkbox';
+type CellRule = ((cell: mixed, rowId?: string, hoveredRowId?: any) => React.Node ) | 'serial' | 'checkbox';
 type CellOptions = {
   rule: CellRule,
   cellData: any,
   rowId?: string,
   idx: number,
-  checked?: boolean
+  checked?: boolean,
+  hoveredRowId?: any
 }
 
 export default class Cell extends React.Component<CellProps> {
   _prepareContent = (cellOptions: CellOptions, currentPage: number, pageSize: number) => {
     if (typeof cellOptions.rule === 'function') {
-      return cellOptions.rule(cellOptions.cellData, cellOptions.rowId);
+      return cellOptions.rule(cellOptions.cellData, cellOptions.rowId, cellOptions.hoveredRowId);
     }
     if (cellOptions.rule === 'serial' && cellOptions.idx !== undefined) {
       return currentPage * pageSize + 1 + cellOptions.idx;
@@ -42,7 +43,8 @@ export default class Cell extends React.Component<CellProps> {
         typeof this.props.content.value === 'object' &&
         typeof nextProps.content.value === 'object' &&
         this.props.content.value.idx === nextProps.content.value.idx &&
-        this.props.content.value.cellData === nextProps.content.value.cellData
+        this.props.content.value.cellData === nextProps.content.value.cellData &&
+        this.props.content.value.hoveredRowId === nextProps.content.value.hoveredRowId
       ));
   }
 
