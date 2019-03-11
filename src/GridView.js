@@ -42,6 +42,7 @@ export type GridViewProps = {
   tableOptions: {},
   showHeader: boolean,
   showFooter: boolean,
+  hidePager: boolean,
   placeFooterAfterBody: boolean,
   headerRowOptions: {},
   footerRowOptions: {},
@@ -140,6 +141,7 @@ export default class GridView extends React.Component<GridViewProps, GridViewSta
         'table-bordered'
       ].join(' ')
     },
+    hidePager: false,
     pagerOptions: { className: 'pagination' },
     rowIdColumn: 'id',
     activePageCssClass: 'active',
@@ -275,7 +277,7 @@ export default class GridView extends React.Component<GridViewProps, GridViewSta
       }
     });
   };
-  
+
   allRowsSelect = (checked: boolean): void  => {
     let selectedRowIds = [];
     if (checked) {
@@ -354,9 +356,13 @@ export default class GridView extends React.Component<GridViewProps, GridViewSta
             </RowSelectContext.Provider>
           </AllRowsSelectContext.Provider>
         </ContentContext.Provider>
-        <ButtonContext.Provider value={ this.state.buttonContext }>
-          <Pager { ...pagerSpecificProps } />
-        </ButtonContext.Provider>
+        {
+          this.props.hidePager
+            ? null
+            : <ButtonContext.Provider value={ this.state.buttonContext }>
+              <Pager { ...pagerSpecificProps } />
+            </ButtonContext.Provider>
+        }
       </PageContext.Provider>
     </div>;
   }

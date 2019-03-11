@@ -145,6 +145,7 @@ class YourController extends Controller {
 |`tableOptions`|Object|{}|HTML attributes of table|
 |`showHeader`|Boolean|true|Whether show \<thead\> or not|
 |`showFooter`|Boolean|false|Whether show \<tfoot\> or not|
+|`hidePager`|Boolean|false|Whether show pager buttons or not|
 |`placeFooterAfterBody`|Boolean|true|Whether place \<tfoot\> after body or not|
 |`headerRowOptions`|Object|{}|HTML attributes of *thead > row*|
 |`footerRowOptions`|Object|{}|HTML attributes of *tfoot > row*|
