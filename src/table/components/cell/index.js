@@ -3,6 +3,7 @@ import * as React from 'react';
 import SelectionCheckbox from './content/SelectionCheckbox';
 import SortLink from './content/SortLink';
 import { PageContext } from "../../../contexts/PageContext";
+import { ContentContext } from "../../../contexts/ContentContext";
 
 type CellProps = { content: any };
 type CellRule = ((cell: mixed, rowId?: string, hoveredRowId?: any) => React.Node ) | 'serial' | 'checkbox';
@@ -50,25 +51,33 @@ export default class Cell extends React.Component<CellProps> {
 
   render(): React.Node {
     return <PageContext.Consumer>{
-      ({ pageSize, currentPage }) => {
-        let content = this.props.content;
-        let preparedContent;
-        if (content && typeof content === 'object' && content.value) {
-          if (content.enableSorting) {
-            preparedContent = <SortLink { ...content }/>;
-          } else {
-            if (typeof content.value === 'object') {
-              const cellOptions: cellOptions = content.value;
-              preparedContent = this._prepareContent(cellOptions, currentPage, pageSize)
+      ({ pageSize, currentPage }) => <ContentContext.Consumer>
+        {
+          ({ sort }) => {
+            let content = this.props.content;
+            let preparedContent;
+            let column;
+            if (content && typeof content === 'object' && content.value) {
+              if (content.enableSorting) {
+                preparedContent = <SortLink { ...content }/>;
+              } else {
+                if (typeof content.value === 'object') {
+                  const cellOptions: cellOptions = content.value;
+                  preparedContent = this._prepareContent(cellOptions, currentPage, pageSize)
+                } else {
+                  preparedContent = content.value;
+                }
+              }
+              column = content.column;
             } else {
-              preparedContent = content.value;
+              preparedContent = content;
             }
+
+            let className = column ? sort[column] : null;
+            return <td className={(className && className.toLowerCase()) || 'no-sort'}>{preparedContent}</td>;
           }
-        } else {
-          preparedContent = content;
         }
-        return <td>{ preparedContent }</td>;
-      }
+      </ContentContext.Consumer>
     }</PageContext.Consumer>;
   }
 }

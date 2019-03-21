@@ -27,7 +27,7 @@ export default class SortLink extends React.PureComponent<SortLinkProps> {
     } else {
       newSort = null;
     }
-    setSort(e.target.getAttribute('data-column'), newSort);
+    setSort(column, newSort);
     return newSort;
   };
   render(): React.Node {
