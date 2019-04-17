@@ -95,17 +95,20 @@ export default class Pager extends React.Component<PagerProps> {
       endPage = this.pageCount - 1;
       beginPage = Math.max(0, endPage - this.props.maxButtonCount + 1);
     }
-
+    const pageNumbers = []
     for (let i = beginPage, idx = 0; i <= endPage; ++i) {
       let isActive = currentPage === i;
+      const content = i + 1
       this._addButton(buttons, {
         page: i,
-        content: i + 1,
+        content,
         active: isActive,
         disabled: isActive,
         idx: idx++,
       }, tableId);
+      pageNumbers.push(content)
     }
+    return pageNumbers
   };
   render(): React.Node {
     return <PageContext.Consumer>{
@@ -116,18 +119,20 @@ export default class Pager extends React.Component<PagerProps> {
         }
         let Tag = this.props.pagerTag;
         let buttons = [];
-        if (this.props.firstPageLabel) {
-          this._addFirstButton(buttons, currentPage, tableId);
-        }
+        let pages = [];
+        const pageNumbers = this._addButtons(pages, currentPage, tableId);
         if (this.props.prevPageLabel) {
           this._addPrevButton(buttons, currentPage, tableId);
         }
-        this._addButtons(buttons, currentPage, tableId);
+        if (this.props.firstPageLabel && pageNumbers[0] > 1) {
+          this._addFirstButton(buttons, currentPage, tableId);
+        }
+        buttons = [ ...buttons, ...pages ]
+        if (this.props.lastPageLabel && pageNumbers.pop() < this.pageCount) {
+          this._addLastButton(buttons, currentPage, tableId);
+        }
         if (this.props.nextPageLabel) {
           this._addNextButton(buttons, currentPage, tableId);
-        }
-        if (this.props.lastPageLabel) {
-          this._addLastButton(buttons, currentPage, tableId);
         }
         return <Tag { ...this.props.pagerOptions }>
           { buttons }
